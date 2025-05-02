@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Self-Directed Learning Scale</title>
+  <style>
+    body {
+      font-family: 'Open Sans', sans-serif;
+      padding: 20px;
+      max-width: 45%;
+      margin: auto;
+      background-image: url('https://github.com/budhasree-m/budhasree-m.github.io/Background.png');
+	  background-size: cover;           /* Scale image to cover full screen */
+	  background-repeat: no-repeat;     /* Prevent tiling */
+	  background-position: center;      /* Center the image */
+	  background-attachment: fixed;     /* Parallax scroll effect */
+	  color: #2c3e50;
+    }
+	h1, h2 {
+      color: #1a252f;
+	   text-align: center;
+    }
+    fieldset {
+      margin-bottom: 30px;
+      padding: 15px;
+      border: 1px solid #ccc;
+      background-color: #ffffff;
+      border-radius: 8px;
+    }
+    legend {
+      font-weight: bold;
+      font-size: 1.2em;
+    }
+    .question {
+	  display: flex;
+	  flex-direction: column; /* stack items vertically on mobile */
+	  align-items: flex-start;
+	  margin-bottom: 15px;
+	}
+	@media (min-width: 768px) {
+	  .question {
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: center;
+	  }
+	}
+    .scale {
+      display: flex;
+	  flex-wrap: wrap;
+      gap: 10px;
+	  margin-top: 5px;
+    }
+	.scale span {
+      display: inline-block;
+      width: 80px;
+      text-align: center;
+    }
+    label {
+      margin-right: 5px;
+    }
+    .result {
+      margin-top: 30px;
+      font-weight: bold;
+      color: #1a252f;
+      font-size: 1.2em;
+    }
+    .intro, .note, .suggestions {
+      margin-bottom: 30px;
+      background-color: #e9ecef;
+      padding: 15px;
+      border-left: 4px solid #007bff;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Self-Directed Learning Readiness Assessment</h1>
+
+  <div class="intro">
+    This readiness assessment is to try to identify learner's levels of self-directedness in learning in higher education, especially for adults. Please read and choose the most appropriate response for each statement indicating the level at which you rate yourself. 
+	Please note that your first reaction to every statement is the most accurate response; therefore, do not spend too long to respond.<br><br>
+   <!-- The 'any other' space is provided for you to add any other issues about self-directedness in learning you think relevant. A 'scoring sheet' is included for you to assess the level of your self-directedness in learning.-->
+	<br><br>
+	
+	<strong>Likert Scale:</strong> <br><br>
+	5 = Always, 4 = Often, 3 = Sometimes, 2 = Seldom, 1 = Never
+  </div>
+
+   <form id="surveyForm">
+    <!-- Questions inserted dynamically here -->
+  </form>
+
+  <div class="result" id="result"></div>
+
+  <div class="suggestions" id="suggestions"></div>
+  
+  <div class="note">
+    💡 <strong>Important:</strong> This assessment is for your personal growth. The scores — Low, Moderate, and High — are not to be viewed as a hierarchy but as helpful categories. Everyone learns differently, and we all need different kinds of support to grow. If you score Low, mentorship alone may not help — instead, you may need deeply personalized support and redesigned learning environments. Inclusion, context, and compassion matter more than competition.
+  </div>
+
+  <p style="margin-top: 50px; font-style: italic; text-align: right;">Created by Budha Sree M, Data Professional & Research Enthusiast in Self-Designed Learning</p>
+
+  <script>
+    const categories = {
+      "Awareness": [
+        "I identify my own learning needs",
+        "I am able to select the best method for my own learning",
+        "I consider teachers as facilitators of learning rather than providing information only",
+        "I keep up to date on different learning resources available",
+        "I am responsible for my own learning",
+        "I am responsible for identifying my areas of deficit",
+        "I am able to maintain self-motivation",
+        "I am able to plan and set my learning goals",
+        "I have a break during long periods of work",
+        "I need to keep my learning routine separate from my other commitments",
+        "I relate my experience with new information",
+        "I feel that I am learning despite not being instructed by a lecturer"
+      ],
+      "Learning Strategies": [
+        "I participate in group discussions",
+        "I find peer coaching effective",
+        "I find 'role play' is a useful method for complex learning",
+        "I find inter-active teaching-learning sessions more effective than just listening to lectures",
+        "I find simulation in teaching-learning useful",
+        "I find learning from case studies useful",
+        "My inner drive directs me towards further development and improvement in my learning",
+        "I regard problems as challenges",
+        "I arrange my self-learning routine in such a way that it helps develop a permanent learning culture in my life",
+        "I find concept mapping is an effective method of learning",
+        "I find modern educational interactive technology enhances my learning process",
+        "I am able to decide my own learning strategy"
+      ],
+      "Learning Activities": [
+        "I rehearse and revise new lessons",
+        "I identify the important points when reading a chapter or an article",
+        "I use concept mapping/outlining as a useful method of comprehending a wide range of information",
+        "I am able to use information technology effectively",
+        "My concentration intensifies and I become more attentive when I read a complex study content",
+        "I keep annotated notes or a summary of all my ideas, reflections and new learning",
+        "I enjoy exploring information beyond the prescribed course objectives",
+        "I am able to relate knowledge with practice",
+        "I raise relevant questions in teaching-learning sessions",
+        "I am able to analyse and critically reflect on new ideas, information or any learning experiences",
+        "I keep an open mind to others' point of view",
+        "I prefer to take any break in between any learning task"
+      ],
+      "Evaluation": [
+        "I self-assess before I get feedback from instructors",
+        "I identify the areas for further development in whatever I have accomplished",
+        "I am able to monitor my learning progress",
+        "I am able to identify my areas of strength and weakness",
+        "I appreciate when my work can be peer reviewed",
+        "I find both success and failure inspire me to further learning",
+        "I value criticism as the basis of bringing improvement to my learning",
+        "I monitor whether I have accomplished my learning goals",
+        "I check my portfolio to review my progress",
+        "I review and reflect on my learning activities",
+        "I find new learning challenging",
+        "I am inspired by others' success"
+      ],
+      "Interpersonal Skills": [
+        "I intend to learn more about other cultures and languages I am frequently exposed to",
+        "I am able to identify my role within a group",
+        "My interaction with others helps me to develop the insight to plan for further learning",
+        "I make use of any opportunities I come across",
+        "I need to share information with others",
+        "I maintain good inter-personal relationships with others",
+        "I find it easy to work in collaboration with others",
+        "I am successful in communicating verbally",
+        "I identify the need for inter-disciplinary links for maintaining social harmony",
+        "I am able to express my ideas effectively in writing",
+        "I am able to express my views freely",
+        "I find it challenging to pursue learning in a culturally diverse environment"
+      ]
+    };
+
+    const form = document.getElementById('surveyForm');
+
+    Object.entries(categories).forEach(([section, questions], sectionIndex) => {
+      const fieldset = document.createElement('fieldset');
+      const legend = document.createElement('legend');
+      legend.innerText = section;
+      fieldset.appendChild(legend);
+	  
+	  // Add Likert scale header row
+      const scaleLabels = document.createElement('div');
+      scaleLabels.className = 'question';
+      scaleLabels.style.fontWeight = 'bold';
+      scaleLabels.innerHTML = `
+        <span style="flex: 1">Statements</span>
+        <span class="scale">
+          <span>5</span>
+          <span>4</span>
+          <span>3</span>
+          <span>2</span>
+          <span>1</span>
+        </span>
+      `;
+      fieldset.appendChild(scaleLabels);
+     
+
+      questions.forEach((q, qIndex) => {
+        const div = document.createElement('div');
+        div.className = 'question';
+        const left = document.createElement('div');
+        left.innerText = q;
+        const right = document.createElement('div');
+        right.className = 'scale';
+		const scaleNames = { 5: 'Always', 4: 'Often', 3: 'Sometimes', 2: 'Seldom', 1: 'Never' };
+        for (let i = 5; i >= 1; i--) {
+          const inputId = `${sectionIndex}_${qIndex}_${i}`;
+          right.innerHTML += `
+            <label><input type="radio" name="${sectionIndex}_${qIndex}" value="${i}" required> ${scaleNames[i]} </label>
+          `;
+        }
+        div.appendChild(left);
+        div.appendChild(right);
+        fieldset.appendChild(div);
+      });
+      form.appendChild(fieldset);
+    });
+
+    const submitBtn = document.createElement('button');
+    submitBtn.type = 'submit';
+    submitBtn.innerText = 'Submit';
+    form.appendChild(submitBtn);
+
+    form.onsubmit = function(e) {
+      e.preventDefault();
+      const data = new FormData(form);
+      let scores = { Awareness: 0, 'Learning Strategies': 0, 'Learning Activities': 0, Evaluation: 0, 'Interpersonal Skills': 0 };
+      let categoryIndex = 0;
+      Object.entries(categories).forEach(([section, questions]) => {
+        let sectionScore = 0;
+        questions.forEach((_, qIndex) => {
+          sectionScore += parseInt(data.get(`${categoryIndex}_${qIndex}`));
+        });
+        scores[section] = sectionScore;
+        categoryIndex++;
+      });
+
+      const grandTotal = Object.values(scores).reduce((a, b) => a + b, 0);
+      let level = '', interpretation = '', suggestions = '';
+      if (grandTotal <= 140) {
+        level = 'Low';
+        interpretation = 'Guidance is definitely needed from the teacher.';
+        suggestions = 'Consider pausing and redesigning your learning methods. Personalized guidance and safe environments are more important than structured mentorship at this stage.';
+      } else if (grandTotal <= 220) {
+        level = 'Moderate';
+        interpretation = 'You are halfway to becoming a self-directed learner.';
+        suggestions = 'Identify areas of growth and seek feedback-oriented mentorship. Begin reflecting on strategies that align with your natural rhythms.';
+      } else {
+        level = 'High';
+        interpretation = 'You demonstrate strong self-directed learning skills.';
+        suggestions = 'Maintain your progress through reflective journaling, project-based learning, and mentoring others.';
+      }
+
+      document.getElementById('result').innerHTML = `
+        Awareness Score: ${scores['Awareness']}<br>
+        Learning Strategies Score: ${scores['Learning Strategies']}<br>
+        Learning Activities Score: ${scores['Learning Activities']}<br>
+        Evaluation Score: ${scores['Evaluation']}<br>
+        Interpersonal Skills Score: ${scores['Interpersonal Skills']}<br><br>
+        <strong>Grand Total: ${grandTotal}</strong><br>
+        <strong>Level of Self-Directedness: ${level}</strong><br>
+        ${interpretation}
+      `;
+
+      document.getElementById('suggestions').innerHTML = `📘 <strong>Suggested Navigation:</strong> ${suggestions}`;
+    };
+  </script>
+</body>
+</html>

@@ -7,7 +7,7 @@
   <style>
     body {
       font-family: 'Open Sans', sans-serif;
-      padding: 20px;
+      padding: 10px;
       max-width: 100%;
 	  width: 90%;
       margin: auto;
@@ -44,7 +44,7 @@
 	  display: flex;
 	  flex-direction: column; /* stack items vertically on mobile */
 	  align-items: flex-start;
-	  margin-bottom: 25px;
+	  margin-bottom: 15px;
 	}	
     .scale {
       display: flex;
@@ -141,25 +141,38 @@
 	  body {
 		padding: 10px;
 		font-size: 16px;
+		width: 95%;
+		max-width: 100%;
+		overflow-x: hidden;
+	  }
+	  h1, h2 {
+		font-size: 1.4em;
+		text-align: center;
 	  }
 
 	  .question {
 		flex-direction: column;
 		align-items: flex-start;
+		margin-bottom: 20px;
 	  }
 
 	  .scale {
 		flex-wrap: wrap;
 		gap: 10px;
+		margin-top: 6px;
 	  }
 
 	  .scale label {
-		font-size: 0.9em;
+		font-size: 0.95em;
+		display: flex;
+		align-items: center;
 	  }
 
 	  canvas {
 		width: 100% !important;
 		height: auto !important;
+		display: block;
+		margin: 0 auto;
 	  }
 
 	  .submit-wrapper,
@@ -167,7 +180,56 @@
 	  .download-section {
 		text-align: center;
 	  }
+	  
+	  button, input[type="radio"] {
+		min-height: 44px;
+		font-size: 1em;
+	  }
+
+	  fieldset {
+		padding: 15px;
+		border-left: 4px solid #007bff;
+	  }
 	}
+	
+	@media (max-width: 375px) { /* iPhone SE and similar */
+	  body {
+		font-size: 15px;
+	  }
+
+	  h1, h2 {
+		font-size: 1.2em;
+	  }
+
+	  .scale label {
+		font-size: 0.85em;
+	  }
+
+	  .result, .suggestions, .note {
+		font-size: 0.95em;
+	  }
+	}
+
+	@media (min-width: 769px) and (max-width: 1024px) { /* Tablet-specific */
+	  body {
+		padding: 20px;
+		font-size: 17px;
+		width: 90%;
+	  }
+
+	  .question {
+		flex-direction: column;
+	  }
+
+	  .scale label {
+		font-size: 1em;
+	  }
+
+	  canvas {
+		width: 100% !important;
+	  }
+	}
+
 
 	.retake-section {
 	  text-align: center;

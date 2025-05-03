@@ -336,12 +336,14 @@
   
 <div class="download-section" id="download-section"></div>
 
-<div class="retake-section" id="retake-section"></div>
+
 
   <div class="suggestions" id="suggestions"></div>
   
   <div class="cta-footer" id ="cta-footer">  
 	</div>
+	
+	<div class="retake-section" id="retake-section"></div>
   
   	
 	<div class="reference" style="margin-top: 40px; font-size: 0.9em; color: #444;" id="reference">
@@ -545,6 +547,10 @@
 	  document.getElementById('download-section').innerHTML = `<button onclick="window.print()">Download Your Reflection as PDF</button>`;
 	  document.getElementById('retake-section').innerHTML = `<button onclick="retakeSurvey()">🔄 Retake Survey</button>`;
 	  document.getElementById('chartLegend').style.display = 'block';
+	  document.getElementById('result').scrollIntoView({
+		  behavior: 'smooth',
+		  block: 'start'
+		});
 	  
 	    // Chart Drawing Logic
 		  const ctx = document.getElementById('scoreChart').getContext('2d');

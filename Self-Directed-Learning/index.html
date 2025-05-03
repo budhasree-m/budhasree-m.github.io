@@ -125,7 +125,6 @@
 	  .cta-footer {
 		display: none !important;
 	  }
-
 	    
 	   canvas {
 		max-width: 100% !important;
@@ -157,13 +156,21 @@
 	  }
 
 	  .scale {
+		display: flex;
 		flex-wrap: wrap;
 		gap: 10px;
 		margin-top: 6px;
 	  }
+	  
+	  .scale span {
+		  display: inline-block;
+		  width: 60px;
+		  text-align: center;
+		  font-size: 0.6em;
+		}
 
 	  .scale label {
-		font-size: 0.95em;
+		font-size: 0.85em;
 		display: flex;
 		align-items: center;
 	  }
@@ -202,8 +209,12 @@
 	  }
 
 	  .scale label {
-		font-size: 0.85em;
+		font-size: 0.75em;
 	  }
+	  
+	    .scale span {
+		  font-size: 0.5em;
+		}
 
 	  .result, .suggestions, .note {
 		font-size: 0.95em;
@@ -222,8 +233,13 @@
 	  }
 
 	  .scale label {
-		font-size: 1em;
+		font-size: 0.9em;
 	  }
+	  
+	   .scale span {
+		  font-size: 0.8em;
+		}
+
 
 	  canvas {
 		width: 100% !important;

@@ -604,9 +604,6 @@
 	  // Disable/enable navigation buttons
 	  backBtn.disabled = currentIndex === 0;
 	  nextBtn.disabled = currentIndex === totalQuestions - 1;
-
-	  // Optional: Scroll to question smoothly
-	  slides[currentIndex].scrollIntoView({ behavior: 'smooth', block: 'start' });
 	  
 	  progressText.innerText = `Question ${currentIndex + 1} of ${slides.length}`;
 	  

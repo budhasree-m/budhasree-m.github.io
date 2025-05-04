@@ -15,9 +15,9 @@
 	  width: 90%;
       margin: auto;
       background-image: url('https://github.com/budhasree-m/budhasree-m.github.io/blob/main/Self-Directed-Learning/Background.png?raw=true');
-	  background-size: cover;         /* Scale image to cover full screen */
+	  background-size: 10%;         /* Scale image to cover full screen */
 	  background-repeat: no-repeat;     /* Prevent tiling */
-	  background-position: center;      /* Center the image */
+	  background-position: bottom;      /* Center the image */
 	  background-attachment: fixed;     /* Parallax scroll effect */
 	  opacity: 0.99;
 	  overflow-x: hidden; /* 👈 Prevents horizontal scroll */
@@ -807,6 +807,29 @@
 	  // Remove results
 	  document.getElementById('result').innerHTML = '';
 	  document.getElementById('suggestions').innerHTML = '';
+	  document.getElementById('cta-footer').innerHTML = '';
+	  document.getElementById('download-section').innerHTML = '';
+	  document.getElementById('retake-section').innerHTML = '';
+	  document.getElementById('chartLegend').style.display = 'none';
+	  progressText.innerText = `Question 1 of 25`;
+	  
+	  // Hide all question slides
+	  const slides = document.querySelectorAll('.question-slide');
+	  slides.forEach(slide => slide.classList.remove('active'));
+
+	  // Reset index and show first slide
+	  currentIndex = 0;
+	  slides[currentIndex].classList.add('active');
+
+	  // Reset chart if exists
+	  if (window.myChart) {
+		window.myChart.destroy();
+		window.myChart = null;
+	  }
+
+	  // Reset navigation buttons
+	  backBtn.disabled = true;
+	  nextBtn.disabled = false;
 
 	  // Scroll to top
 	  window.scrollTo({ top: 0, behavior: 'smooth' });

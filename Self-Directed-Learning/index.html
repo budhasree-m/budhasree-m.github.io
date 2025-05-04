@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Self-Directed Learning Assessment</title>
   <style>
+    * {
+      font-family: 'Open Sans', sans-serif;
+	  }
     body {
       font-family: 'Open Sans', sans-serif;
       padding: 10px;
@@ -26,8 +29,8 @@
 	   text-align: center;
     }
     fieldset {
-      margin-bottom: 30px;
-      padding: 20px;
+      margin-bottom: 10px; /* Reduce this value if it's large */
+	  padding-bottom: 10px; /* Optional: tighten internal spacing */
       border: none;
       background-color: #ffffff;
       border-radius: 8px;
@@ -39,15 +42,18 @@
       font-size: 1.2em;
 	  color: #1a252f;
 	  text-align: center;
+	  margin-bottom: 0 !important;
     }
     .question {
 	  display: flex;
 	  flex-direction: column; /* stack items vertically on mobile */
-	  align-items: flex-start;
+	  align-items: center; /* Center-aligns all content inside the question block */
+	  text-align: center;
 	  margin-bottom: 15px;
 	}	
     .scale {
       display: flex;
+	  justify-content: center;  /* Centers the radio button group */
 	  flex-wrap: wrap;
       gap: 12px;
 	  margin-top: 6px;
@@ -76,9 +82,13 @@
       margin-bottom: 30px;
       background-color: #e9ecef;
       padding: 15px;
-      border-left: 4px solid #007bff;
+      border-left: 4px solid #28a745;
+	  border-right: 4px solid #28a745;
       border-radius: 5px;
+	  text-align: center;
     }
+	.suggestions{
+	display: none; }
 	.hero {
 	  text-align: center;
 	  margin-bottom: 30px;
@@ -104,7 +114,7 @@
 	  margin-top: 30px;
 	}
 	.download-section button {
-	  background-color: #007bff;
+	  background-color: #28a745;
 	  color: white;
 	  padding: 10px 20px;
 	  font-size: 1em;
@@ -120,9 +130,12 @@
 		zoom: 0.5;
 		font-size: 14px;
 	  }
-
+	  
 	  /* Optional: remove buttons and non-print content */
+	   .question-slide, 
+       form, 
 	   button,
+	   .note,
 	  .download-section,
 	  .retake-section,
 	  .cta-footer {
@@ -133,10 +146,18 @@
 		max-width: 100% !important;
 		height: auto !important;
 	  }
+	  
+	  #result, 
+	  #suggestions, 
+	  #scoreChart, 
+	  #chartLegend {
+		display: block !important;
+	  }
 
 	  #scoreChart {
-		margin-top: 20px;
-		margin-bottom: 20px;
+		max-width: 100% !important;
+		height: auto !important;
+		margin-bottom: 30px;
 	  }
 	}
 	@media (max-width: 768px) {
@@ -291,8 +312,55 @@
 	  justify-content: center;
 	  margin-top: 30px;
 	}
+	.question-slide { 
+	   display: none;
+	   max-width: 800px;
+	   width: 100%;
+	   text-align: center;
+	   justify-content: center;
+	    margin-bottom: 10px; /* Add or reduce this */
+	 }
+    .question-slide.active { 
+		display: block;
+		max-width: 800px;
+	   width: 100%;
+	   text-align: center;
+	   justify-content: center;
+	   margin: 0 auto;
+     }
+	.nav-buttons {
+	  display: flex;
+	  justify-content: space-between;
+	  margin: 30px auto;
+	  max-width: 800px;
+	  width: 100%;
+	}
+	.nav-buttons button {
+	  padding: 6px 12px;
+	  font-size: 0.9em;
+	  border-radius: 4px;
+	  background-color: #007bff;
+	  color: white;
+	  border: none;
+	  cursor: pointer;
+	}
+
+	.nav-buttons button:hover {
+	  background-color: #0056b3;
+	}
+	#backBtn, #nextBtn {
+  padding: 6px 14px;
+  font-size: 0.9em;
+}
+    .progress {
+      text-align: center;
+      margin-bottom: 20px;
+      font-weight: bold;
+      color: #1a252f;
+    }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
   <link rel="preload" as="image" href="https://github.com/budhasree-m/budhasree-m.github.io/blob/main/Self-Directed-Learning/Background.png?raw=true">
 </head>
 <body>
@@ -302,7 +370,7 @@
   
   <p>This simple, research-backed assessment helps you understand how independently you learn - across awareness, strategy, activities, evaluation and interpersonal skills.</p>
   <br><br>
-	
+	<div class="estimate" id="estimate"><strong>Estimated time:</strong> ~5 minutes</div>
 	 <!--<p><strong>Likert Scale:</strong> 5 = Always, 4 = Often, 3 = Sometimes, 2 = Seldom, 1 = Never</p>-->
 	</div>
 
@@ -318,34 +386,46 @@
 	<br><br>
 	<strong>"Inclusion, context, and compassion matter more than competition."</strong>
   </div>
+  
+  <div class="progress" id="progressText">Question 1 of 25</div>
 
-   <form id="surveyForm">
+ 
+  <form id="surveyForm">
     <!-- Questions inserted dynamically here -->
   </form>
   
-  <div class="result" id="result"></div>
-  <br><br>
-   <div class="suggestions" id="suggestions"></div>
-    <br><br>
-  <div id="chartLegend" style="display: none; position: 'right'; max-width: 600px; margin: 10px auto 30px; font-size: 0.9em; color: #444;">
-	  <p><strong>Color Legend:</strong></p>
-	  <ul style="list-style: none; padding-left: 0;">
-		<li><span style="display:inline-block;width:15px;height:15px;background-color:#dc3545;margin-right:8px;"></span> Low (≤ 10)</li>
-		<li><span style="display:inline-block;width:15px;height:15px;background-color:#ffc107;margin-right:8px;"></span> Moderate (11-18)</li>
-		<li><span style="display:inline-block;width:15px;height:15px;background-color:#28a745;margin-right:8px;"></span> High (≥ 18)</li>
-	  </ul>
-	</div>
-	
-	 <div style="max-width: 600px; margin: 30px auto;">
-	  <canvas id="scoreChart"></canvas>
-	</div>
+  <div class="nav-buttons" style="text-align:center; margin-top: 20px;">
+    <button type="button" id="backBtn" disabled>Back</button>
+    <button type="button" id="nextBtn">Next</button>
+  </div>
+  
+   <div class="submitBtn" id="submitBtn"></div>
+  
+  	  <div class="result" id="result"></div>
+	  <br><br>
+	   <div class="suggestions" id="suggestions"></div>
+		<br><br>
+	  <div id="chartLegend" style="display: none; position: 'right'; max-width: 600px; margin: 10px auto 30px; font-size: 0.9em; color: #444;">
+		  <p><strong>Level of Self-Directedness:</strong></p>
+		  <ul style="list-style: none; padding-left: 0;">
+			<li><span style="display:inline-block;width:15px;height:15px;background-color:#dc3545;margin-right:8px;"></span> Low</li>
+			<li><span style="display:inline-block;width:15px;height:15px;background-color:#ffc107;margin-right:8px;"></span> Moderate</li>
+			<li><span style="display:inline-block;width:15px;height:15px;background-color:#28a745;margin-right:8px;"></span> High</li>
+		  </ul>
+		
+		 <div style="max-width: 600px; margin: 30px auto;">
+		  <canvas id="scoreChart"></canvas>
+		</div>	
+</div>
+
 <div class="download-section" id="download-section"></div>
   
-  <div class="cta-footer" id ="cta-footer">  
-	</div>
+  
 	
 	<div class="retake-section" id="retake-section"></div>
   
+  <div class="cta-footer" id ="cta-footer">  
+	</div>
   	
 	<div class="reference" style="margin-top: 40px; font-size: 0.9em; color: #444;" id="reference">
   <p><strong>Reference:</strong> Williamson, S. N. (2007). Development of a self-rating scale of self-directed learning. <a href="https://knilt.arcc.albany.edu/images/3/39/Williamson.pdf" target="_blank">[Read the original paper]</a></p>
@@ -392,17 +472,8 @@
         "I know my learning style is different, and I\'m okay with that - it works for me."
       ]
     };
-
-    const form = document.getElementById('surveyForm');
-
-    Object.entries(categories).forEach(([section, questions], sectionIndex) => {
-      const fieldset = document.createElement('fieldset');
-	  const sectionColors = ['#007bff', '#17a2b8', '#28a745', '#ffc107', '#6f42c1'];
-      const legend = document.createElement('legend');
-	  legend.innerText = section;
-      fieldset.appendChild(legend);
-	  
-	  <!--adds subtle guidance, makes each section more welcoming, and reminds users that reflection is the goal — not performance.-->
+	
+	 <!--adds subtle guidance, makes each section more welcoming, and reminds users that reflection is the goal — not performance.-->
 		const intros = {
 		  'Self-Awareness and Direction': 'Learning begins the moment you know what you don\'t know.',
 		  'Learning Strategies': 'How you learn often matters more than what you learn.',
@@ -411,39 +482,44 @@
 		  'Connected Learning and Community': 'No one learns alone — even when they\'re learning solo.'
 		};
 
-		const introPara = document.createElement('p');
+    const form = document.getElementById('surveyForm');
+	const questionSlides = [];
+    let currentIndex = 0;
+    const totalQuestions = Object.values(categories).flat().length;
+
+	 let questionCount = 0;
+    Object.entries(categories).forEach(([section, questions], sectionIndex) => {
+	
+	  questions.forEach((q, qIndex) => {
+	    const slide = document.createElement('div');
+        slide.className = 'question-slide';
+        if (questionCount === 0) slide.classList.add('active');
+		
+	  const fieldset = document.createElement('fieldset');
+	  const sectionColors = ['#007bff', '#17a2b8', '#28a745', '#ffc107', '#6f42c1'];
+	  const legend = document.createElement('legend');
+	  legend.innerText = section;
+	  fieldset.appendChild(legend);
+	  
+	  const introPara = document.createElement('p');
 		introPara.innerText = intros[section];
 		introPara.style.fontStyle = 'italic';
 		introPara.style.fontWeight = 'bold';
-		introPara.style.marginBottom = '15px';
+		introPara.style.marginBottom = '30px';
 		fieldset.appendChild(introPara);
       
 	  
-	  // Add Likert scale header row
-      const scaleLabels = document.createElement('div');
-      scaleLabels.className = 'question';
-      scaleLabels.style.fontWeight = 'bold';
-      scaleLabels.innerHTML = `
-        <span style="flex: 1"></span>        
-		<span class="scale">
-          <span>Always<br>5</span>
-          <span>Often<br>4</span>
-          <span>Sometimes<br>3</span>
-          <span>Seldom<br>2</span>
-          <span>Never<br>1</span>
-        </span>
-      `;
-      fieldset.appendChild(scaleLabels);
-     
-
-      questions.forEach((q, qIndex) => {
+	  	
         const div = document.createElement('div');
         div.className = 'question';
+		
         const left = document.createElement('div');
         left.innerText = q;
+		
         const right = document.createElement('div');
         right.className = 'scale';
-		const scaleNames = { 5: 'Always', 4: 'Often', 3: 'Sometimes', 2: 'Seldom', 1: 'Never' };
+		
+		const scaleNames = { 5: 'Always', 4: 'Often', 3: 'Sometimes', 2: 'Rarely', 1: 'Never' };
         for (let i = 5; i >= 1; i--) {
           const inputId = `${sectionIndex}_${qIndex}_${i}`;
           right.innerHTML += `
@@ -453,20 +529,65 @@
         div.appendChild(left);
         div.appendChild(right);
         fieldset.appendChild(div);
+		slide.appendChild(fieldset);
+        form.appendChild(slide);
+        questionSlides.push(slide);
+        questionCount++;
+		
 		fieldset.style.borderLeft = `5px solid ${sectionColors[sectionIndex]}`;
+		fieldset.style.borderRight = `5px solid ${sectionColors[sectionIndex]}`;
       });
-      form.appendChild(fieldset);
+      <!--form.appendChild(fieldset);-->
     });
-
-    const submitBtn = document.createElement('button');
+	
+	const submitBtn = document.createElement('button');
     submitBtn.type = 'submit';
+	submitBtn.style.display = 'none';  // Hide it initially
     submitBtn.innerText = 'Submit';
     
 	const submitWrapper = document.createElement('div');
 	submitWrapper.className = 'submit-wrapper';
 	submitWrapper.appendChild(submitBtn);
-	form.appendChild(submitWrapper);
+	
 
+	const progressText = document.getElementById('progressText');
+	
+	function updateSlide() {
+      questionSlides.forEach((slide, idx) => {
+        slide.classList.toggle('active', idx === currentIndex);
+      });
+      document.getElementById('backBtn').disabled = currentIndex === 0;
+      document.getElementById('nextBtn').disabled = currentIndex === questionSlides.length - 1;	
+      progressText.innerText = `Question ${currentIndex + 1} of ${questionSlides.length}`;
+	  
+	  if(currentIndex === questionSlides.length - 1)
+	  {
+	  submitBtn.style.display = 'inline-block';
+	  }
+	  
+    }
+
+    document.getElementById('nextBtn').onclick = () => {
+      if (currentIndex < questionSlides.length - 1) {
+        currentIndex++;
+        updateSlide();
+      }
+    };
+
+    document.getElementById('backBtn').onclick = () => {
+      if (currentIndex > 0) {
+        currentIndex--;
+        updateSlide();
+      }
+    };
+
+    
+	 updateSlide();
+   
+	form.appendChild(submitWrapper);
+		
+   
+	
     form.onsubmit = function(e) {
       e.preventDefault();
       const data = new FormData(form);
@@ -486,82 +607,79 @@
       if (grandTotal <= 60) {
         level = 'Low';
 		interpretation = 'Guidance is definitely needed from the teacher.';
-        suggestions += 'Consider pausing and redesigning your learning methods. Personalized guidance and safe environments are more important than structured mentorship at this stage.<br>';
       } else if (grandTotal <= 90) {
         level = 'Moderate';
         interpretation = 'You are halfway to becoming a self-directed learner.';
-        suggestions += 'Identify areas of growth and seek feedback-oriented mentorship. Begin reflecting on strategies that align with your natural rhythms.<br>';
       } else {
         level = 'High';
         interpretation = 'You demonstrate strong self-directed learning skills.';
-        suggestions += 'Maintain your progress through reflective journaling, project-based learning, and mentoring others.<br>';
       }
 	  
 	  const high = [], moderate = [], low = [];
 	  
 	    <!--Suggestion Framework by Category-->
 	  	if (scores['Self-Awareness and Direction'] <= 10) {
-			suggestions += '<br>* You may know something\'s off, but struggle to articulate what to learn or when. Try journaling or talking aloud about your frustrations.<br>';
+			suggestions += '<br> You may know something\'s off, but struggle to articulate what to learn or when. Try journaling or talking aloud about your frustrations.<br>';
 			low.push('Self-Awareness and Direction');
 			}
 			else if (scores['Self-Awareness and Direction'] <= 18) {
-			suggestions += '<br>* You\'re aware of gaps but may wait for urgency. Start using curiosity as a compass, not stress.<br>';
+			suggestions += '<br>You\'re aware of gaps but may wait for urgency. Start using curiosity as a compass, not stress.<br>';
 			moderate.push('Self-Awareness and Direction');
 			}
 			else { 
-			suggestions += '<br>* You clearly self-initiate learning. Share this confidence with someone who\'s stuck.<br>';
+			suggestions += '<br>You clearly self-initiate learning. Share this confidence with someone who\'s stuck.<br>';
 			high.push('Self-Awareness and Direction');
 			}
 		
 		if (scores['Learning Strategies'] <= 10) {
-			suggestions += '<br>* You might be using the same methods even when they stop working. Try experimenting with how you learn, not just what.<br>';
+			suggestions += '<br>You might be using the same methods even when they stop working. Try experimenting with how you learn, not just what.<br>';
 			low.push('Learning Strategies');
 			}
 			else if (scores['Learning Strategies'] <= 18) {
-			suggestions += '<br>* You\'re exploring strategies, but maybe inconsistently. Try tracking what works best for you.<br>';
+			suggestions += '<br>You\'re exploring strategies, but maybe inconsistently. Try tracking what works best for you.<br>';
 			moderate.push('Learning Strategies');
 			}
 			else { 
-			suggestions += '<br>* You\'re adaptable and strategic. Consider documenting your approach to help others.<br>';
+			suggestions += '<br>You\'re adaptable and strategic. Consider documenting your approach to help others.<br>';
 			high.push('Learning Strategies');
 			}
 			
 		 if (scores['Application and Real-World Practice'] <= 10) {
-			suggestions += '<br>* You\'re learning, but not applying it enough. Find micro-ways to test ideas in real life.<br>';
+			suggestions += '<br>You\'re learning, but not applying it enough. Find micro-ways to test ideas in real life.<br>';
 			low.push('Application and Real-World Practice');
 			}
 			else if (scores['Application and Real-World Practice'] <= 18) {
-			suggestions += '<br>* You sometimes apply learning but may not reflect deeply. Try a learning log or share lessons learned.<br>';
+			suggestions += '<br>You sometimes apply learning but may not reflect deeply. Try a learning log or share lessons learned.<br>';
 			moderate.push('Application and Real-World Practice');
 			}
 			else { 
-			suggestions += '<br>* You\'re a hands-on learner. Keep integrating what you learn with action.<br>';
+			suggestions += '<br>You\'re a hands-on learner. Keep integrating what you learn with action.<br>';
 			high.push('Application and Real-World Practice');
 			}
 			
 		if (scores['Self-Assessment and Growth Monitoring'] <= 10) {
-			suggestions += '<br>* You might be moving but unsure if you\'re growing. Begin a habit of self-check-ins weekly.<br>';
+			suggestions += '<br>You might be moving but unsure if you\'re growing. Begin a habit of self-check-ins weekly.<br>';
 			low.push('Self-Assessment and Growth Monitoring');
 			}
 			else if (scores['Self-Assessment and Growth Monitoring'] <= 18) {
-			suggestions += '<br>* You\'re reflecting sometimes. Add regular prompts like \'What worked?\' after each learning session.<br>';
+			suggestions += '<br>You\'re reflecting sometimes. Add regular prompts like \'What worked?\' after each learning session.<br>';
 			moderate.push('Self-Assessment and Growth Monitoring');
 			}
 			else { 
-			suggestions += '<br>* You\'re your own best coach. Share your growth journey with others.<br>';
+			suggestions += '<br>You\'re your own best coach. Share your growth journey with others.<br>';
 			high.push('Self-Assessment and Growth Monitoring');
 			}
 			
 		if (scores['Connected Learning and Community'] <= 10) {
-			suggestions += '<br>* You may feel alone in your learning. You don\'t need a mentor - you need a community. Try Discord groups, book clubs, or local learning spaces.<br>';
+			suggestions += '<br>You may feel alone in your learning. You don\'t just need a mentor - you need a community. Try Discord groups, book clubs, or local learning spaces.<br>';
 			low.push('Connected Learning and Community');
 			}
 			else if (scores['Connected Learning and Community'] <= 18) {
-			suggestions += '<br>* You connect occasionally. Make it a habit to learn with others, not just near others.<br>';
+			suggestions += '<br>You connect occasionally. Make it a habit to learn with others, not just near others.<br>';
 			moderate.push('Connected Learning and Community');
 			}
 			else { 
-			suggestions += '<br>* You thrive in community learning. Consider organizing or hosting a learning circle.<br>';
+			suggestions += '<br>You thrive in community learning. Consider organizing or hosting a learning circle.<br>';
 			high.push('Connected Learning and Community');
 			}
 			
@@ -571,7 +689,7 @@
 		  const key = `${high.includes('Self-Awareness and Direction') ? 'H' : low.includes('Self-Awareness and Direction') ? 'L' : 'M'}${high.includes('Learning Strategies') ? 'H' : low.includes('Learning Strategies') ? 'L' : 'M'}${high.includes('Application and Real-World Practice') ? 'H' : low.includes('Application and Real-World Practice') ? 'L' : 'M'}${high.includes('Self-Assessment and Growth Monitoring') ? 'H' : low.includes('Self-Assessment and Growth Monitoring') ? 'L' : 'M'}${high.includes('Connected Learning and Community') ? 'H' : low.includes('Connected Learning and Community') ? 'L' : 'M'}`;
 
 		  const titles = {
-			'HHHHH': '🌟 You\'re in the Self-Driven Sage.',
+			'HHHHH': '🌟 You\'re the Self-Driven Sage.',
 			'LLLLL': '🚧 You\'re in the Seed Stage: Greatness Yet to Bloom.',
 			'HLHLH': '⚡ You\'re the Lone Explorer with a Lightning Brain.',
 			'HLLLH': '🎯 You\'re the Connector Without a Compass.',
@@ -588,23 +706,17 @@
 			'MMMMM': '🧘 You\'re the Balanced Seeker — Centered, but Still Searching.'
 		  };
 		  
-		const summarytitle = titles[key] || '🧩 You\'re a Work-in-Progress Puzzle — Every Piece Matters.';
+		const summarytitle = titles[key] || '🧩 You\'re a Work-in-Progress Puzzle.';
 
       document.getElementById('result').innerHTML = `        
         <p><strong>You've completed the reflection.</strong></p>
-		<p><strong>Grand Total:</strong> ${grandTotal}<br>
-		<strong>Level of Self-Directedness:</strong> ${level}</p>
-		<p>Self-Awareness and Direction: ${scores['Self-Awareness and Direction']}<br>
-        Learning Strategies: ${scores['Learning Strategies']}<br>
-        Application and Real-World Practice: ${scores['Application and Real-World Practice']}<br>
-        Self-Assessment and Growth Monitoring: ${scores['Self-Assessment and Growth Monitoring']}<br>
-        Connected Learning and Community: ${scores['Connected Learning and Community']}<br><br></p>
-		<p><strong>${summarytitle}</strong><br><br></p>
-      `;	  
-      document.getElementById('suggestions').innerHTML = `📘 <strong>Suggested Navigation:</strong>${interpretation}<br><br> ${suggestions}`;
+		<p><strong>${summarytitle} You\'ve ${level} level of Self-Directedness.</strong><br><br></p>
+      `;
+      document.getElementById('suggestions').style.display = 'block';	  
+      document.getElementById('suggestions').innerHTML = `<strong>Suggested Navigation:</strong>${interpretation}<br><br> ${suggestions}`;
 	  document.getElementById('cta-footer').innerHTML = `<p>If this made you reflect, consider sharing your insights or reaching out to explore more self-designed learning tools.</p>`;
 	  document.getElementById('download-section').innerHTML = `<button onclick="window.print()">Download Your Reflection as PDF</button>`;
-	  document.getElementById('retake-section').innerHTML = `<button onclick="retakeSurvey()">🔄 Retake Survey</button>`;
+	  document.getElementById('retake-section').innerHTML = `<button onclick="retakeSurvey()">Retake Survey</button>`;
 	  document.getElementById('chartLegend').style.display = 'block';
 	  document.getElementById('result').scrollIntoView({
 		  behavior: 'smooth',
@@ -655,9 +767,7 @@
 			}
 		  });
 
-    };
-	
-	
+    };  
 
 
 	  function retakeSurvey() {

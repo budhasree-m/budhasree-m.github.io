@@ -325,27 +325,21 @@
   
   <div class="result" id="result"></div>
   <br><br>
+   <div class="suggestions" id="suggestions"></div>
+    <br><br>
   <div id="chartLegend" style="display: none; position: 'right'; max-width: 600px; margin: 10px auto 30px; font-size: 0.9em; color: #444;">
 	  <p><strong>Color Legend:</strong></p>
 	  <ul style="list-style: none; padding-left: 0;">
-		<li><span style="display:inline-block;width:15px;height:15px;background-color:#dc3545;margin-right:8px;"></span> Low (≤ 24)</li>
-		<li><span style="display:inline-block;width:15px;height:15px;background-color:#ffc107;margin-right:8px;"></span> Moderate (25–44)</li>
-		<li><span style="display:inline-block;width:15px;height:15px;background-color:#28a745;margin-right:8px;"></span> High (≥ 45)</li>
+		<li><span style="display:inline-block;width:15px;height:15px;background-color:#dc3545;margin-right:8px;"></span> Low (≤ 10)</li>
+		<li><span style="display:inline-block;width:15px;height:15px;background-color:#ffc107;margin-right:8px;"></span> Moderate (11-18)</li>
+		<li><span style="display:inline-block;width:15px;height:15px;background-color:#28a745;margin-right:8px;"></span> High (≥ 18)</li>
 	  </ul>
 	</div>
 	
 	 <div style="max-width: 600px; margin: 30px auto;">
 	  <canvas id="scoreChart"></canvas>
 	</div>
-	
-	
-
-  
 <div class="download-section" id="download-section"></div>
-
-
-
-  <div class="suggestions" id="suggestions"></div>
   
   <div class="cta-footer" id ="cta-footer">  
 	</div>
@@ -362,75 +356,40 @@
 
   <script>
     const categories = {
-      "Awareness": [
-        "I identify my own learning needs",
-        "I am able to select the best method for my own learning",
-        "I consider teachers as facilitators of learning rather than providing information only",
-        "I keep up to date on different learning resources available",
-        "I am responsible for my own learning",
-        "I am responsible for identifying my areas of deficit",
-        "I am able to maintain self-motivation",
-        "I am able to plan and set my learning goals",
-        "I have a break during long periods of work",
-        "I need to keep my learning routine separate from my other commitments",
-        "I relate my experience with new information",
-        "I feel that I am learning despite not being instructed by a lecturer"
+      "Self-Awareness and Direction": [
+        "I can usually tell when I\'ve hit a learning gap - even before someone points it out.",
+        "I learn things before they become urgent, not just in crisis mode.",
+        "I choose what to learn based on what feels meaningful or useful to me.",
+        "When I get overwhelmed or stuck, I know when to pause and reset.",
+        "I\'m more motivated when I understand why something matters to me."
       ],
       "Learning Strategies": [
-        "I participate in group discussions",
-        "I find peer coaching effective",
-        "I find 'role play' is a useful method for complex learning",
-        "I find inter-active teaching-learning sessions more effective than just listening to lectures",
-        "I find simulation in teaching-learning useful",
-        "I find learning from case studies useful",
-        "My inner drive directs me towards further development and improvement in my learning",
-        "I regard problems as challenges",
-        "I arrange my self-learning routine in such a way that it helps develop a permanent learning culture in my life",
-        "I find concept mapping is an effective method of learning",
-        "I find modern educational interactive technology enhances my learning process",
-        "I am able to decide my own learning strategy"
+        "When something feels confusing, I try a different approach instead of giving up.",
+        "I save or bookmark helpful content - articles, videos, tools - to revisit later.",
+        "I look for real examples or situations to help understand complex ideas.",
+        "I pace my learning so I don\'t burn out or feel guilty for taking breaks.",
+        "Even if it\'s a bit messy, I have a system to organize what I\'m learning."
       ],
-      "Learning Activities": [
-        "I rehearse and revise new lessons",
-        "I identify the important points when reading a chapter or an article",
-        "I use concept mapping/outlining as a useful method of comprehending a wide range of information",
-        "I am able to use information technology effectively",
-        "My concentration intensifies and I become more attentive when I read a complex study content",
-        "I keep annotated notes or a summary of all my ideas, reflections and new learning",
-        "I enjoy exploring information beyond the prescribed course objectives",
-        "I am able to relate knowledge with practice",
-        "I raise relevant questions in teaching-learning sessions",
-        "I am able to analyse and critically reflect on new ideas, information or any learning experiences",
-        "I keep an open mind to other's point of view",
-        "I prefer to take any break in between any learning task"
+      "Application and Real-World Practice": [
+        "I\'ve actually used what I learned to solve a real-world problem.",
+        "When I come across something I\'ve learned before, I enjoy connecting the dots.",
+        "If something I tried doesn\'t work, I take time to figure out what went wrong.",
+        "I ask for feedback or advice when I\'m unsure if I\'ve applied something correctly.",
+        "I often relate what I\'m learning to goals that matter to me personally."
       ],
-      "Evaluation": [
-        "I self-assess before I get feedback from instructors",
-        "I identify the areas for further development in whatever I have accomplished",
-        "I am able to monitor my learning progress",
-        "I am able to identify my areas of strength and weakness",
-        "I appreciate when my work can be peer reviewed",
-        "I find both success and failure inspire me to further learning",
-        "I value criticism as the basis of bringing improvement to my learning",
-        "I monitor whether I have accomplished my learning goals",
-        "I check my portfolio to review my progress",
-        "I review and reflect on my learning activities",
-        "I find new learning challenging",
-        "I am inspired by others' success"
+      "Self-Assessment and Growth Monitoring": [
+        "I can tell I\'m getting better at something without needing others to say so.",
+        "I keep a journal, tracker, or at least a mental note of what I\'ve been learning.",
+        "I test myself casually - just to see if I still remember or understand something.",
+        "I often pause to reflect: \"Is this way of learning really working for me?\"",
+        "I celebrate small wins when I stay consistent with learning."
       ],
-      "Interpersonal Skills": [
-        "I intend to learn more about other cultures and languages I am frequently exposed to",
-        "I am able to identify my role within a group",
-        "My interaction with others helps me to develop the insight to plan for further learning",
-        "I make use of any opportunities I come across",
-        "I need to share information with others",
-        "I maintain good inter-personal relationships with others",
-        "I find it easy to work in collaboration with others",
-        "I am successful in communicating verbally",
-        "I identify the need for inter-disciplinary links for maintaining social harmony",
-        "I am able to express my ideas effectively in writing",
-        "I am able to express my views freely",
-        "I find it challenging to pursue learning in a culturally diverse environment"
+      "Connected Learning and Community": [
+        "I understand things better after I talk about them with someone else.",
+        "I\'ve picked up something unexpected from a conversation or online community.",
+        "When I figure something out, I like helping others understand it too.",
+        "I\'m part of a learning group, online space, or community where ideas are shared.",
+        "I know my learning style is different, and I\'m okay with that - it works for me."
       ]
     };
 
@@ -445,11 +404,11 @@
 	  
 	  <!--adds subtle guidance, makes each section more welcoming, and reminds users that reflection is the goal — not performance.-->
 		const intros = {
-		  'Awareness': 'How well do you recognize and take charge of your learning needs?',
-		  'Learning Strategies': 'The methods and techniques you use to make learning effective.',
-		  'Learning Activities': 'How you engage with content through reflection, practice, and action?',
-		  'Evaluation': 'How you review your progress and use feedback to improve?',
-		  'Interpersonal Skills': 'Your ability to collaborate, communicate, and learn with others.'
+		  'Self-Awareness and Direction': 'Learning begins the moment you know what you don\'t know.',
+		  'Learning Strategies': 'How you learn often matters more than what you learn.',
+		  'Application and Real-World Practice': 'Learning sticks when it meets reality.',
+		  'Self-Assessment and Growth Monitoring': 'If you can\'t measure it, you\'ll struggle to improve it.',
+		  'Connected Learning and Community': 'No one learns alone — even when they\'re learning solo.'
 		};
 
 		const introPara = document.createElement('p');
@@ -511,7 +470,7 @@
     form.onsubmit = function(e) {
       e.preventDefault();
       const data = new FormData(form);
-      let scores = { Awareness: 0, 'Learning Strategies': 0, 'Learning Activities': 0, Evaluation: 0, 'Interpersonal Skills': 0 };
+      let scores = { 'Self-Awareness and Direction': 0, 'Learning Strategies': 0, 'Application and Real-World Practice': 0, 'Self-Assessment and Growth Monitoring': 0, 'Connected Learning and Community': 0  };
       let categoryIndex = 0;
       Object.entries(categories).forEach(([section, questions]) => {
         let sectionScore = 0;
@@ -524,32 +483,125 @@
 
       const grandTotal = Object.values(scores).reduce((a, b) => a + b, 0);
       let level = '', interpretation = '', suggestions = '';
-      if (grandTotal <= 140) {
+      if (grandTotal <= 60) {
         level = 'Low';
-        interpretation = 'Guidance is definitely needed from the teacher.';
-        suggestions = 'Consider pausing and redesigning your learning methods. Personalized guidance and safe environments are more important than structured mentorship at this stage.';
-      } else if (grandTotal <= 220) {
+		interpretation = 'Guidance is definitely needed from the teacher.';
+        suggestions += 'Consider pausing and redesigning your learning methods. Personalized guidance and safe environments are more important than structured mentorship at this stage.<br>';
+      } else if (grandTotal <= 90) {
         level = 'Moderate';
         interpretation = 'You are halfway to becoming a self-directed learner.';
-        suggestions = 'Identify areas of growth and seek feedback-oriented mentorship. Begin reflecting on strategies that align with your natural rhythms.';
+        suggestions += 'Identify areas of growth and seek feedback-oriented mentorship. Begin reflecting on strategies that align with your natural rhythms.<br>';
       } else {
         level = 'High';
         interpretation = 'You demonstrate strong self-directed learning skills.';
-        suggestions = 'Maintain your progress through reflective journaling, project-based learning, and mentoring others.';
+        suggestions += 'Maintain your progress through reflective journaling, project-based learning, and mentoring others.<br>';
       }
+	  
+	  const high = [], moderate = [], low = [];
+	  
+	    <!--Suggestion Framework by Category-->
+	  	if (scores['Self-Awareness and Direction'] <= 10) {
+			suggestions += '<br>* You may know something\'s off, but struggle to articulate what to learn or when. Try journaling or talking aloud about your frustrations.<br>';
+			low.push('Self-Awareness and Direction');
+			}
+			else if (scores['Self-Awareness and Direction'] <= 18) {
+			suggestions += '<br>* You\'re aware of gaps but may wait for urgency. Start using curiosity as a compass, not stress.<br>';
+			moderate.push('Self-Awareness and Direction');
+			}
+			else { 
+			suggestions += '<br>* You clearly self-initiate learning. Share this confidence with someone who\'s stuck.<br>';
+			high.push('Self-Awareness and Direction');
+			}
+		
+		if (scores['Learning Strategies'] <= 10) {
+			suggestions += '<br>* You might be using the same methods even when they stop working. Try experimenting with how you learn, not just what.<br>';
+			low.push('Learning Strategies');
+			}
+			else if (scores['Learning Strategies'] <= 18) {
+			suggestions += '<br>* You\'re exploring strategies, but maybe inconsistently. Try tracking what works best for you.<br>';
+			moderate.push('Learning Strategies');
+			}
+			else { 
+			suggestions += '<br>* You\'re adaptable and strategic. Consider documenting your approach to help others.<br>';
+			high.push('Learning Strategies');
+			}
+			
+		 if (scores['Application and Real-World Practice'] <= 10) {
+			suggestions += '<br>* You\'re learning, but not applying it enough. Find micro-ways to test ideas in real life.<br>';
+			low.push('Application and Real-World Practice');
+			}
+			else if (scores['Application and Real-World Practice'] <= 18) {
+			suggestions += '<br>* You sometimes apply learning but may not reflect deeply. Try a learning log or share lessons learned.<br>';
+			moderate.push('Application and Real-World Practice');
+			}
+			else { 
+			suggestions += '<br>* You\'re a hands-on learner. Keep integrating what you learn with action.<br>';
+			high.push('Application and Real-World Practice');
+			}
+			
+		if (scores['Self-Assessment and Growth Monitoring'] <= 10) {
+			suggestions += '<br>* You might be moving but unsure if you\'re growing. Begin a habit of self-check-ins weekly.<br>';
+			low.push('Self-Assessment and Growth Monitoring');
+			}
+			else if (scores['Self-Assessment and Growth Monitoring'] <= 18) {
+			suggestions += '<br>* You\'re reflecting sometimes. Add regular prompts like \'What worked?\' after each learning session.<br>';
+			moderate.push('Self-Assessment and Growth Monitoring');
+			}
+			else { 
+			suggestions += '<br>* You\'re your own best coach. Share your growth journey with others.<br>';
+			high.push('Self-Assessment and Growth Monitoring');
+			}
+			
+		if (scores['Connected Learning and Community'] <= 10) {
+			suggestions += '<br>* You may feel alone in your learning. You don\'t need a mentor - you need a community. Try Discord groups, book clubs, or local learning spaces.<br>';
+			low.push('Connected Learning and Community');
+			}
+			else if (scores['Connected Learning and Community'] <= 18) {
+			suggestions += '<br>* You connect occasionally. Make it a habit to learn with others, not just near others.<br>';
+			moderate.push('Connected Learning and Community');
+			}
+			else { 
+			suggestions += '<br>* You thrive in community learning. Consider organizing or hosting a learning circle.<br>';
+			high.push('Connected Learning and Community');
+			}
+			
+				
+				
+		  <!-- Specific fun combinations — examples below-->
+		  const key = `${high.includes('Self-Awareness and Direction') ? 'H' : low.includes('Self-Awareness and Direction') ? 'L' : 'M'}${high.includes('Learning Strategies') ? 'H' : low.includes('Learning Strategies') ? 'L' : 'M'}${high.includes('Application and Real-World Practice') ? 'H' : low.includes('Application and Real-World Practice') ? 'L' : 'M'}${high.includes('Self-Assessment and Growth Monitoring') ? 'H' : low.includes('Self-Assessment and Growth Monitoring') ? 'L' : 'M'}${high.includes('Connected Learning and Community') ? 'H' : low.includes('Connected Learning and Community') ? 'L' : 'M'}`;
 
-      document.getElementById('result').innerHTML = `
-        Awareness: ${scores['Awareness']}<br>
-        Learning Strategies: ${scores['Learning Strategies']}<br>
-        Learning Activities: ${scores['Learning Activities']}<br>
-        Evaluation: ${scores['Evaluation']}<br>
-        Interpersonal Skills: ${scores['Interpersonal Skills']}<br><br>
+		  const titles = {
+			'HHHHH': '🌟 You\'re in the Self-Driven Sage.',
+			'LLLLL': '🚧 You\'re in the Seed Stage: Greatness Yet to Bloom.',
+			'HLHLH': '⚡ You\'re the Lone Explorer with a Lightning Brain.',
+			'HLLLH': '🎯 You\'re the Connector Without a Compass.',
+			'MLMLM': '🌀 You\'re the Reflective Wanderer.',
+			'HMMHM': '🛠️ You\'re the Tinkerer with Untapped Wisdom.',
+			'LLLHL': '⛅ You\'re the Flickers of Insight in a Foggy Sky.',
+			'LMHHL': '📚 You\'re the The Wildcard Strategist.',
+			'HLHLL': '🔍 You\'re the The Pattern Seeker, Still Grounding.',
+			'MLMHH': '💬 You\'re the Social Sage, Inner Explorer.',
+			'LHHHL': '🧭 You\'re the Tactical Learner, Lacking Roots.',
+			'HHLHH': '✨ You\'re the Visionary With Practical Fire.',
+			'LHHHH': '🔗 You\'re the The Connected Strategist.',
+			'HHLHL': '🧠 You\'re the Brain on Fire, Soul in Waiting.',
+			'MMMMM': '🧘 You\'re the Balanced Seeker — Centered, but Still Searching.'
+		  };
+		  
+		const summarytitle = titles[key] || '🧩 You\'re a Work-in-Progress Puzzle — Every Piece Matters.';
+
+      document.getElementById('result').innerHTML = `        
         <p><strong>You've completed the reflection.</strong></p>
 		<p><strong>Grand Total:</strong> ${grandTotal}<br>
 		<strong>Level of Self-Directedness:</strong> ${level}</p>
-		<p>${interpretation}</p>
+		<p>Self-Awareness and Direction: ${scores['Self-Awareness and Direction']}<br>
+        Learning Strategies: ${scores['Learning Strategies']}<br>
+        Application and Real-World Practice: ${scores['Application and Real-World Practice']}<br>
+        Self-Assessment and Growth Monitoring: ${scores['Self-Assessment and Growth Monitoring']}<br>
+        Connected Learning and Community: ${scores['Connected Learning and Community']}<br><br></p>
+		<p><strong>${summarytitle}</strong><br><br></p>
       `;	  
-      document.getElementById('suggestions').innerHTML = `📘 <strong>Suggested Navigation:</strong> ${suggestions}`;
+      document.getElementById('suggestions').innerHTML = `📘 <strong>Suggested Navigation:</strong>${interpretation}<br><br> ${suggestions}`;
 	  document.getElementById('cta-footer').innerHTML = `<p>If this made you reflect, consider sharing your insights or reaching out to explore more self-designed learning tools.</p>`;
 	  document.getElementById('download-section').innerHTML = `<button onclick="window.print()">Download Your Reflection as PDF</button>`;
 	  document.getElementById('retake-section').innerHTML = `<button onclick="retakeSurvey()">🔄 Retake Survey</button>`;
@@ -565,8 +617,8 @@
 		  const sectionValues = Object.values(scores);
 
 		  const colors = sectionValues.map(score => {
-			if (score <= 24) return '#dc3545';     // Red
-			if (score <= 44) return '#ffc107';     // Yellow
+			if (score <= 10) return '#dc3545';     // Red
+			if (score <= 18) return '#ffc107';     // Yellow
 			return '#28a745';                      // Green
 		  });
 
@@ -588,7 +640,7 @@
 			  scales: {
 				y: {
 				  beginAtZero: true,
-				  suggestedMax: 60
+				  suggestedMax: 25
 				}
 			  },
 			  plugins: {

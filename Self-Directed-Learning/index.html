@@ -135,6 +135,8 @@
 	   .question-slide, 
        form, 
 	   button,
+	   .progress,
+	   .estimate,
 	   .note,
 	  .download-section,
 	  .retake-section,
@@ -328,30 +330,24 @@
 	   justify-content: center;
 	   margin: 0 auto;
      }
-	.nav-buttons {
-	  display: flex;
-	  justify-content: space-between;
-	  margin: 30px auto;
-	  max-width: 800px;
-	  width: 100%;
-	}
-	.nav-buttons button {
-	  padding: 6px 12px;
-	  font-size: 0.9em;
-	  border-radius: 4px;
-	  background-color: #007bff;
-	  color: white;
-	  border: none;
-	  cursor: pointer;
-	}
+	.nav-buttons-inside {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+      padding: 0 20px;
+    }
+    .nav-buttons-inside button {
+      padding: 8px 16px;
+      font-size: 0.9em;
+    }
 
-	.nav-buttons button:hover {
+	.nav-buttons-inside button:hover {
 	  background-color: #0056b3;
 	}
 	#backBtn, #nextBtn {
-  padding: 6px 14px;
-  font-size: 0.9em;
-}
+	  padding: 6px 14px;
+	  font-size: 0.9em;
+	}
     .progress {
       text-align: center;
       margin-bottom: 20px;
@@ -394,11 +390,7 @@
     <!-- Questions inserted dynamically here -->
   </form>
   
-  <div class="nav-buttons" style="text-align:center; margin-top: 20px;">
-    <button type="button" id="backBtn" disabled>Back</button>
-    <button type="button" id="nextBtn">Next</button>
-  </div>
-  
+ 
    <div class="submitBtn" id="submitBtn"></div>
   
   	  <div class="result" id="result"></div>
@@ -481,6 +473,7 @@
 		  'Self-Assessment and Growth Monitoring': 'If you can\'t measure it, you\'ll struggle to improve it.',
 		  'Connected Learning and Community': 'No one learns alone — even when they\'re learning solo.'
 		};
+				
 
     const form = document.getElementById('surveyForm');
 	const questionSlides = [];
@@ -506,8 +499,7 @@
 		introPara.style.fontStyle = 'italic';
 		introPara.style.fontWeight = 'bold';
 		introPara.style.marginBottom = '30px';
-		fieldset.appendChild(introPara);
-      
+		fieldset.appendChild(introPara);     
 	  
 	  	
         const div = document.createElement('div');
@@ -527,8 +519,33 @@
           `;
         }
         div.appendChild(left);
-        div.appendChild(right);
+        div.appendChild(right);		
         fieldset.appendChild(div);
+		
+		const nav = document.createElement('div');
+        nav.className = 'nav-buttons-inside';
+		
+		const backBtn = document.createElement('button');
+        backBtn.type = 'button';
+		backBtn.id = 'backBtn';
+        backBtn.innerText = 'Back';
+		backBtn.addEventListener('click', () => {
+		  navigateQuestion(-1);
+		});
+		
+		nav.appendChild(backBtn);
+		
+        const nextBtn = document.createElement('button');
+        nextBtn.type = 'button';
+		nextBtn.id = 'nextBtn';
+        nextBtn.innerText = 'Next';
+		nextBtn.addEventListener('click', () => {
+		  navigateQuestion(1);
+		});			
+		nav.appendChild(nextBtn);
+		
+		fieldset.appendChild(nav);
+		
 		slide.appendChild(fieldset);
         form.appendChild(slide);
         questionSlides.push(slide);
@@ -536,6 +553,11 @@
 		
 		fieldset.style.borderLeft = `5px solid ${sectionColors[sectionIndex]}`;
 		fieldset.style.borderRight = `5px solid ${sectionColors[sectionIndex]}`;
+		
+		
+		
+		
+	
       });
       <!--form.appendChild(fieldset);-->
     });
@@ -547,43 +569,51 @@
     
 	const submitWrapper = document.createElement('div');
 	submitWrapper.className = 'submit-wrapper';
-	submitWrapper.appendChild(submitBtn);
-	
-
-	const progressText = document.getElementById('progressText');
-	
-	function updateSlide() {
-      questionSlides.forEach((slide, idx) => {
-        slide.classList.toggle('active', idx === currentIndex);
-      });
-      document.getElementById('backBtn').disabled = currentIndex === 0;
-      document.getElementById('nextBtn').disabled = currentIndex === questionSlides.length - 1;	
-      progressText.innerText = `Question ${currentIndex + 1} of ${questionSlides.length}`;
+	submitWrapper.appendChild(submitBtn);  
+    
+      	
+	function navigateQuestion(step) {
+	  const slides = document.querySelectorAll('.question-slide');
+	  const totalQuestions = slides.length;  
 	  
-	  if(currentIndex === questionSlides.length - 1)
+	  // Prevent moving forward without answering
+	  if (step === 1) {
+		const currentSlide = slides[currentIndex];
+		const radioGroupName = currentSlide.querySelector('input[type="radio"]').name;
+		const isAnswered = !!currentSlide.querySelector(`input[name="${radioGroupName}"]:checked`);
+		
+		if (!isAnswered) {
+		  alert("Please select an option before proceeding.");
+		  return; // stop navigation
+		}
+	  }
+
+	  // Hide current question
+	  slides[currentIndex].classList.remove('active');
+
+	  // Update index
+	  currentIndex += step;
+	  currentIndex = Math.max(0, Math.min(currentIndex, totalQuestions - 1));
+
+	  // Show new question
+	  slides[currentIndex].classList.add('active');
+
+	  // Disable/enable navigation buttons
+	  backBtn.disabled = currentIndex === 0;
+	  nextBtn.disabled = currentIndex === totalQuestions - 1;
+
+	  // Optional: Scroll to question smoothly
+	  slides[currentIndex].scrollIntoView({ behavior: 'smooth', block: 'start' });
+	  
+	  progressText.innerText = `Question ${currentIndex + 1} of ${slides.length}`;
+	  
+	  if(currentIndex === slides.length - 1)
 	  {
 	  submitBtn.style.display = 'inline-block';
 	  }
-	  
-    }
-
-    document.getElementById('nextBtn').onclick = () => {
-      if (currentIndex < questionSlides.length - 1) {
-        currentIndex++;
-        updateSlide();
-      }
-    };
-
-    document.getElementById('backBtn').onclick = () => {
-      if (currentIndex > 0) {
-        currentIndex--;
-        updateSlide();
-      }
-    };
-
-    
-	 updateSlide();
-   
+	}	
+		
+	   
 	form.appendChild(submitWrapper);
 		
    
@@ -768,7 +798,7 @@
 		  });
 
     };  
-
+     
 
 	  function retakeSurvey() {
 	  // Clear form

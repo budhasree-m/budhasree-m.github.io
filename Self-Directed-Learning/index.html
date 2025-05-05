@@ -435,9 +435,8 @@
   
   	  <div class="result" id="result"></div>
 	  <br><br>
-	   <div class="suggestions" id="suggestions"></div>
-		<br><br>
-	  <div id="chartLegend" style="display: none; position: 'right'; max-width: 600px; margin: 10px auto 30px; font-size: 0.9em; color: #444;">
+	  
+	   <div id="chartLegend" style="display: none; position: 'right'; max-width: 600px; margin: 10px auto 30px; font-size: 0.9em; color: #444;">
 		  <p><strong>Self-Driven Level:</strong></p>
 		  <ul style="list-style: none; padding-left: 0;">
 			<li><span style="display:inline-block;width:15px;height:15px;background-color:#66c5cc;margin-right:8px;"></span> Low</li>
@@ -448,6 +447,9 @@
 		 <div style="max-width: 600px; margin: 30px auto; display: flex; justify-content: center; align-items: center; ">
 		  <canvas id="scoreChart"></canvas>
 		</div>	
+	   <div class="suggestions" id="suggestions"></div>
+		<br><br>
+	 
 </div>
 
 <div class="button-row">
@@ -792,6 +794,13 @@
       document.getElementById('result').innerHTML = `        
         <p>You've completed the reflection.</p>
 		<p style="color:#5b4b50;" >\"${summarytitle} Your Self-Driven Metric is ${level}.\"<br><br></p>
+        Self-Awareness and Direction: ${scores['Self-Awareness and Direction']}/25<br>
+		Learning Strategies: ${scores['Learning Strategies']}/25<br>
+        Application and Real-World Practice: ${scores['Application and Real-World Practice']}/25<br>
+        Self-Assessment and Growth Monitoring: ${scores['Self-Assessment and Growth Monitoring']}/25<br>
+        Connected Learning and Community: ${scores['Connected Learning and Community']}/25<br><br>
+		<p><strong>Grand Total:</strong> ${grandTotal}/125<br>
+		
       `;
 	  
       document.getElementById('suggestions').style.display = 'block';	  

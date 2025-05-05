@@ -18,7 +18,7 @@
 	  background-size: contain;         /* Scale image to cover full screen */
 	  background-repeat: no-repeat;     /* Prevent tiling */
 	  background-position: top;      /* Center the image */
-	  background-attachment: fixed;     /* Parallax scroll effect */
+	  background-attachment: scroll; /* fallback for mobile */
     }
 	h1 {
       color: #1a252f;
@@ -58,6 +58,7 @@
 	  border-radius: 5px;
 	  text-align: center;
 	  margin: 15px auto;
+	  max-width: 800px;
     }
 	.progress {
       text-align: right;
@@ -262,6 +263,7 @@
 		width: 95%;
 		max-width: 100%;
 		overflow-x: hidden;
+		background-attachment: fixed;
 	  }
 	  h1, h2 {
 		font-size: 1.1em;
@@ -330,6 +332,7 @@
 	@media (max-width: 375px) { /* iPhone SE and similar */
 	  body {
 		font-size: 15px;
+		background-attachment: fixed;
 	  }
 
 	  h1, h2 {
@@ -359,6 +362,7 @@
 		padding: 20px;
 		font-size: 17px;
 		width: 90%;
+		background-attachment: fixed;
 	  }
 	  
 	  h1, h2 {
@@ -383,8 +387,13 @@
 	  }
 	  canvas {
 		width: 100% !important;
-	  }
-	}	
+	  }	  
+	}
+
+	@media (min-width: 1025px) {
+	  body {
+		background-attachment: fixed;
+	  }	
   </style>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 

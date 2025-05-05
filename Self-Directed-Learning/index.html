@@ -15,18 +15,14 @@
 	  width: 90%;
       margin: auto;
       background-image: url('https://github.com/budhasree-m/budhasree-m.github.io/blob/main/Self-Directed-Learning/Background.png?raw=true');
-	  background-size: 12%;         /* Scale image to cover full screen */
+	  background-size: contain;         /* Scale image to cover full screen */
 	  background-repeat: no-repeat;     /* Prevent tiling */
-	  background-position: bottom;      /* Center the image */
+	  background-position: top;      /* Center the image */
 	  background-attachment: fixed;     /* Parallax scroll effect */
-	  opacity: 0.99;
-	  overflow-x: hidden; /* 👈 Prevents horizontal scroll */
-	  z-index: 0;
-	  transition: background-image 0.5s ease-in-out;
     }
 	h1 {
       color: #1a252f;
-	   text-align: center;
+	  text-align: center;
     }
 	.hero {
 	  text-align: center;
@@ -43,19 +39,33 @@
 	  margin: 0 auto;
 	}
 	
+	.intro{
+	  max-width: 650px;	 
+	  text-align: center;
+	  margin: 15px auto;	  
+	}
+	
+	.reference{
+	  max-width: 700px;	
+	  margin: 15px auto;	  
+	}
+	
+	
 	 .note {
-      margin-bottom: 30px;
-      background-color: #f5f7f9;
+	  margin-bottom: 30px;
+      background-color: #f6e7e9;
 	 /*  border-left: 4px solid #adb5bd;
 	  border-right: 4px solid #adb5bd; */
-      padding: 15px;
-      border-radius: 5px;
+	  padding: 15px;
+	  border-radius: 5px;
 	  text-align: center;
-	  color: #495057;
+	  margin: 15px auto;
     }
 	.progress {
       text-align: right;
       margin-bottom: 5px;
+	  margin: 15px auto;
+	  max-width: 800px;	 
       font-size: 0.7em;
       color: #1a252f;
     }
@@ -103,7 +113,7 @@
     }
 	.question-slide { 
 	   display: none;
-	   max-width: 800px;
+	   max-width: 700px;
 	   width: 100%;
 	   text-align: center;
 	   justify-content: center;
@@ -111,7 +121,7 @@
 	 }
     .question-slide.active { 
 		display: block;
-		max-width: 800px;
+		max-width: 700px;
 	   width: 100%;
 	   text-align: center;
 	   justify-content: center;
@@ -155,6 +165,8 @@
 	  border-right: 4px solid #9e6bae;
 	  border-radius: 5px;
 	  text-align: left;
+	  margin: 15px auto;
+	  max-width: 700px;	 
 	  }
 	@media print {
 	  body {
@@ -168,7 +180,6 @@
 	   button,
 	   .progress,
 	   .estimate,
-	   .note,
 	  .download-section,
 	  .retake-section {
 		display: none !important;
@@ -195,11 +206,18 @@
 	
 	.download-section {
 	  text-align: center;
-	  margin-top: 15px;
+	  margin:0;
 	}	
 	.retake-section {
 	  text-align: center;
-	  margin-top: 15px;
+	  margin:0;
+	}
+	.button-row {
+	  display: flex;
+	  justify-content: center;
+	  gap: 12px;
+	  flex-wrap: wrap; /* Optional: stacks vertically on smaller screens */
+	  margin-top: 20px;
 	}
 	.cta-footer {
 	  text-align: center;
@@ -223,12 +241,13 @@
 	.download-section button {
 	  background-color: #9e6bae;
 	  color: white;
-	  padding: 10px 25px;
-	  font-size: 1em;
+	  padding: 6px 12px;
+	  font-size: 0.85em;
 	  border: none;
-	  border-radius: 5px;
+	  border-radius: 4px;
 	  cursor: pointer;
 	  font-family: 'Open Sans', sans-serif;
+	  min-height: 36px; 
 	}
 
 	button:hover, 
@@ -237,7 +256,6 @@
 	.download-section button:hover {
 	  background-color: #7f4f8e;
 	}
-	    
 	
 	@media (max-width: 768px) {
 	  body {
@@ -299,7 +317,16 @@
 	  fieldset {
 		padding: 15px;
 		border-left: 4px solid #007bff;
+	  }	  
+	  
+	    button,
+	  button[type="submit"],
+	  .download-section button,
+	  .retake-section button {
+		font-size: 0.9em;
+		min-height: 44px;        /* Keep mobile tap accessibility */
 	  }
+
 	}
 	
 	@media (max-width: 375px) { /* iPhone SE and similar */
@@ -363,7 +390,7 @@
 </head>
 <body>
   <div class="hero">
-  <h1>How Self-Directed Are You as a Learner?</h1>
+  <h1>How Self-Driven Are You as a Learner?</h1>
   
   
   <div class="intro">This simple, research-backed assessment helps you understand how independently you learn - across self-awareness, strategies, real-world practice, self-reflection, and community connection.</div>
@@ -380,7 +407,7 @@
   </div>-->
   
   <div class="note">
-     <strong>Important:</strong> This assessment is for your personal growth. The scores - <strong> Low, Moderate, and High</strong> are not judgements. They are simply snapshots of your current patterns. <br> <br> Every level reveals something worth appreciating. Own it with curiosity, not comparison.
+     <strong>Important:</strong> This assessment is for your personal growth. The scores - <strong> Low, Moderate, and High</strong> are not judgements. Every level reveals something worth appreciating.
 	<br><br><br>
 	<strong>"Inclusion, context, and compassion matter more than competition."</strong>
   </div>
@@ -400,7 +427,7 @@
 	   <div class="suggestions" id="suggestions"></div>
 		<br><br>
 	  <div id="chartLegend" style="display: none; position: 'right'; max-width: 600px; margin: 10px auto 30px; font-size: 0.9em; color: #444;">
-		  <p><strong>Level of Self-Directedness:</strong></p>
+		  <p><strong>Sel-Driven Level:</strong></p>
 		  <ul style="list-style: none; padding-left: 0;">
 			<li><span style="display:inline-block;width:15px;height:15px;background-color:#66c5cc;margin-right:8px;"></span> Low</li>
 			<li><span style="display:inline-block;width:15px;height:15px;background-color:#a1d99b;margin-right:8px;"></span> Moderate</li>
@@ -412,21 +439,21 @@
 		</div>	
 </div>
 
-<div class="download-section" id="download-section"></div>
-  
-  
+<div class="button-row">
+<div class="download-section" id="download-section"></div>  
 	
 	<div class="retake-section" id="retake-section"></div>
-  
+  </div>
   <div class="cta-footer" id ="cta-footer">  
 	</div>
   	
 	<div class="reference" style="margin-top: 40px; font-size: 0.9em; color: #444;" id="reference">
-  <p><strong>Reference:</strong> Williamson, S. N. (2007). Development of a self-rating scale of self-directed learning. <a href="https://knilt.arcc.albany.edu/images/3/39/Williamson.pdf" target="_blank">[Read the original paper]</a></p>
-  <p><em>Special thanks to the author, Swapna Naskar Williamson, for contributing to the understanding of learner autonomy through thoughtful research.</em></p>
+  <p><strong>Reference:</strong> Williamson, S. N. (2007). <a href="https://knilt.arcc.albany.edu/images/3/39/Williamson.pdf" target="_blank"> Development of a self-rating scale of self-directed learning.</a></p>
+  <p><em>Special thanks to the author for contributing to the understanding of learner autonomy through thoughtful research.</em></p>
+  <p style="margin-top: 50px; font-size: 0.9em; color: #444; font-style: italic; text-align: right;">Created by <br> Budha Sree M <br> Data Professional & Research Consultant</p>
 </div>
 
-  <p style="margin-top: 50px; font-size: 0.9em; color: #444; font-style: italic; text-align: right;">Created by <br> Budha Sree M <br> Data Professional & Research Consultant</p>
+  
 
   <script>
     const categories = {
@@ -488,6 +515,7 @@
 	  questions.forEach((q, qIndex) => {
 	    const slide = document.createElement('div');
         slide.className = 'question-slide';
+		slide.id = 'question-slide';
         if (questionCount === 0) slide.classList.add('active');
 		
 	  const fieldset = document.createElement('fieldset');
@@ -500,7 +528,7 @@
 	  const introPara = document.createElement('p');
 		introPara.innerText = intros[section];
 		introPara.style.fontStyle = 'italic';
-		introPara.style.fontSize = '0.8em';
+		introPara.style.fontSize = '0.7em';
 		introPara.style.color  = sectionColors[sectionIndex];
 		introPara.style.marginBottom = '30px';
 		fieldset.appendChild(introPara);     
@@ -570,11 +598,13 @@
 	
 	const submitBtn = document.createElement('button');
     submitBtn.type = 'submit';
+	submitBtn.id='submitBtn';
 	submitBtn.style.display = 'none';  // Hide it initially
     submitBtn.innerText = 'Submit';
     
 	const submitWrapper = document.createElement('div');
 	submitWrapper.className = 'submit-wrapper';
+	submitWrapper.id = 'submit-wrapper';
 	submitWrapper.appendChild(submitBtn);  
     
       	
@@ -622,7 +652,8 @@
    
 	
     form.onsubmit = function(e) {
-      e.preventDefault();
+      e.preventDefault();	  
+	  
       const data = new FormData(form);
       let scores = { 'Self-Awareness and Direction': 0, 'Learning Strategies': 0, 'Application and Real-World Practice': 0, 'Self-Assessment and Growth Monitoring': 0, 'Connected Learning and Community': 0  };
       let categoryIndex = 0;
@@ -668,7 +699,7 @@
 		
 		suggestions += '<br><strong>Learning Strategies:</strong>';
 		if (scores['Learning Strategies'] <= 10) {
-			suggestions += 'You may be using the same tools even when they stop helping. Instead of changing what you learn, try changing how you approach it. Strategy isn\'t just about productivity — it\'s about kindness to your brain.<br>';
+			suggestions += 'You may be using the same tools even when they stop helping. Instead of changing what you learn, try changing how you approach it. Strategy isn\'t just about productivity - it\'s about kindness to your brain.<br>';
 			low.push('Learning Strategies');
 			}
 			else if (scores['Learning Strategies'] <= 18) {
@@ -696,7 +727,7 @@
 		
 		suggestions += '<br><strong>Self-Assessment and Growth Monitoring:</strong>';
 		if (scores['Self-Assessment and Growth Monitoring'] <= 10) {
-			suggestions += 'You may be growing without realizing it - because you haven’t paused to look. Begin with gentle check-ins: What surprised me today? What shifted this week?<br>';
+			suggestions += 'You may be growing without realizing it - because you haven\'t paused to look. Begin with gentle check-ins: What surprised me today? What shifted this week?<br>';
 			low.push('Self-Assessment and Growth Monitoring');
 			}
 			else if (scores['Self-Assessment and Growth Monitoring'] <= 18) {
@@ -749,18 +780,30 @@
 
       document.getElementById('result').innerHTML = `        
         <p>You've completed the reflection.</p>
-		<p><strong>${summarytitle} You\'ve ${level} level of Self-Directedness.</strong><br><br></p>
+		<p style="color:#5b4b50;" >\"${summarytitle} Your Self-Driven Metric is ${level}.\"<br><br></p>
       `;
+	  
       document.getElementById('suggestions').style.display = 'block';	  
       document.getElementById('suggestions').innerHTML = `<strong>Suggested Navigation:</strong><br><br>${interpretation}<br><br> ${suggestions}`;
-	  document.getElementById('cta-footer').innerHTML = `<p>If any of this resonated - pause, journal, share, or simply rest. Learning is deeply personal. Keep shining from wherever you're. </p>`;
-	  document.getElementById('download-section').innerHTML = `<button onclick="window.print()">Download Your Reflection as PDF</button>`;
+	  document.getElementById('cta-footer').innerHTML = `<p>If any of this resonated - pause, journal, share, or simply rest. Learning is deeply personal. </p>`;
+	  document.getElementById('download-section').innerHTML = `<button onclick="window.print()">Download as PDF</button>`;
 	  document.getElementById('retake-section').innerHTML = `<button onclick="retakeSurvey()">Retake Survey</button>`;
 	  document.getElementById('chartLegend').style.display = 'block';
-	  document.getElementById('result').scrollIntoView({
-		  behavior: 'smooth',
-		  block: 'start'
-		});
+		
+		const questionSlidesHide = document.querySelector('.question-slide.active');
+		if (questionSlidesHide) questionSlidesHide.style.display = 'none';
+
+		const navButtonsHide = document.getElementById('.nav-buttons-inside');
+		if (navButtonsHide) navButtonsHide.style.display = 'none';
+
+		const submitHide = document.getElementById('submitBtn');
+		if (submitHide) submitHide.style.display = 'none';
+		
+		const submitwrapperHide = document.getElementById('.submit-wrapper');
+		if (submitwrapperHide) submitwrapperHide.style.display = 'none';
+		
+		const progresshide = document.getElementById('progressText');
+		if (progresshide) progresshide.style.display = 'none';
 	  
 	    // Chart Drawing Logic
 		  const ctx = document.getElementById('scoreChart').getContext('2d');
@@ -800,7 +843,7 @@
 				},
 				title: {
 				  display: true,
-				  text: 'Self-Directed Learning Score'
+				  text: 'Self-Driven Learning Score'
 				}
 			  }
 			}
@@ -816,10 +859,12 @@
 	  // Remove results
 	  document.getElementById('result').innerHTML = '';
 	  document.getElementById('suggestions').innerHTML = '';
+	  document.getElementById('suggestions').style.display = 'none';
 	  document.getElementById('cta-footer').innerHTML = '';
 	  document.getElementById('download-section').innerHTML = '';
 	  document.getElementById('retake-section').innerHTML = '';
 	  document.getElementById('chartLegend').style.display = 'none';
+	  document.getElementById('progressText').style.display = 'block';
 	  progressText.innerText = `Question 1 of 25`;
 	  // Hide all question slides
 	  const slides = document.querySelectorAll('.question-slide');

@@ -694,7 +694,7 @@
 	  
 	       
 	    <!--Suggestion Framework by Category-->
-		   suggestions += '<br><strong>Self-Awareness and Direction:</strong>';
+		   suggestions += '<br><strong>Self-Awareness and Direction: </strong>';
 	  	if (scores['Self-Awareness and Direction'] <= 10) {			
 			suggestions += 'You may sense discomfort in your learning but haven\'t yet named it. Instead of waiting for urgency, consider gently journaling your questions or noticing when curiosity sparks. Direction often begins in quiet confusion.<br>';
 			low.push('Self-Awareness and Direction');
@@ -708,7 +708,7 @@
 			high.push('Self-Awareness and Direction');
 			}
 		
-		suggestions += '<br><strong>Learning Strategies:</strong>';
+		suggestions += '<br><strong>Learning Strategies: </strong>';
 		if (scores['Learning Strategies'] <= 10) {
 			suggestions += 'You may be using the same tools even when they stop helping. Instead of changing what you learn, try changing how you approach it. Strategy isn\'t just about productivity - it\'s about kindness to your brain.<br>';
 			low.push('Learning Strategies');
@@ -722,7 +722,7 @@
 			high.push('Learning Strategies');
 			}
 			
-		suggestions += '<br><strong>Application and Real-World Practice:</strong>';
+		suggestions += '<br><strong>Application and Real-World Practice: </strong>';
 		 if (scores['Application and Real-World Practice'] <= 10) {
 			suggestions += 'You may be gathering input but not yet exploring output. That\'s okay - reflection precedes action. Try one small, safe test of what you\'ve learned this week.<br>';
 			low.push('Application and Real-World Practice');
@@ -736,7 +736,7 @@
 			high.push('Application and Real-World Practice');
 			}
 		
-		suggestions += '<br><strong>Self-Assessment and Growth Monitoring:</strong>';
+		suggestions += '<br><strong>Self-Assessment and Growth Monitoring: </strong>';
 		if (scores['Self-Assessment and Growth Monitoring'] <= 10) {
 			suggestions += 'You may be growing without realizing it - because you haven\'t paused to look. Begin with gentle check-ins: What surprised me today? What shifted this week?<br>';
 			low.push('Self-Assessment and Growth Monitoring');
@@ -750,7 +750,7 @@
 			high.push('Self-Assessment and Growth Monitoring');
 			}
 		
-		suggestions += '<br><strong>Connected Learning and Community:</strong>';
+		suggestions += '<br><strong>Connected Learning and Community: </strong>';
 		if (scores['Connected Learning and Community'] <= 10) {
 			suggestions += 'You may feel like learning is a solo journey. But even solitary learners thrive in connection. Seek a community that shares - not competes.<br>';
 			low.push('Connected Learning and Community');
@@ -796,7 +796,7 @@
 	  
       document.getElementById('suggestions').style.display = 'block';	  
       document.getElementById('suggestions').innerHTML = `<strong>Suggested Navigation:</strong><br><br>${interpretation}<br><br> ${suggestions}`;
-	  document.getElementById('cta-footer').innerHTML = `<p>If any of this resonated - pause, journal, share, or simply rest. Learning is deeply personal. </p>`;
+	  document.getElementById('cta-footer').innerHTML = `<p>If any of this resonated - pause, journal, share, or simply rest. Always remember \'learning\' is deeply personal. </p>`;
 	  document.getElementById('download-section').innerHTML = `<button onclick="window.print()">Download as PDF</button>`;
 	  document.getElementById('retake-section').innerHTML = `<button onclick="retakeSurvey()">Retake Survey</button>`;
 	  document.getElementById('chartLegend').style.display = 'block';

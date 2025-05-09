@@ -24,24 +24,6 @@ body {
     color: white;
 }
 
-.logo-container {
-    position: absolute;
-    top: 50%;
-    right: 20px;
-    transform: translateY(-50%);
-}
-
-.inverted-logo {
-    width: 200px;
-    height: auto;
-    filter: invert(100%) brightness(110%) contrast(120%);
-    transition: transform 0.3s;
-}
-
-.inverted-logo:hover {
-    transform: translateY(-50%) scale(1.05);
-}
-
 .control-label {
     font-size: 20px;
     font-weight: bold;
@@ -88,26 +70,12 @@ body {
     background-color: #555;
 }
 
-#region-buttons button[data-region="Non-Hindi South"] { background-color: #ff6b6b; }
-#region-buttons button[data-region="Non-Hindi,Non-South"] { background-color: #4ecdc4; }
-#region-buttons button[data-region="Hindi_Belt"] { background-color: #45b7d1; }
-
-.scrollable {
-    max-height: 200px;
-    overflow-y: auto;
-    flex-direction: column;
-    align-items: stretch;
-    width: 100%;
-    background: #333;
-    border-radius: 10px;
-    padding: 10px;
-}
-
-#state-container button {
-    background-color: #444;
-    flex: 1 1 calc(33% - 10px);
-    margin: 5px;
-}
+#region-buttons button[data-region="Non-Hindi, South"] { background-color: #ff6b6b; }
+#region-buttons button[data-region="Non-Hindi, North"] { background-color: #4ecdc4; }
+#region-buttons button[data-region="Hindi Belt"] { background-color: #45b7d1; }
+#region-buttons button[data-region="Non-Hindi, West"] { background-color: #f0ad4e; }
+#region-buttons button[data-region="Non-Hindi, East"] { background-color: #5bc0de; }
+#region-buttons button[data-region="Non-Hindi, North East"] { background-color: #b276b2; }
 
 #reset-button {
     background-color: #ff9f1c;
@@ -119,17 +87,78 @@ body {
     margin-top: 20px;
 }
 
+#main-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+  padding: 20px;
+}
+
+#state-container {
+  flex: 0 0 850px; /* Fixed width for full India map */
+  background: #333;
+  border: 1px solid #444;
+}
+
 #chart-container {
-    width: 90%;
-    margin: 0 auto;
-    background-color: #333;
-    border-radius: 15px;
-    padding: 20px;
+  flex: 1;
+  width: 40%;
+  min-width: 600px;
+  height: 600px;
+  background: #333;
+  border-radius: 15px;
+  padding: 20px;
+  box-sizing: border-box;  
 }
 
 svg {
     width: 100%;
     height: 600px;
+}
+
+path { stroke: white ; stroke-width: 0.5px; fill: #333;  }
+
+text {
+      font-size: 7px;
+      text-anchor: middle;
+      paint-order: stroke;
+      stroke: #222 ;
+      stroke-width: 2;
+      stroke-linejoin: round;
+      fill: white;
+	  cursor: pointer;
+    }
+.state {
+  fill: #222;
+  stroke: white;
+  stroke-width: 0.5px;
+}
+
+.state.hovered {
+  fill: #7FB3D5;
+}
+
+.state.selected {
+  fill: #87CEFA;
+}
+.state-label {
+  fill: #DCDCDC;
+  font-size: 7px;
+  text-anchor: middle;
+  paint-order: stroke;
+  stroke: #222;
+  stroke-width: 2;
+  stroke-linejoin: round;
+  cursor: pointer;
+}
+
+.state-label.hovered {
+  fill: #7FB3D5;
+}
+
+.state-label.selected {
+  fill: #87CEFA;
 }
 
 .axis text {

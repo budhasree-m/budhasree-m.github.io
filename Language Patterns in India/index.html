@@ -9,10 +9,7 @@
 </head>
 <body>
     <header class="app-header">
-        <h1>Language Patterns in India Over Time</h1>
-        <div class="logo-container">
-            <img src="TH-DATA-LOGO.svg" alt="TH Data Logo" class="inverted-logo">
-        </div>
+        <h1>Language Patterns in India Over Time</h1>       
     </header>
 
     <div id="controls">
@@ -21,14 +18,15 @@
 
         <div class="control-label">Regions:</div>
         <div id="region-buttons" class="button-group"></div>
+		<button id="reset-button">Reset</button>  
+	</div>
+	<div id="main-container">
+        <div id="state-container" class="button-group scrollable"></div>         
 
-        <div id="state-container" class="button-group scrollable"></div>
-        <button id="reset-button">Reset</button>
-    </div>
-
-    <div id="chart-container">
-        <svg id="chart"></svg>
-    </div>
+		<div id="chart-container">
+			<svg id="chart"></svg>
+		</div>
+	</div>
 
     <div id="tooltip" class="tooltip"></div>
 

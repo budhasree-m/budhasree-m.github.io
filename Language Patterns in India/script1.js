@@ -50,6 +50,7 @@ d3.csv("data.csv").then(function(data) {
 
     let currentRegion = regions[0];
     let currentState = "All";
+	let statesToHighlight = regions[0];
     const tooltip = d3.select("#tooltip");
 
     // Replace state buttons with India Map
@@ -77,10 +78,13 @@ d3.csv("data.csv").then(function(data) {
             .on("mouseout", function() { d3.select(this).classed("hovered", false); })
             .on("click", function(event, d) {
                 currentState = d.properties.st_nm;
+				statesToHighlight = normalizeStateClick(currentState);
                 d3.selectAll(".state").classed("selected", false);
                 d3.select(this).classed("selected", true);
-			    highlightStates(getRegion(currentState));				
-                updateChart(getRegion(currentState), currentState);
+			     // Pass multiple states into highlight function
+				highlightSelectedStates(statesToHighlight);
+                currentState = StateWithData(currentState);	
+			    updateChart(getRegion(currentState), currentState);	
             });
 			
 		  const seen = new Set();
@@ -136,13 +140,17 @@ d3.csv("data.csv").then(function(data) {
 			})
 			.on("click", function(event, d) {
 			  currentState = d.properties.st_nm;
+			  statesToHighlight = normalizeStateClick(currentState);
 			  d3.selectAll(".state").classed("selected", false);
 			  d3.selectAll(".state-label").classed("selected", false);
 			  d3.selectAll(".state").filter(s => s.properties.st_nm === d.properties.st_nm)
              .classed("selected", true);
 			  d3.select(this).classed("selected", true);
+			   // Pass multiple states into highlight function			  
+			  currentState = StateWithData(currentState);
+			  highlightSelectedStates(statesToHighlight);
 			  updateChart(getRegion(currentState), currentState);
-			  console.log("Selected state:", d.properties.st_nm);
+			  console.log("Selected state:", currentState);
 			});
     });
 
@@ -156,20 +164,37 @@ d3.csv("data.csv").then(function(data) {
         return "All";
     }
 	
-	function getStatesInRegion(region) {
-    return d3.selectAll(".state")
-        .filter(d => getRegion(d.properties.st_nm) === region)
-        .data()
-        .map(d => d.properties.st_nm);
+	function normalizeStateClick(stateName) {
+		if (stateName === "Telangana" || stateName === "Andhra Pradesh") {
+			return ["Telangana", "Andhra Pradesh"];
+		}
+		if (stateName === "Jammu and Kashmir" || stateName === "Ladakh") {
+			return ["Jammu and Kashmir", "Ladakh"];
+		}
+		return [stateName];
+	}
+	
+	function StateWithData(stateName) {
+		if (stateName === "Telangana" || stateName === "Andhra Pradesh") {
+			return "Andhra Pradesh";
+		}
+		if (stateName === "Jammu and Kashmir" || stateName === "Ladakh") {
+			return "Jammu and Kashmir";
+		}
+		return stateName;
 	}
 	
     function highlightStates(region) {
 		console.log("Selected region colour:", regionColors[region]);
 		d3.selectAll(".state")
             .classed("selected", d => getRegion(d.properties.st_nm) === region)
-			.attr("fill", d => { return getRegion(d.properties.st_nm) === region ? regionColors[region] :"#222" })
-			;
+		;
     }
+	
+	function highlightSelectedStates(stateList) {
+		d3.selectAll(".state")
+			.classed("selected", d => stateList.includes(d.properties.st_nm));
+	}
 
     d3.select("#reset-button").on("click", () => {
         categoryContainer.selectAll("button").classed("active", d => d === "Monolinguals");
@@ -184,7 +209,8 @@ d3.csv("data.csv").then(function(data) {
 
     function updateChart(region, state) {
         let selectedCategory = d3.select("#category-buttons button.active").attr("data-category");
-        
+         console.log("region:", region);
+		 console.log("state:", state);
         let filteredData = data.filter(d => 
             d.Region === region && 
             (state === "All" || d.State === state) &&

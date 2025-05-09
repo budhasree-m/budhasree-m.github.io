@@ -85,6 +85,15 @@ d3.csv("data.csv").then(function(data) {
 				highlightSelectedStates(statesToHighlight);
                 currentState = StateWithData(currentState);	
 			    updateChart(getRegion(currentState), currentState);	
+			// Show contextual note
+			let note = "";
+			if (statesToHighlight.includes("Telangana") && statesToHighlight.includes("Andhra Pradesh")) {
+				note = "Andhra Pradesh and Telangana are two seperate states now, they were one state in 2011.";
+			} else if (statesToHighlight.includes("Jammu and Kashmir") && statesToHighlight.includes("Ladakh")) {
+				note = "Jammu & Kashmir and Ladakh are two separate UTs now, they were one state in 2011.";
+			}
+			d3.select("#map-note").text(note);
+				
             });
 			
 		  const seen = new Set();
@@ -151,7 +160,15 @@ d3.csv("data.csv").then(function(data) {
 			  highlightSelectedStates(statesToHighlight);
 			  updateChart(getRegion(currentState), currentState);
 			  console.log("Selected state:", currentState);
-			});
+			  // Show contextual note
+			let note = "";
+			if (statesToHighlight.includes("Telangana") && statesToHighlight.includes("Andhra Pradesh")) {
+				note = "Andhra Pradesh and Telangana are two seperate states now, they were one state until 2011.";
+			} else if (statesToHighlight.includes("Jammu and Kashmir") && statesToHighlight.includes("Ladakh")) {
+				note = "Jammu & Kashmir and Ladakh are two separate UTs now, they were one state until 2011.";
+			}
+			d3.select("#map-note").text(note);
+		   });
     });
 
     function getRegion(state) {
@@ -187,13 +204,12 @@ d3.csv("data.csv").then(function(data) {
     function highlightStates(region) {
 		console.log("Selected region colour:", regionColors[region]);
 		d3.selectAll(".state")
-            .classed("selected", d => getRegion(d.properties.st_nm) === region)
-		;
+            .classed("selected", d => getRegion(d.properties.st_nm) === region);
     }
 	
 	function highlightSelectedStates(stateList) {
 		d3.selectAll(".state")
-			.classed("selected", d => stateList.includes(d.properties.st_nm));
+			.classed("selected", d => stateList.includes(d.properties.st_nm));       
 	}
 
     d3.select("#reset-button").on("click", () => {

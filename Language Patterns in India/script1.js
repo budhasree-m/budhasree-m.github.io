@@ -11,13 +11,27 @@ d3.csv("data.csv").then(function(data) {
     let regions = [...new Set(data.map(d => d.Region))];
 
     const regionColors = {
-        "Non-Hindi, South": "#ff6b6b",
-        "Non-Hindi, North": "#4ecdc4",
-        "Hindi Belt": "#45b7d1",
-		"Non-Hindi, East": "#f0ad4e",
-		"Non-Hindi, West": "#5bc0de",
-		"Non-Hindi, North East": "#b276b2"
+        "Non-Hindi, South": "#3A6351",
+        "Non-Hindi, North": "#354F52",
+        "Hindi Belt": "#5D3A58",		
+		"Non-Hindi, West": "#A0522D",
+		"Non-Hindi, East": "#5A5A3A",
+		"Non-Hindi, North East": "#8A5E3B"
     };
+	
+	const highlightRegionColors = {
+        "Non-Hindi, South": "#5D8B75",
+        "Non-Hindi, North": "#5B7A7D",
+        "Hindi Belt": "#865C81",		
+		"Non-Hindi, West": "#C4744D",
+		"Non-Hindi, East": "#84845C",
+		"Non-Hindi, North East": "#B27F5E"
+    };
+	
+	let currentRegion = "Non-Hindi, South";
+    let currentState = "All";
+	let statesToHighlight = "All";
+    const tooltip = d3.select("#tooltip");
 
     let categoryContainer = d3.select("#category-buttons");
     categories.forEach(category => {
@@ -26,8 +40,11 @@ d3.csv("data.csv").then(function(data) {
             .attr("data-category", category)
             .classed("active", category === "Monolinguals")
             .on("click", function() {
-                categoryContainer.selectAll("button").classed("active", false);
-                d3.select(this).classed("active", true);					
+                categoryContainer.selectAll("button").classed("active", false)
+						.filter(function() {
+									return d3.select(this).attr("data-category") === category;
+								})
+								.classed("active", true);				
                 updateChart(currentRegion, currentState);
 				highlightStates(currentRegion);	
             });
@@ -37,29 +54,30 @@ d3.csv("data.csv").then(function(data) {
     regions.forEach(region => {
         regionContainer.append("button")
             .attr("data-region", region)
+			.classed("active", region === "Non-Hindi, South")
             .style("background-color", regionColors[region] || "#555")
             .text(region)
             .on("click", () => {
-                currentRegion = region;
+                regionContainer.selectAll("button").classed("active", false)
+				               .filter(function() {
+									return d3.select(this).attr("data-region") === region;
+								})
+								.classed("active", true);
+				currentRegion = region;
                 currentState = "All";
-                highlightStates(region);
-                updateChart(region, currentState);
+                highlightStates(currentRegion);
+                updateChart(currentRegion, currentState);
             }
 			);
     });
 
-    let currentRegion = regions[0];
-    let currentState = "All";
-	let statesToHighlight = regions[0];
-    const tooltip = d3.select("#tooltip");
-
     // Replace state buttons with India Map
-    const width = 800, height = 600;
-    const svg = d3.select("#state-container").html("").append("svg")
+    const width = 900, height = 900;
+    const svg = d3.select("#map-container").html("").append("svg")
         .attr("width", width)
         .attr("height", height)
         .style("background", "#222");
-
+    let note = "";	  
     const mapGroup = svg.append("g");
 
     d3.json("IndiaMap-All.geojson").then(geojson => {
@@ -71,29 +89,28 @@ d3.csv("data.csv").then(function(data) {
             .enter()
             .append("path")
             .attr("d", path)
-            .attr("fill", d => regionColors[getRegion(d.properties.st_nm)] || "#222")
+            .attr("fill", d => regionColors[getRegion(d.properties.st_nm)] || highlightRegionColors[getRegion(d.properties.st_nm)])
             .attr("stroke", "white")
+			.attr("stroke-width", 2)
             .attr("class", "state")
             .on("mouseover", function() { d3.select(this).classed("hovered", true); })
             .on("mouseout", function() { d3.select(this).classed("hovered", false); })
             .on("click", function(event, d) {
                 currentState = d.properties.st_nm;
 				statesToHighlight = normalizeStateClick(currentState);
-                d3.selectAll(".state").classed("selected", false);
-                d3.select(this).classed("selected", true);
-			     // Pass multiple states into highlight function
+				regionContainer.selectAll("button").classed("active", false)
+				               .filter(function() {
+									return d3.select(this).attr("data-region") === getRegion(d.properties.st_nm);
+								})
+								.classed("active", true);
+                //d3.select(this).classed("selected", true);	
+				highlightStates(getRegion(currentState));
+				 // Pass multiple states into highlight function				  
 				highlightSelectedStates(statesToHighlight);
-                currentState = StateWithData(currentState);	
+				// Chart
+                currentState = StateBeforeReorg(currentState);
 			    updateChart(getRegion(currentState), currentState);	
-			// Show contextual note
-			let note = "";
-			if (statesToHighlight.includes("Telangana") && statesToHighlight.includes("Andhra Pradesh")) {
-				note = "Andhra Pradesh and Telangana are two seperate states now, they were one state in 2011.";
-			} else if (statesToHighlight.includes("Jammu and Kashmir") && statesToHighlight.includes("Ladakh")) {
-				note = "Jammu & Kashmir and Ladakh are two separate UTs now, they were one state in 2011.";
-			}
-			d3.select("#map-note").text(note);
-				
+				console.log("Selected state:", currentState);				
             });
 			
 		  const seen = new Set();
@@ -150,24 +167,19 @@ d3.csv("data.csv").then(function(data) {
 			.on("click", function(event, d) {
 			  currentState = d.properties.st_nm;
 			  statesToHighlight = normalizeStateClick(currentState);
-			  d3.selectAll(".state").classed("selected", false);
-			  d3.selectAll(".state-label").classed("selected", false);
-			  d3.selectAll(".state").filter(s => s.properties.st_nm === d.properties.st_nm)
-             .classed("selected", true);
-			  d3.select(this).classed("selected", true);
-			   // Pass multiple states into highlight function			  
-			  currentState = StateWithData(currentState);
+			 regionContainer.selectAll("button").classed("active", false)
+				               .filter(function() {
+									return d3.select(this).attr("data-region") === getRegion(d.properties.st_nm);
+								})
+								.classed("active", true);
+			  //d3.select(this).classed("selected", true);
+			  highlightStates(getRegion(currentState));
+			   // Pass multiple states into highlight function 
 			  highlightSelectedStates(statesToHighlight);
+			  // Chart
+			  currentState = StateBeforeReorg(currentState);
 			  updateChart(getRegion(currentState), currentState);
-			  console.log("Selected state:", currentState);
-			  // Show contextual note
-			let note = "";
-			if (statesToHighlight.includes("Telangana") && statesToHighlight.includes("Andhra Pradesh")) {
-				note = "Andhra Pradesh and Telangana are two seperate states now, they were one state until 2011.";
-			} else if (statesToHighlight.includes("Jammu and Kashmir") && statesToHighlight.includes("Ladakh")) {
-				note = "Jammu & Kashmir and Ladakh are two separate UTs now, they were one state until 2011.";
-			}
-			d3.select("#map-note").text(note);
+			  console.log("Selected state:", currentState);			
 		   });
     });
 
@@ -180,7 +192,7 @@ d3.csv("data.csv").then(function(data) {
         if (["Assam", "Manipur", "Meghalaya", "Mizoram", "Nagaland", "Tripura", "Arunachal Pradesh", "Sikkim"].includes(state)) return "Non-Hindi, North East";
         return "All";
     }
-	
+		
 	function normalizeStateClick(stateName) {
 		if (stateName === "Telangana" || stateName === "Andhra Pradesh") {
 			return ["Telangana", "Andhra Pradesh"];
@@ -191,7 +203,7 @@ d3.csv("data.csv").then(function(data) {
 		return [stateName];
 	}
 	
-	function StateWithData(stateName) {
+	function StateBeforeReorg(stateName) {
 		if (stateName === "Telangana" || stateName === "Andhra Pradesh") {
 			return "Andhra Pradesh";
 		}
@@ -201,25 +213,52 @@ d3.csv("data.csv").then(function(data) {
 		return stateName;
 	}
 	
-    function highlightStates(region) {
+    function  highlightStates (region) {
 		console.log("Selected region colour:", regionColors[region]);
-		d3.selectAll(".state")
-            .classed("selected", d => getRegion(d.properties.st_nm) === region);
+		d3.selectAll(".state").classed("selected", false);
+	    d3.selectAll(".state").classed("selectedRegion", false);
+	    d3.selectAll(".state-label").classed("selected", false);
+		d3.selectAll(".state").filter(s => getRegion(s.properties.st_nm) === region)
+            .classed("selectedRegion", true);
+		d3.selectAll(".state").filter(s => getRegion(s.properties.st_nm) === region)
+            .classed("selected", true);
+		d3.selectAll(".state-label").filter(s => getRegion(s.properties.st_nm) === region)
+            .classed("selected", true);
+		mapGroup.selectAll("path")
+            .attr("fill", d => getRegion(d.properties.st_nm) === region ? highlightRegionColors[getRegion(d.properties.st_nm)] : regionColors[getRegion(d.properties.st_nm)])
+			.attr("stroke-width", d => getRegion(d.properties.st_nm) === region ? 3 : 2);
     }
 	
 	function highlightSelectedStates(stateList) {
-		d3.selectAll(".state")
-			.classed("selected", d => stateList.includes(d.properties.st_nm));       
+		    d3.selectAll(".state").classed("selected", false);
+			mapGroup.selectAll("path")
+            .attr("fill", d => regionColors[getRegion(d.properties.st_nm)])
+			.attr("stroke-width", 2);
+			if (stateList.includes("Telangana") && stateList.includes("Andhra Pradesh")) {
+				note = "Note: Andhra Pradesh and Telangana are two seperate states now, they were united in 2011.";
+			} else if (stateList.includes("Jammu and Kashmir") && stateList.includes("Ladakh")) {
+				note = "Note: Jammu & Kashmir and Ladakh are two separate UTs now, they were united in 2011.";
+			}
+			d3.select("#map-note").text(note);
+		stateList.forEach(state => {			
+			d3.selectAll(".state").filter(s => s.properties.st_nm === state)
+            .classed("selected", true);
+			mapGroup.selectAll("path").filter(s => s.properties.st_nm === state)
+            .attr("fill", d => highlightRegionColors[getRegion(d.properties.st_nm)])
+			.attr("stroke-width", 3);
+		});
 	}
 
     d3.select("#reset-button").on("click", () => {
-        categoryContainer.selectAll("button").classed("active", d => d === "Monolinguals");
-        regionContainer.selectAll("button").classed("active", false)
-            .filter(function() { return d3.select(this).attr("data-region") === regions[0]; })
-            .classed("active", true);
-        currentRegion = regions[0];
+        currentRegion = "Non-Hindi, South";
         currentState = "All";
-		highlightStates(currentRegion);
+		categoryContainer.selectAll("button").classed("active", d => d === "Monolinguals");
+        regionContainer.selectAll("button").classed("active", false)
+            .filter(function() { return d3.select(this).attr("data-region") === currentRegion; })
+            .classed("active", true); 
+		d3.selectAll(".state").classed("selected", false);
+	    d3.selectAll(".state").classed("selectedRegion", false);
+	    d3.selectAll(".state-label").classed("selected", false);
         d3.select("#chart").html("");
     });
 
@@ -240,16 +279,21 @@ d3.csv("data.csv").then(function(data) {
 
         let yMin, yMax;
         if (selectedCategory === "Monolinguals") {
-            yMin = 50;
+            yMin = 20;
             yMax = 100;
-        } else {
+        }
+		else if (selectedCategory === "Atleast Bilinguals") {
+            yMin = 0;
+            yMax = 80;
+        }
+		else {
             let values = filteredData.flatMap(d => [d["1991_Per"], d["2001_Per"], d["2011_Per"]]);
             yMin = Math.floor(Math.min(...values) / 5) * 5;
             yMax = Math.ceil(Math.max(...values) / 5) * 5;
         }
 
-        let width = document.getElementById("chart-container").clientWidth - 40;
-        let height = 600;
+        let width = document.getElementById("chart-container").clientWidth - 20;
+        let height = document.getElementById("chart-container").clientHeight - 20;
         let margin = {top: 50, right: 80, bottom: 70, left: 80}; 
 
         let svg = d3.select("#chart").html("")
@@ -339,12 +383,12 @@ d3.csv("data.csv").then(function(data) {
             .attr("transform", `translate(0,${height - margin.bottom})`)
             .call(d3.axisBottom(xScale).tickSize(8))
             .selectAll("text")
-            .style("font-size", "18px");
+            .style("font-size", "14px");
 
         svg.append("g")
             .attr("transform", `translate(${margin.left},0)`)
             .call(d3.axisLeft(yScale).tickSize(8))
             .selectAll("text")
-            .style("font-size", "18px");
+            .style("font-size", "14px");
     }
 });

@@ -23,9 +23,9 @@ Kannada,Karnataka,"Non-Hindi, South",Monolinguals,23798072,26158354,31259340,79.
 Kannada,Karnataka,"Non-Hindi, South",Atleast Bilinguals,5986932,8679681,9391750,20.1,24.9,23.1
 Kannada,Karnataka,"Non-Hindi, South",English,3598146,4574915,4063169,12.1,13.1,10
 Kannada,Karnataka,"Non-Hindi, South",Hindi,2552678,4165957,3470850,8.6,12,8.5
-Hindi,Bihar,Hindi Belt,Monolinguals,63051472,57783926,76873869,90.3,95.3,95.3
-Hindi,Bihar,Hindi Belt,Atleast Bilinguals,6794507,2851358,3824597,9.7,4.7,4.7
-Hindi,Bihar,Hindi Belt,English,6096047,2122512,1944491,8.7,3.5,2.4
+Hindi,Bihar,"Hindi, Central & East",Monolinguals,63051472,57783926,76873869,90.3,95.3,95.3
+Hindi,Bihar,"Hindi, Central & East",Atleast Bilinguals,6794507,2851358,3824597,9.7,4.7,4.7
+Hindi,Bihar,"Hindi, Central & East",English,6096047,2122512,1944491,8.7,3.5,2.4
 Odia,Odisha,"Non-Hindi, East",Monolinguals,22510368,23515337,25861929,85.9,76.9,74.5
 Odia,Odisha,"Non-Hindi, East",Atleast Bilinguals,3688978,7048170,8850241,14.1,23.1,25.5
 Odia,Odisha,"Non-Hindi, East",English,3426985,5980661,6655586,13.1,19.6,19.2
@@ -34,25 +34,25 @@ Bengali,West Bengal,"Non-Hindi, East",Monolinguals,52912952,57394468,70403464,90
 Bengali,West Bengal,"Non-Hindi, East",Atleast Bilinguals,5628567,10974787,8295388,9.6,16.1,10.5
 Bengali,West Bengal,"Non-Hindi, East",English,5023974,9030392,4925660,8.6,13.2,6.3
 Bengali,West Bengal,"Non-Hindi, East",Hindi,2380016,4674622,4782240,4.1,6.8,6.1
-Hindi,Madhya Pradesh,Hindi Belt,Monolinguals,52861145,48283596,59807653,93.4,91.7,93
-Hindi,Madhya Pradesh,Hindi Belt,Atleast Bilinguals,3757945,4375091,4517310,6.6,8.3,7
-Hindi,Madhya Pradesh,Hindi Belt,English,3757945,3723078,3488231,6.6,7.1,5.4
-Hindi,Uttar Pradesh,Hindi Belt,Monolinguals,115579492,135734624,171969085,92.2,89.4,91.5
-Hindi,Uttar Pradesh,Hindi Belt,Atleast Bilinguals,9769000,16035507,16009970,7.8,10.6,8.5
-Hindi,Uttar Pradesh,Hindi Belt,English,9101384,13715482,11841998,7.3,9,6.3
-Hindi,Rajasthan,Hindi Belt,Monolinguals,36573949,48588697,57774999,92.8,94.5,94.3
-Hindi,Rajasthan,Hindi Belt,Atleast Bilinguals,2837019,2818519,3499275,7.2,5.5,5.7
-Hindi,Rajasthan,Hindi Belt,English,2837019,2367845,2572419,7.2,4.6,4.2
+Hindi,Madhya Pradesh,"Hindi, Central & East",Monolinguals,52861145,48283596,59807653,93.4,91.7,93
+Hindi,Madhya Pradesh,"Hindi, Central & East",Atleast Bilinguals,3757945,4375091,4517310,6.6,8.3,7
+Hindi,Madhya Pradesh,"Hindi, Central & East",English,3757945,3723078,3488231,6.6,7.1,5.4
+Hindi,Uttar Pradesh,"Hindi, Central & East",Monolinguals,115579492,135734624,171969085,92.2,89.4,91.5
+Hindi,Uttar Pradesh,"Hindi, Central & East",Atleast Bilinguals,9769000,16035507,16009970,7.8,10.6,8.5
+Hindi,Uttar Pradesh,"Hindi, Central & East",English,9101384,13715482,11841998,7.3,9,6.3
+Hindi,Rajasthan,"Hindi, North & West",Monolinguals,36573949,48588697,57774999,92.8,94.5,94.3
+Hindi,Rajasthan,"Hindi, North & West",Atleast Bilinguals,2837019,2818519,3499275,7.2,5.5,5.7
+Hindi,Rajasthan,"Hindi, North & West",English,2837019,2367845,2572419,7.2,4.6,4.2
 Punjabi,Punjab,"Non-Hindi, North",Monolinguals,12480000,11784075,13053880,66.7,52.8,52.4
 Punjabi,Punjab,"Non-Hindi, North",Atleast Bilinguals,6224461,10550294,11864005,33.3,47.2,47.6
 Punjabi,Punjab,"Non-Hindi, North",English,4255294,7249605,7761505,22.8,32.5,31.1
 Punjabi,Punjab,"Non-Hindi, North",Hindi,6027019,10174643,11434985,32.2,45.6,45.9
-Hindi,Haryana,Hindi Belt,Monolinguals,11977578,15233754,18591722,79.9,82.5,83.3
-Hindi,Haryana,Hindi Belt,Atleast Bilinguals,3004831,3227089,3730435,20.1,17.5,16.7
-Hindi,Haryana,Hindi Belt,English,2624719,2944320,3267122,17.5,15.9,14.6
-Hindi,Himachal Pradesh,Hindi Belt,Monolinguals,3513473,4958408,5396328,76.5,91.7,91.5
-Hindi,Himachal Pradesh,Hindi Belt,Atleast Bilinguals,1082142,451350,499201,23.5,8.3,8.5
-Hindi,Himachal Pradesh,Hindi Belt,English,966817,409451,434466,21,7.6,7.4
+Hindi,Haryana,"Hindi, North & West",Monolinguals,11977578,15233754,18591722,79.9,82.5,83.3
+Hindi,Haryana,"Hindi, North & West",Atleast Bilinguals,3004831,3227089,3730435,20.1,17.5,16.7
+Hindi,Haryana,"Hindi, North & West",English,2624719,2944320,3267122,17.5,15.9,14.6
+Hindi,Himachal Pradesh,"Hindi, North & West",Monolinguals,3513473,4958408,5396328,76.5,91.7,91.5
+Hindi,Himachal Pradesh,"Hindi, North & West",Atleast Bilinguals,1082142,451350,499201,23.5,8.3,8.5
+Hindi,Himachal Pradesh,"Hindi, North & West",English,966817,409451,434466,21,7.6,7.4
 Konkani,Goa,"Non-Hindi, South",Monolinguals,220836,210485,208312,36.6,27.3,21.6
 Konkani,Goa,"Non-Hindi, South",Atleast Bilinguals,381790,559403,755993,63.4,72.7,78.4
 Konkani,Goa,"Non-Hindi, South",English,267426,373481,460603,44.4,48.5,47.8
@@ -69,21 +69,21 @@ Bengali,Andaman and Nicobar Islands,"Non-Hindi, South",Monolinguals,31142,30869,
 Bengali,Andaman and Nicobar Islands,"Non-Hindi, South",Atleast Bilinguals,33564,60713,78817,51.9,66.3,72.7
 Bengali,Andaman and Nicobar Islands,"Non-Hindi, South",English,16971,25140,22559,26.2,27.5,20.8
 Bengali,Andaman and Nicobar Islands,"Non-Hindi, South",Hindi,31928,58346,77033,49.3,63.7,71
-Hindi,Chandigarh,Hindi Belt,Monolinguals,209413,313410,425810,53.4,51.5,54.8
-Hindi,Chandigarh,Hindi Belt,Atleast Bilinguals,182641,294808,350965,46.6,48.5,45.2
-Hindi,Chandigarh,Hindi Belt,English,149029,244160,280858,38,40.1,36.2
-Hindi,Chhattisgarh,Hindi Belt,Monolinguals,,16584387,20708030,,96.4,96.9
-Hindi,Chhattisgarh,Hindi Belt,Atleast Bilinguals,,626094,653897,,3.6,3.1
-Hindi,Chhattisgarh,Hindi Belt,English,,429942,357741,,2.5,1.7
-Hindi,Jharkhand,Hindi Belt,Monolinguals,,14169697,18680411,,91.4,91.4
-Hindi,Jharkhand,Hindi Belt,Atleast Bilinguals,,1340890,1755615,,8.6,8.6
-Hindi,Jharkhand,Hindi Belt,English,,927187,919688,,6,4.5
-Hindi,Uttarakhand,Hindi Belt,Monolinguals,,6731236,8059742,,90.2,89.6
-Hindi,Uttarakhand,Hindi Belt,Atleast Bilinguals,,735177,932372,,9.8,10.4
-Hindi,Uttarakhand,Hindi Belt,English,,630567,714478,,8.4,7.9
-Hindi,Delhi,Hindi Belt,Monolinguals,5498553,7506994,9514896,71.5,67,66.7
-Hindi,Delhi,Hindi Belt,Atleast Bilinguals,2192078,3703849,4740630,28.5,33,33.3
-Hindi,Delhi,Hindi Belt,English,2030525,3448217,4344605,26.4,30.8,30.5
+Hindi,Chandigarh,"Hindi, North & West",Monolinguals,209413,313410,425810,53.4,51.5,54.8
+Hindi,Chandigarh,"Hindi, North & West",Atleast Bilinguals,182641,294808,350965,46.6,48.5,45.2
+Hindi,Chandigarh,"Hindi, North & West",English,149029,244160,280858,38,40.1,36.2
+Hindi,Chhattisgarh,"Hindi, Central & East",Monolinguals,,16584387,20708030,93.4,96.4,96.9
+Hindi,Chhattisgarh,"Hindi, Central & East",Atleast Bilinguals,,626094,653897,6.6,3.6,3.1
+Hindi,Chhattisgarh,"Hindi, Central & East",English,,429942,357741,6.6,2.5,1.7
+Hindi,Jharkhand,"Hindi, Central & East",Monolinguals,,14169697,18680411,90.3,91.4,91.4
+Hindi,Jharkhand,"Hindi, Central & East",Atleast Bilinguals,,1340890,1755615,9.7,8.6,8.6
+Hindi,Jharkhand,"Hindi, Central & East",English,,927187,919688,8.7,6,4.5
+Hindi,Uttarakhand,"Hindi, North & West",Monolinguals,,6731236,8059742,92.2,90.2,89.6
+Hindi,Uttarakhand,"Hindi, North & West",Atleast Bilinguals,,735177,932372,7.8,9.8,10.4
+Hindi,Uttarakhand,"Hindi, North & West",English,,630567,714478,7.3,8.4,7.9
+Hindi,Delhi,"Hindi, North & West",Monolinguals,5498553,7506994,9514896,71.5,67,66.7
+Hindi,Delhi,"Hindi, North & West",Atleast Bilinguals,2192078,3703849,4740630,28.5,33,33.3
+Hindi,Delhi,"Hindi, North & West",English,2030525,3448217,4344605,26.4,30.8,30.5
 Kashmiri,Jammu and Kashmir,"Non-Hindi, North",Monolinguals,,3333738,3785526,,61.4,56.7
 Kashmiri,Jammu and Kashmir,"Non-Hindi, North",Atleast Bilinguals,,2091995,2895311,,38.6,43.3
 Kashmiri,Jammu and Kashmir,"Non-Hindi, North",English,,782873,960893,,14.4,14.4

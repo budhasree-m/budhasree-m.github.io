@@ -9,21 +9,31 @@ d3.csv("data.csv").then(function(data) {
 
     let categories = [...new Set(data.map(d => d.Category))];
     let regions = [...new Set(data.map(d => d.Region))];
-
+    let regionsOrder = [
+        "Non-Hindi, South",
+		"Non-Hindi, West",
+        "Non-Hindi, North",
+        "Hindi, North & West",
+		"Hindi, Central & East",			
+		"Non-Hindi, East",
+		"Non-Hindi, North East"
+    ];
     const regionColors = {
         "Non-Hindi, South": "#3A6351",
-        "Non-Hindi, North": "#354F52",
-        "Hindi Belt": "#5D3A58",		
 		"Non-Hindi, West": "#A0522D",
+        "Non-Hindi, North": "#354F52",
+        "Hindi, North & West": "#6B3E3E",
+		"Hindi, Central & East": "#5D3A58",			
 		"Non-Hindi, East": "#5A5A3A",
 		"Non-Hindi, North East": "#8A5E3B"
     };
 	
 	const highlightRegionColors = {
         "Non-Hindi, South": "#5D8B75",
-        "Non-Hindi, North": "#5B7A7D",
-        "Hindi Belt": "#865C81",		
 		"Non-Hindi, West": "#C4744D",
+        "Non-Hindi, North": "#5B7A7D",
+        "Hindi, North & West": "#A67171",		
+		"Hindi, Central & East": "#865C81",	
 		"Non-Hindi, East": "#84845C",
 		"Non-Hindi, North East": "#B27F5E"
     };
@@ -40,7 +50,8 @@ d3.csv("data.csv").then(function(data) {
             .attr("data-category", category)
             .classed("active", category === "Monolinguals")
             .on("click", function() {
-                categoryContainer.selectAll("button").classed("active", false)
+                note = "";
+				categoryContainer.selectAll("button").classed("active", false)
 						.filter(function() {
 									return d3.select(this).attr("data-category") === category;
 								})
@@ -51,14 +62,16 @@ d3.csv("data.csv").then(function(data) {
     });
 
     let regionContainer = d3.select("#region-buttons");
-    regions.forEach(region => {
-        regionContainer.append("button")
+    regionsOrder.forEach(region => {
+        if (!regions.includes(region)) return;  // ensure region exists in data
+		regionContainer.append("button")
             .attr("data-region", region)
 			.classed("active", region === "Non-Hindi, South")
             .style("background-color", regionColors[region] || "#555")
             .text(region)
             .on("click", () => {
-                regionContainer.selectAll("button").classed("active", false)
+                note = "";
+				regionContainer.selectAll("button").classed("active", false)
 				               .filter(function() {
 									return d3.select(this).attr("data-region") === region;
 								})
@@ -96,7 +109,8 @@ d3.csv("data.csv").then(function(data) {
             .on("mouseover", function() { d3.select(this).classed("hovered", true); })
             .on("mouseout", function() { d3.select(this).classed("hovered", false); })
             .on("click", function(event, d) {
-                currentState = d.properties.st_nm;
+                note = "";
+				currentState = d.properties.st_nm;
 				statesToHighlight = normalizeStateClick(currentState);
 				regionContainer.selectAll("button").classed("active", false)
 				               .filter(function() {
@@ -165,9 +179,10 @@ d3.csv("data.csv").then(function(data) {
 			  d3.select(this).classed("hovered", false);
 			})
 			.on("click", function(event, d) {
+			  note = "";
 			  currentState = d.properties.st_nm;
 			  statesToHighlight = normalizeStateClick(currentState);
-			 regionContainer.selectAll("button").classed("active", false)
+			  regionContainer.selectAll("button").classed("active", false)
 				               .filter(function() {
 									return d3.select(this).attr("data-region") === getRegion(d.properties.st_nm);
 								})
@@ -186,7 +201,8 @@ d3.csv("data.csv").then(function(data) {
     function getRegion(state) {
         if (["Kerala", "Tamil Nadu", "Karnataka", "Andhra Pradesh", "Telangana", "Goa", "Lakshadweep", "Puducherry", "Andaman and Nicobar Islands"].includes(state)) return "Non-Hindi, South";
         if (["Jammu and Kashmir", "Ladakh", "Punjab"].includes(state)) return "Non-Hindi, North";
-        if (["Chandigarh", "Uttar Pradesh", "Madhya Pradesh", "Bihar", "Rajasthan", "Chhattisgarh", "Jharkhand", "Haryana", "Himachal Pradesh", "Uttarakhand", "Delhi"].includes(state)) return "Hindi Belt";
+        if (["Chandigarh", "Rajasthan", "Haryana", "Himachal Pradesh", "Uttarakhand", "Delhi"].includes(state)) return "Hindi, North & West";
+		if (["Uttar Pradesh", "Madhya Pradesh", "Bihar", "Chhattisgarh", "Jharkhand"].includes(state)) return "Hindi, Central & East";
         if (["West Bengal", "Odisha"].includes(state)) return "Non-Hindi, East";
         if (["Gujarat", "Dadra and Nagar Haveli and Daman and Diu", "Maharashtra"].includes(state)) return "Non-Hindi, West";
         if (["Assam", "Manipur", "Meghalaya", "Mizoram", "Nagaland", "Tripura", "Arunachal Pradesh", "Sikkim"].includes(state)) return "Non-Hindi, North East";
@@ -235,9 +251,19 @@ d3.csv("data.csv").then(function(data) {
             .attr("fill", d => regionColors[getRegion(d.properties.st_nm)])
 			.attr("stroke-width", 2);
 			if (stateList.includes("Telangana") && stateList.includes("Andhra Pradesh")) {
-				note = "Note: Andhra Pradesh and Telangana are two seperate states now, they were united in 2011.";
+				note = "Note: Andhra Pradesh and Telangana are shown together as they were a unified state till 2014.";
 			} else if (stateList.includes("Jammu and Kashmir") && stateList.includes("Ladakh")) {
-				note = "Note: Jammu & Kashmir and Ladakh are two separate UTs now, they were united in 2011.";
+				note = "Note: Jammu & Kashmir and Ladakh UTs are shown together as they were a unified state till 2019. 1991 data is unavailable due to unrest.";
+			} else if (stateList.includes("Uttarakhand")) {
+				note = "Note: Uttarakhand was carved out of Uttar Pradesh in 2000. For 1991 data, UP figures are used for Uttarakhand.";
+			} else if (stateList.includes("Jharkhand")) {
+				note = "Note: Jharkhand was carved out of Bihar in 2000. For 1991 data, Bihar figures are used for Jharkhand.";
+			} else if (stateList.includes("Chhattisgarh")) {
+				note = "Note: Chhattisgarh was carved out of Madhya Pradesh in 2000. For 1991 data, MP figures are used for Chhattisgarh.";
+			} else if (stateList.includes("Manipur")) {
+				note = "Note: For 1991 data, category information for 5,00,000 speakers in Manipur is unavailable. They're assumed to be Monolingual.";
+			} else if (stateList.includes("Dadra and Nagar Haveli and Daman and Diu")) {
+				note = "Note: Dadra & Nagar Haveli and Daman & Diu, merged in 2020, are shown together with data consolidated under Gujarati as the major language.";
 			}
 			d3.select("#map-note").text(note);
 		stateList.forEach(state => {			
@@ -259,7 +285,11 @@ d3.csv("data.csv").then(function(data) {
 		d3.selectAll(".state").classed("selected", false);
 	    d3.selectAll(".state").classed("selectedRegion", false);
 	    d3.selectAll(".state-label").classed("selected", false);
+		mapGroup.selectAll("path")
+            .attr("fill", d => regionColors[getRegion(d.properties.st_nm)])
+			.attr("stroke-width", 2);
         d3.select("#chart").html("");
+		note = "";
     });
 
     function updateChart(region, state) {
@@ -282,18 +312,18 @@ d3.csv("data.csv").then(function(data) {
         }
 
         let yMin, yMax;
-        if (selectedCategory === "Monolinguals") {
-            yMin = 20;
-            yMax = 100;
+        if (selectedCategory === "English") {
+            yMin = 0;
+            yMax = 60;
         }
-		else if (selectedCategory === "Atleast Bilinguals") {
+		else if (selectedCategory === "Hindi") {
             yMin = 0;
             yMax = 80;
         }
 		else {
             let values = filteredData.flatMap(d => [d["1991_Per"], d["2001_Per"], d["2011_Per"]]);
-            yMin = Math.floor(Math.min(...values) / 5) * 5;
-            yMax = Math.ceil(Math.max(...values) / 5) * 5;
+            yMin = Math.floor(Math.min(...values) / 10) * 10;
+            yMax = Math.ceil(Math.max(...values) / 10) * 10;
         }
 
         let width = document.getElementById("chart-container").clientWidth - 20;
@@ -365,8 +395,8 @@ d3.csv("data.csv").then(function(data) {
                 svg.selectAll(`.label-${index}`)
                     .data(stateData.filter(d => d.percentage != null && !isNaN(d.percentage)))
                     .enter().append("text")
-                    .attr("x", d => xScale(d.year))
-                    .attr("y", d => yScale(d.percentage) - 25)
+                    .attr("x", d => xScale(d.year) + 20)
+                    .attr("y", d => yScale(d.percentage)-20)
                     .attr("text-anchor", "middle")
                     .attr("fill", "white")
                     .attr("font-size", "16px")
@@ -392,7 +422,7 @@ d3.csv("data.csv").then(function(data) {
 
         svg.append("g")
             .attr("transform", `translate(${margin.left},0)`)
-            .call(d3.axisLeft(yScale).tickSize(8))
+            .call(d3.axisLeft(yScale).tickValues(d3.range(yMin, yMax + 10, 10)))
             .selectAll("text")
             .style("font-size", "14px");
     }

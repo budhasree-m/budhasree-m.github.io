@@ -38,7 +38,7 @@ d3.csv("data.csv").then(function(data) {
 		"Non-Hindi, North East": "#B27F5E"
     };
 	
-	let currentRegion = "Non-Hindi, South";
+	let currentRegion = "All";
     let currentState = "All";
 	let statesToHighlight = "All";
     const tooltip = d3.select("#tooltip");
@@ -58,6 +58,8 @@ d3.csv("data.csv").then(function(data) {
 								.classed("active", true);				
                 updateChart(currentRegion, currentState);
 				highlightStates(currentRegion);	
+				statesToHighlight = normalizeStateClick(currentState);
+				highlightSelectedStates(statesToHighlight);
             });
     });
 
@@ -76,9 +78,9 @@ d3.csv("data.csv").then(function(data) {
 									return d3.select(this).attr("data-region") === region;
 								})
 								.classed("active", true);
+				currentState = "All";
 				currentRegion = region;
-                currentState = "All";
-                highlightStates(currentRegion);
+				highlightStates(currentRegion);
                 updateChart(currentRegion, currentState);
             }
 			);
@@ -111,6 +113,7 @@ d3.csv("data.csv").then(function(data) {
             .on("click", function(event, d) {
                 note = "";
 				currentState = d.properties.st_nm;
+				currentRegion = getRegion(currentState);
 				statesToHighlight = normalizeStateClick(currentState);
 				regionContainer.selectAll("button").classed("active", false)
 				               .filter(function() {
@@ -118,12 +121,11 @@ d3.csv("data.csv").then(function(data) {
 								})
 								.classed("active", true);
                 //d3.select(this).classed("selected", true);	
-				highlightStates(getRegion(currentState));
+				highlightStates(currentRegion);
 				 // Pass multiple states into highlight function				  
 				highlightSelectedStates(statesToHighlight);
 				// Chart
-                currentState = StateBeforeReorg(currentState);
-			    updateChart(getRegion(currentState), currentState);	
+			    updateChart(getRegion(StateBeforeReorg(currentState)), StateBeforeReorg(currentState));	
 				console.log("Selected state:", currentState);				
             });
 			
@@ -181,6 +183,7 @@ d3.csv("data.csv").then(function(data) {
 			.on("click", function(event, d) {
 			  note = "";
 			  currentState = d.properties.st_nm;
+			  currentRegion = getRegion(currentState);
 			  statesToHighlight = normalizeStateClick(currentState);
 			  regionContainer.selectAll("button").classed("active", false)
 				               .filter(function() {
@@ -188,12 +191,11 @@ d3.csv("data.csv").then(function(data) {
 								})
 								.classed("active", true);
 			  //d3.select(this).classed("selected", true);
-			  highlightStates(getRegion(currentState));
+			  highlightStates(currentRegion);
 			   // Pass multiple states into highlight function 
 			  highlightSelectedStates(statesToHighlight);
 			  // Chart
-			  currentState = StateBeforeReorg(currentState);
-			  updateChart(getRegion(currentState), currentState);
+			  updateChart(getRegion(StateBeforeReorg(currentState)), StateBeforeReorg(currentState));
 			  console.log("Selected state:", currentState);			
 		   });
     });
@@ -240,9 +242,9 @@ d3.csv("data.csv").then(function(data) {
             .classed("selected", true);
 		d3.selectAll(".state-label").filter(s => getRegion(s.properties.st_nm) === region)
             .classed("selected", true);
-		mapGroup.selectAll("path")
-            .attr("fill", d => getRegion(d.properties.st_nm) === region ? highlightRegionColors[getRegion(d.properties.st_nm)] : regionColors[getRegion(d.properties.st_nm)])
-			.attr("stroke-width", d => getRegion(d.properties.st_nm) === region ? 3 : 2);
+		mapGroup.selectAll("path").filter(s => getRegion(s.properties.st_nm) === region)
+            .attr("fill", d => highlightRegionColors[getRegion(d.properties.st_nm)])
+			.attr("stroke-width", 3 );
     }
 	
 	function highlightSelectedStates(stateList) {
@@ -266,7 +268,7 @@ d3.csv("data.csv").then(function(data) {
 				note = "Note: Dadra & Nagar Haveli and Daman & Diu, merged in 2020, are shown together with data consolidated under Gujarati as the major language.";
 			}
 			d3.select("#map-note").text(note);
-		stateList.forEach(state => {			
+			stateList.forEach(state => {			
 			d3.selectAll(".state").filter(s => s.properties.st_nm === state)
             .classed("selected", true);
 			mapGroup.selectAll("path").filter(s => s.properties.st_nm === state)
@@ -297,7 +299,7 @@ d3.csv("data.csv").then(function(data) {
          console.log("region:", region);
 		 console.log("state:", state);
         let filteredData = data.filter(d => 
-            d.Region === region && 
+            (d.Region === region) && 
             (state === "All" || d.State === state) &&
             d.Category === selectedCategory
         );		

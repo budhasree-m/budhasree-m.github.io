@@ -271,6 +271,10 @@ d3.csv("data.csv").then(function(data) {
             (state === "All" || d.State === state) &&
             d.Category === selectedCategory
         );		
+		
+		function sanitizeValue(value) {
+			return (value === "" || value === 0 || value === null || isNaN(value)) ? null : value;
+		}
 
         if (filteredData.length === 0) {
             console.warn("⚠️ No data available for selected filters!");
@@ -309,16 +313,17 @@ d3.csv("data.csv").then(function(data) {
             .range([height - margin.bottom, margin.top]);
 
         let lineGenerator = d3.line()
-            .x(d => xScale(d.year))
+            .defined(d => d.percentage != null && !isNaN(d.percentage))  // Skip null/NaN points
+			.x(d => xScale(d.year))
             .y(d => yScale(d.percentage));
 
         let statesList = [...new Set(filteredData.map(d => d.State))];
 
         statesList.forEach((stateName, index) => {
             let stateData = [
-                {year: "1991", percentage: filteredData.find(d => d.State === stateName)["1991_Per"]},
-                {year: "2001", percentage: filteredData.find(d => d.State === stateName)["2001_Per"]},
-                {year: "2011", percentage: filteredData.find(d => d.State === stateName)["2011_Per"]}
+                {year: "1991", percentage: sanitizeValue(filteredData.find(d => d.State === stateName)["1991_Per"])},
+                {year: "2001", percentage: sanitizeValue(filteredData.find(d => d.State === stateName)["2001_Per"])},
+                {year: "2011", percentage: sanitizeValue(filteredData.find(d => d.State === stateName)["2011_Per"])}
             ];
 
             let lineColor = regionColors[region] || "#777";
@@ -334,7 +339,7 @@ d3.csv("data.csv").then(function(data) {
 
             // Add dots
             svg.selectAll(`.dot-${index}`)
-                .data(stateData)
+                .data(stateData.filter(d => d.percentage != null && !isNaN(d.percentage)))
                 .enter()
                 .append("circle")
                 .attr("cx", d => xScale(d.year))
@@ -358,7 +363,7 @@ d3.csv("data.csv").then(function(data) {
             // Add labels (only when specific state is selected)
             if (currentState !== "All") {
                 svg.selectAll(`.label-${index}`)
-                    .data(stateData)
+                    .data(stateData.filter(d => d.percentage != null && !isNaN(d.percentage)))
                     .enter().append("text")
                     .attr("x", d => xScale(d.year))
                     .attr("y", d => yScale(d.percentage) - 25)

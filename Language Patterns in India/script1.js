@@ -38,7 +38,7 @@ d3.csv("data.csv").then(function(data) {
 		"Non-Hindi, North East": "#B27F5E"
     };
 	
-	let currentRegion = "All";
+	let currentRegion = "Non-Hindi, South";
     let currentState = "All";
 	let statesToHighlight = "All";
     const tooltip = d3.select("#tooltip");
@@ -342,7 +342,7 @@ d3.csv("data.csv").then(function(data) {
         let margin;
 
 		if (window.innerWidth <= 375) {
-			margin = { top: 5, right: 15, bottom: 20, left: 15 };
+			margin = { top: 5, right: 20, bottom: 20, left: 15 };
 		} else if (window.innerWidth <= 768) {
 			margin = { top: 7, right: 20, bottom: 20, left: 20 };
 		} else {
@@ -438,7 +438,7 @@ d3.csv("data.csv").then(function(data) {
             path.attr("stroke-dasharray", totalLength + " " + totalLength)
                 .attr("stroke-dashoffset", totalLength)
                 .transition()
-                .duration(4000)
+                .duration(2000)
                 .ease(d3.easeLinear)
                 .attr("stroke-dashoffset", 0);
         });

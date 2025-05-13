@@ -206,6 +206,10 @@ text {
 	  font-size: 3px;
 	}
 	
+	.state-label.selected {
+	  font-size: 4px;
+	}
+	
 	.footer {
 	  font-size: 7px;
 	}
@@ -246,6 +250,10 @@ text {
 	
 	.state-label {
 	  font-size: 4px;
+	}
+	
+	.state-label.selected {
+	  font-size: 5px;
 	}
 	
 	.footer {
@@ -289,6 +297,10 @@ text {
 	
 	.state-label {
 	  font-size: 5px;
+	}
+	
+	.state-label.selected {
+	  font-size: 6px;
 	}
 	
 	.footer {

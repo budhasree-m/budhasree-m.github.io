@@ -210,6 +210,9 @@ text {
 	  font-size: 4px;
 	}
 	
+	.tooltip {
+		font-size: 7px;
+	}
 	.footer {
 	  font-size: 7px;
 	}
@@ -254,6 +257,10 @@ text {
 	
 	.state-label.selected {
 	  font-size: 5px;
+	}
+	
+	.tooltip {
+		font-size: 8px;
 	}
 	
 	.footer {
@@ -301,6 +308,10 @@ text {
 	
 	.state-label.selected {
 	  font-size: 6px;
+	}
+	
+	.tooltip {
+		font-size: 8px;
 	}
 	
 	.footer {

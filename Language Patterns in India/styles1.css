@@ -99,6 +99,7 @@ body {
   border-radius: 15px; /* Rounded corners like chart-container */
   position: sticky;
   box-sizing: border-box;
+  touch-action: pan-y; /* Allow vertical scroll */
 }
 
 #chart-container {
@@ -172,7 +173,7 @@ text {
     color: white;
     padding: 12px;
     border-radius: 6px;
-    font-size: 18px;
+    font-size: 14px;
     pointer-events: none;
     transition: opacity 0.3s;
 }
@@ -212,6 +213,8 @@ text {
 	
 	.tooltip {
 		font-size: 7px;
+		padding: 8px;
+		border-radius: 3px;
 	}
 	.footer {
 	  font-size: 7px;
@@ -261,6 +264,8 @@ text {
 	
 	.tooltip {
 		font-size: 8px;
+		padding: 8px;
+		border-radius: 4px;
 	}
 	
 	.footer {
@@ -312,6 +317,8 @@ text {
 	
 	.tooltip {
 		font-size: 8px;
+		padding: 8px;
+		border-radius: 4px;
 	}
 	
 	.footer {

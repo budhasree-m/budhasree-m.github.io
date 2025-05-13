@@ -129,7 +129,14 @@ d3.csv("data.csv").then(function(data) {
 				console.log("Selected state:", currentState);				
             });
 		const zoom = d3.zoom()
-					.scaleExtent([0.5, 5])
+					.filter(function(event) {
+					// Allow zoom only for mousewheel or two-finger gestures
+					return (!event.sourceEvent || 
+						   event.sourceEvent.ctrlKey ||      // For trackpad zoom on desktop
+						   event.sourceEvent.type === 'wheel' || 
+						   event.sourceEvent.touches?.length > 1);  // Pinch zoom only
+					})
+					.scaleExtent([1, 5])
 					.on("zoom", (event) => {
 						mapGroup.attr("transform", event.transform);
 					});
@@ -323,30 +330,20 @@ d3.csv("data.csv").then(function(data) {
         }
 
         let yMin, yMax;
-        if (selectedCategory === "English") {
-            yMin = 0;
-            yMax = 60;
-        }
-		else if (selectedCategory === "Hindi") {
-            yMin = 0;
-            yMax = 80;
-        }
-		else {
-            let values = filteredData.flatMap(d => [d["1991_Per"], d["2001_Per"], d["2011_Per"]]);
-            yMin = Math.floor(Math.min(...values) / 10) * 10;
-            yMax = Math.ceil(Math.max(...values) / 10) * 10;
-        }
+        let values = filteredData.flatMap(d => [d["1991_Per"], d["2001_Per"], d["2011_Per"]]);
+		yMin = Math.floor(Math.min(...values) / 10) * 10;
+		yMax = Math.ceil(Math.max(...values) / 10) * 10;
 
         let width = document.getElementById("chart-container").clientWidth - 20;
         let height = document.getElementById("chart-container").clientHeight - 20;
         let margin;
 
 		if (window.innerWidth <= 375) {
-			margin = { top: 5, right: 20, bottom: 20, left: 15 };
+			margin = { top: 5, right: 100, bottom: 20, left: 20 };
 		} else if (window.innerWidth <= 768) {
-			margin = { top: 7, right: 20, bottom: 20, left: 20 };
+			margin = { top: 7, right: 100, bottom: 30, left: 30 };
 		} else {
-			margin = {top: 10, right: 40, bottom: 40, left: 40};
+			margin = {top: 10, right: 100, bottom: 50, left: 50};
 		}
 
         let svg = d3.select("#chart").html("")
@@ -367,6 +364,21 @@ d3.csv("data.csv").then(function(data) {
             .y(d => yScale(d.percentage));
 
         let statesList = [...new Set(filteredData.map(d => d.State))];
+		
+		// Add axes
+		let axisFontSize;
+		let labelsFontSize;
+
+		if (window.innerWidth <= 375) {
+			axisFontSize = "10px";
+			labelsFontSize = "8px";
+		} else if (window.innerWidth <= 768) {
+			axisFontSize = "12px";
+			labelsFontSize = "10px";
+		} else {
+			axisFontSize = "14px";
+			labelsFontSize = "10px";
+		}
 
         statesList.forEach((stateName, index) => {
             let stateData = [
@@ -382,7 +394,7 @@ d3.csv("data.csv").then(function(data) {
                 .datum(stateData)
                 .attr("fill", "none")
                 .attr("stroke", lineColor)
-                .attr("stroke-width", 4)
+                .attr("stroke-width", 1.2)
                 .attr("d", lineGenerator)
                 .style("cursor", currentState === "All" ? "pointer" : "default");
 
@@ -407,7 +419,7 @@ d3.csv("data.csv").then(function(data) {
                 .attr("r", circleRadius) // Larger dots for TV visibility
                 .attr("fill", lineColor)
                 .attr("stroke", "white")
-                .attr("stroke-width", 2)
+                .attr("stroke-width", 1.2)
                 .on("mouseover", function(event, d) {
                     if (currentState === "All") {
                         tooltip.style("display", "block")
@@ -418,9 +430,9 @@ d3.csv("data.csv").then(function(data) {
                 })
                 .on("mouseout", function() {
                     tooltip.style("display", "none");
-                });
-
-            // Add labels (only when specific state is selected)
+                });            
+			
+			// Add labels to data points when state is selected
             if (currentState !== "All") {
                 svg.selectAll(`.label-${index}`)
                     .data(stateData.filter(d => d.percentage != null && !isNaN(d.percentage)))
@@ -429,30 +441,57 @@ d3.csv("data.csv").then(function(data) {
                     .attr("y", d => yScale(d.percentage)-20)
                     .attr("text-anchor", "middle")
                     .attr("fill", "white")
-                    .attr("font-size", "14px")
+                    .attr("font-size", labelsFontSize)
                     .text(d => d.percentage.toFixed(1) + "%" );
             }
-
-            // Animation
+			
+			// Animation
             let totalLength = path.node().getTotalLength();
             path.attr("stroke-dasharray", totalLength + " " + totalLength)
                 .attr("stroke-dashoffset", totalLength)
                 .transition()
-                .duration(2000)
+                .duration(1500)
                 .ease(d3.easeLinear)
-                .attr("stroke-dashoffset", 0);
+                .attr("stroke-dashoffset", 0)
+				.on("end", function() {
+					addStateLabels();  // Call label rendering after animation
+				});
+			
+			function addStateLabels() {
+				// Add labels to the line graph
+				stateData = filteredData.find(d => d.State === stateName);
+				if (stateData && stateData["2011_Per"] != null && stateData["2011_Per"] !== "") {
+					
+					// Get coordinates for 2001 and 2011 points
+					let x2001 = xScale("2001");
+					let y2001 = yScale(stateData["2001_Per"]);
+					let x2011 = xScale("2011");
+					let y2011 = yScale(stateData["2011_Per"]);
+
+					// Calculate angle in degrees
+					let angleRad = Math.atan2(y2011 - y2001, x2011 - x2001);
+					let angleDeg = angleRad * (180 / Math.PI);
+					
+					svg.append("text")
+						.attr("class", "state-line-label")
+						.attr("x", x2011 -140)  // slight offset to the right
+						.attr("y", y2011)  // position above the line
+						.attr("transform", `rotate(${angleDeg}, ${x2011 + 8}, ${y2011})`) // rotate around label position
+						.style("text-anchor", "start")
+						.style("fill", "white")
+						.style("font-size", labelsFontSize)
+						.style("opacity", 0)  // Initially invisible
+						.text(`${stateName}`)
+						.transition()        // Transition for smooth fade-in
+						.duration(800)
+						.delay(100)          // Small delay for nicer effect
+						.style("opacity", 1);
+				}
+			};
+            
         });
 
-        // Add axes
-		let axisFontSize;
-
-		if (window.innerWidth <= 375) {
-			axisFontSize = "10px";
-		} else if (window.innerWidth <= 768) {
-			axisFontSize = "12px";
-		} else {
-			axisFontSize = "14px";
-		}
+        
         svg.append("g")
             .attr("transform", `translate(0,${height - margin.bottom})`)
             .call(d3.axisBottom(xScale).tickSize(8))
@@ -461,9 +500,31 @@ d3.csv("data.csv").then(function(data) {
 
         svg.append("g")
             .attr("transform", `translate(${margin.left},0)`)
-            .call(d3.axisLeft(yScale).tickValues(d3.range(yMin, yMax + 10, 10)))
+            .call(d3.axisLeft(yScale).tickValues(d3.range(yMin, yMax + 5, 5)))
             .selectAll("text")
             .style("font-size", axisFontSize);
+			
+		// Y-axis Label
+		svg.append("text")
+		   .attr("class", "y-axis-label")
+		   .attr("transform", "rotate(-90)")
+		   .attr("y", margin.left / 4)
+		   .attr("x", -(height / 2))
+		   .style("text-anchor", "middle")
+		   .style("fill", "white")
+		   .style("font-size", axisFontSize)
+		   .text("Percentage of Speakers");
+
+		// X-axis Label
+		svg.append("text")
+		   .attr("class", "x-axis-label")
+		   .attr("x", (width + margin.left - margin.right) / 2)
+		   .attr("y", height - margin.bottom / 4)
+		   .style("text-anchor", "middle")
+		   .style("fill", "white")
+		   .style("font-size", axisFontSize)
+		   .text("Census Year");
+
     }
 	
 	window.addEventListener("resize", () => {

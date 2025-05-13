@@ -203,7 +203,7 @@ text {
     }
 	
 	.state-label {
-	  font-size: 7px;
+	  font-size: 5px;
 	}
 	
 	.footer {
@@ -218,22 +218,23 @@ text {
 
     #map-container {
         flex-shrink: 0;
-        width: 100%;
+        width: 300px;
+		height: 300px;
     }
 
     #chart-container {
-        width: 100%;
-        height: auto;
+        width: 300px;
+        height: 250px;
     }
 }
 
 
 @media (max-width: 768px) {
-     body {
+    body {
 	margin: 0 auto;
 	}   
     .app-header h1 {
-        font-size: 22px;
+        font-size: 20px;
     }
 	
 	.button-group button {
@@ -244,7 +245,7 @@ text {
     }
 	
 	.state-label {
-	  font-size: 8px;
+	  font-size: 7px;
 	}
 	
 	.footer {
@@ -263,12 +264,12 @@ text {
 
     #map-container {
         flex-shrink: 0;
-        width: 400px;
+        width: 350px;
 		height:400px;
     }
 
     #chart-container {
-        width: 400px;
+        width: 350px;
         height: 300px;
     }
 }

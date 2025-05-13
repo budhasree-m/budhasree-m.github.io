@@ -102,12 +102,14 @@ body {
 }
 
 #chart-container {
-  width: 600px;
+  width: 900px;
   height: 400px; /* Adjust height as per header + padding */
   background: #333;
   border-radius: 15px;
   padding: 15px;
   box-sizing: border-box;  
+  margin: 0 auto;
+  display: block;
 }
 
 
@@ -186,7 +188,10 @@ text {
 }
 
 @media (max-width: 375px) {
-    .app-header h1 {
+    body {
+	margin: 0 auto;
+	}
+	.app-header h1 {
         font-size: 18px;
     }
 
@@ -194,17 +199,26 @@ text {
         padding: 8px 10px;
         font-size: 6px;
         border-radius: 4px;
-        min-width: 70px;
+        min-width: 60px;
     }
+	
+	.state-label {
+	  font-size: 7px;
+	}
+	
+	.footer {
+	  font-size: 7px;
+	}
 
     #main-container {
         flex-direction: column;
         align-items: center;
+		gap: 3px;
     }
 
     #map-container {
+        flex-shrink: 0;
         width: 100%;
-        height: auto;
     }
 
     #chart-container {
@@ -215,7 +229,9 @@ text {
 
 
 @media (max-width: 768px) {
-        
+     body {
+	margin: 0 auto;
+	}   
     .app-header h1 {
         font-size: 22px;
     }
@@ -226,32 +242,61 @@ text {
         border-radius: 6px;
         min-width: 100px;
     }
+	
+	.state-label {
+	  font-size: 8px;
+	}
+	
+	.footer {
+	  font-size: 8px;
+	}
+	
+	.button-group {
+        justify-content: center; 
+    }
 
     #main-container {
         flex-direction: column;
         align-items: center;
+		gap: 5px;
     }
 
     #map-container {
-        width: 100%;
-        height: auto;
+        flex-shrink: 0;
+        width: 400px;
+		height:400px;
     }
 
     #chart-container {
-        width: 100%;
-        height: auto;
+        width: 400px;
+        height: 300px;
     }
 }
 
 @media (min-width: 769px) and (max-width: 1024px) {
-    #map-container {
-        width: 60%;
-        height: auto;
+    #main-container {
+        flex-direction: column;
+        align-items: center;
+		gap: 5px;
     }
 
+    #map-container {
+        flex-shrink: 0;
+        width: 400px;
+		height:400px;
+    }
+	
+	.state-label {
+	  font-size: 8px;
+	}
+	
+	.footer {
+	  font-size: 8px;
+	}
+
     #chart-container {
-        width: 35%;
-        height: auto;
+        flex-shrink: 0;
+        width: 400px;
     }
 
     .button-group button {
@@ -263,7 +308,8 @@ text {
 
 @media (min-width: 1025px) {
     #map-container {
-        width: 900px;
+        flex: 0 0 auto;
+		width: 900px;
         height: 900px;
     }
 

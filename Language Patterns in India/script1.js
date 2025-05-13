@@ -87,7 +87,8 @@ d3.csv("data.csv").then(function(data) {
     });
 
     // Replace state buttons with India Map
-    const width = 900, height = 900;
+    let width = document.getElementById("map-container").clientWidth;
+    let height = document.getElementById("map-container").clientHeight;
     const svg = d3.select("#map-container").html("").append("svg")
         .attr("width", width)
         .attr("height", height)
@@ -120,14 +121,20 @@ d3.csv("data.csv").then(function(data) {
 									return d3.select(this).attr("data-region") === getRegion(d.properties.st_nm);
 								})
 								.classed("active", true);
-                //d3.select(this).classed("selected", true);	
-				highlightStates(currentRegion);
+                highlightStates(currentRegion);
 				 // Pass multiple states into highlight function				  
 				highlightSelectedStates(statesToHighlight);
 				// Chart
 			    updateChart(getRegion(StateBeforeReorg(currentState)), StateBeforeReorg(currentState));	
 				console.log("Selected state:", currentState);				
             });
+		const zoom = d3.zoom()
+					.scaleExtent([0.5, 5])
+					.on("zoom", (event) => {
+						mapGroup.attr("transform", event.transform);
+					});
+
+		svg.call(zoom);
 			
 		  const seen = new Set();
 		  const labelOffsets = {
@@ -190,7 +197,6 @@ d3.csv("data.csv").then(function(data) {
 									return d3.select(this).attr("data-region") === getRegion(d.properties.st_nm);
 								})
 								.classed("active", true);
-			  //d3.select(this).classed("selected", true);
 			  highlightStates(currentRegion);
 			   // Pass multiple states into highlight function 
 			  highlightSelectedStates(statesToHighlight);
@@ -249,6 +255,7 @@ d3.csv("data.csv").then(function(data) {
 	
 	function highlightSelectedStates(stateList) {
 		    d3.selectAll(".state").classed("selected", false);
+			d3.selectAll(".state-label").classed("selected", false);
 			mapGroup.selectAll("path")
             .attr("fill", d => regionColors[getRegion(d.properties.st_nm)])
 			.attr("stroke-width", 2);
@@ -270,6 +277,8 @@ d3.csv("data.csv").then(function(data) {
 			d3.select("#map-note").text(note);
 			stateList.forEach(state => {			
 			d3.selectAll(".state").filter(s => s.properties.st_nm === state)
+            .classed("selected", true);
+			d3.selectAll(".state-label").filter(s => s.properties.st_nm === state)
             .classed("selected", true);
 			mapGroup.selectAll("path").filter(s => s.properties.st_nm === state)
             .attr("fill", d => highlightRegionColors[getRegion(d.properties.st_nm)])
@@ -330,7 +339,15 @@ d3.csv("data.csv").then(function(data) {
 
         let width = document.getElementById("chart-container").clientWidth - 20;
         let height = document.getElementById("chart-container").clientHeight - 20;
-        let margin = {top: 50, right: 80, bottom: 70, left: 80}; 
+        let margin;
+
+		if (window.innerWidth <= 375) {
+			margin = { top: 5, right: 15, bottom: 20, left: 15 };
+		} else if (window.innerWidth <= 768) {
+			margin = { top: 7, right: 20, bottom: 20, left: 20 };
+		} else {
+			margin = {top: 10, right: 40, bottom: 40, left: 40};
+		}
 
         let svg = d3.select("#chart").html("")
             .attr("width", width)
@@ -370,20 +387,31 @@ d3.csv("data.csv").then(function(data) {
                 .style("cursor", currentState === "All" ? "pointer" : "default");
 
             // Add dots
+			let circleRadius;
+
+			if (window.innerWidth <= 375) {
+				circleRadius = 3;
+			} else if (window.innerWidth <= 768) {
+				circleRadius = 5;
+			} else if (window.innerWidth <= 1024) {
+				circleRadius = 7;
+			} else {
+				circleRadius = 10;
+			}
             svg.selectAll(`.dot-${index}`)
                 .data(stateData.filter(d => d.percentage != null && !isNaN(d.percentage)))
                 .enter()
                 .append("circle")
                 .attr("cx", d => xScale(d.year))
                 .attr("cy", d => yScale(d.percentage))
-                .attr("r", 10) // Larger dots for TV visibility
+                .attr("r", circleRadius) // Larger dots for TV visibility
                 .attr("fill", lineColor)
                 .attr("stroke", "white")
                 .attr("stroke-width", 2)
                 .on("mouseover", function(event, d) {
                     if (currentState === "All") {
                         tooltip.style("display", "block")
-                            .html(`${stateName}<br>${d.year}: ${d.percentage.toFixed(1)}`)
+                            .html(`${stateName}<br>${d.year}: ${d.percentage.toFixed(1)}%`)
                             .style("left", (event.pageX + 15) + "px")
                             .style("top", (event.pageY - 30) + "px");
                     }
@@ -401,8 +429,8 @@ d3.csv("data.csv").then(function(data) {
                     .attr("y", d => yScale(d.percentage)-20)
                     .attr("text-anchor", "middle")
                     .attr("fill", "white")
-                    .attr("font-size", "16px")
-                    .text(d => d.percentage.toFixed(1));
+                    .attr("font-size", "14px")
+                    .text(d => d.percentage.toFixed(1) + "%" );
             }
 
             // Animation
@@ -416,16 +444,30 @@ d3.csv("data.csv").then(function(data) {
         });
 
         // Add axes
+		let axisFontSize;
+
+		if (window.innerWidth <= 375) {
+			axisFontSize = "10px";
+		} else if (window.innerWidth <= 768) {
+			axisFontSize = "12px";
+		} else {
+			axisFontSize = "14px";
+		}
         svg.append("g")
             .attr("transform", `translate(0,${height - margin.bottom})`)
             .call(d3.axisBottom(xScale).tickSize(8))
             .selectAll("text")
-            .style("font-size", "14px");
+            .style("font-size", axisFontSize);
 
         svg.append("g")
             .attr("transform", `translate(${margin.left},0)`)
             .call(d3.axisLeft(yScale).tickValues(d3.range(yMin, yMax + 10, 10)))
             .selectAll("text")
-            .style("font-size", "14px");
+            .style("font-size", axisFontSize);
     }
+	
+	window.addEventListener("resize", () => {
+		updateChart(currentRegion, currentState);
+	});
 });
+

@@ -73,7 +73,7 @@ d3.csv("data.csv").then(function(data) {
         if (!regions.includes(region)) return;  // ensure region exists in data
 		regionContainer.append("button")
             .attr("data-region", region)
-			.classed("active", region === "Non-Hindi, South")
+			.classed("active", region === "Non-Hindi, South West")
             .style("background-color", regionColors[region] || "#555")
             .text(region)
             .on("click", () => {

@@ -305,7 +305,7 @@ d3.csv("data.csv").then(function(data) {
             .classed("selected", true);
 		mapGroup.selectAll("path").filter(s => getRegion(s.properties.st_nm) === region)
             .attr("fill", d => highlightRegionColors[region])
-			.attr("stroke-width", 3.5 );
+			.attr("stroke-width", 2.5 );
     }
 	
 	function highlightSelectedStates(stateList) {
@@ -329,7 +329,7 @@ d3.csv("data.csv").then(function(data) {
 			} else if (stateList.includes("Dadra and Nagar Haveli and Daman and Diu")) {
 				note = "Note: Dadra & Nagar Haveli and Daman & Diu, merged in 2020, are shown together with data consolidated under Gujarati as the major language.";
 			}
-			d3.select("#map-note").text(note);
+			d3.select("#chart-note").text(note);
 			stateList.forEach(state => {			
 			d3.selectAll(".state").filter(s => s.properties.st_nm === state)
             .classed("selected", true);
@@ -337,7 +337,7 @@ d3.csv("data.csv").then(function(data) {
             .classed("selected", true);
 			mapGroup.selectAll("path").filter(s => s.properties.st_nm === state)
             .attr("fill", d => highlightRegionColors[getRegion(d.properties.st_nm)])
-			.attr("stroke-width", 3.5);
+			.attr("stroke-width", 2.5);
 		});
 	}
 
@@ -384,15 +384,13 @@ d3.csv("data.csv").then(function(data) {
 
         let width = document.getElementById("chart-container").clientWidth - 20;
         let height = document.getElementById("chart-container").clientHeight - 20;
-        let margin;
+		const marginLeft   = parseFloat(getComputedStyle(document.getElementById("chart-container")).getPropertyValue('margin-left'));
+		const marginTop    = parseFloat(getComputedStyle(document.getElementById("chart-container")).getPropertyValue('margin-top'));
+		const marginBottom = parseFloat(getComputedStyle(document.getElementById("chart-container")).getPropertyValue('margin-bottom'));
+		const marginRight  = parseFloat(getComputedStyle(document.getElementById("chart-container")).getPropertyValue('margin-right'));
 
-		if (window.innerWidth <= 375) {
-			margin = { top: 10, right: 100, bottom: 20, left: 20 };
-		} else if (window.innerWidth <= 768) {
-			margin = { top: 15, right: 100, bottom: 30, left: 30 };
-		} else {
-			margin = {top: 15, right: 100, bottom: 50, left: 50};
-		}
+		console.log("Margin Left :" , marginLeft);
+        let margin = { top: marginTop, right: marginRight, bottom: marginBottom, left: marginLeft };
 
         let svg = d3.select("#chart").html("")
             .attr("width", width)
@@ -414,18 +412,22 @@ d3.csv("data.csv").then(function(data) {
         let statesList = [...new Set(filteredData.map(d => d.State))];
 		
 		// Add axes
-		let axisFontSize;
+		let axisLabelFontSize;
+		let axisScaleFontSize;
 		let labelsFontSize;
 
 		if (window.innerWidth <= 375) {
-			axisFontSize = "10px";
-			labelsFontSize = "8px";
+			axisLabelFontSize = "8px";
+			axisScaleFontSize = "7px";
+			labelsFontSize = "6px";
 		} else if (window.innerWidth <= 768) {
-			axisFontSize = "12px";
-			labelsFontSize = "10px";
+			axisLabelFontSize = "10px";
+			axisScaleFontSize = "8px";
+			labelsFontSize = "8px";
 		} else {
-			axisFontSize = "14px";
-			labelsFontSize = "12px";
+			axisLabelFontSize = "12px";
+			axisScaleFontSize = "10px";
+			labelsFontSize = "9px";
 		}
 				
 
@@ -455,7 +457,7 @@ d3.csv("data.csv").then(function(data) {
 					d3.selectAll(`.state-line-label[data-state='${stateName}']`).select("text")
 							.style("font-weight", "bold")
 							.style("opacity", 1)
-							.style("font-size",axisFontSize);
+							.style("font-size",axisLabelFontSize);
                 })
                 .on("mouseout", function(event, d) {
                     d3.select(this)
@@ -471,7 +473,7 @@ d3.csv("data.csv").then(function(data) {
 			let circleRadius;
 
 			if (window.innerWidth <= 375) {
-				circleRadius = 4;
+				circleRadius = 3;
 			} else if (window.innerWidth <= 768) {
 				circleRadius = 5;
 			} else if (window.innerWidth <= 1024) {
@@ -500,7 +502,7 @@ d3.csv("data.csv").then(function(data) {
 					d3.selectAll(`.state-line-label[data-state='${stateName}']`).select("text")
 							.style("font-weight", "bold")
 							.style("opacity", 1)
-							.style("font-size",axisFontSize);
+							.style("font-size",axisLabelFontSize);
                 })
                 .on("mouseout", function() {
                     tooltip.style("display", "none");
@@ -596,7 +598,7 @@ d3.csv("data.csv").then(function(data) {
 							d3.select(this).select("text")
 								.style("font-weight", "bold")
 								.style("opacity", 1)
-								.style("font-size",axisFontSize);
+								.style("font-size",axisLabelFontSize);
 						})
 						.on("mouseout", function() {
 							const state = d3.select(this).attr("data-state");
@@ -619,13 +621,13 @@ d3.csv("data.csv").then(function(data) {
             .attr("transform", `translate(0,${height - margin.bottom})`)
             .call(d3.axisBottom(xScale).tickSize(8))
             .selectAll("text")
-            .style("font-size", axisFontSize);
+            .style("font-size", axisScaleFontSize);
 
         svg.append("g")
             .attr("transform", `translate(${margin.left},0)`)
             .call(d3.axisLeft(yScale).tickValues(d3.range(yMin, yMax + 10, 10)))
             .selectAll("text")
-            .style("font-size", axisFontSize);
+            .style("font-size", axisScaleFontSize);
 			
 		// Y-axis Label
 		svg.append("text")
@@ -635,17 +637,17 @@ d3.csv("data.csv").then(function(data) {
 		   .attr("x", -(height / 2))
 		   .style("text-anchor", "middle")
 		   .style("fill", "white")
-		   .style("font-size", axisFontSize)
+		   .style("font-size", axisLabelFontSize)
 		   .text("Percentage of Speakers");
 
 		// X-axis Label
 		svg.append("text")
 		   .attr("class", "x-axis-label")
-		   .attr("x", (width + margin.left - margin.right) / 2)
-		   .attr("y", height - margin.bottom / 4)
+		   .attr("x", (width + margin.right - margin.left) / 2)
+		   .attr("y", height - (margin.bottom / 4))
 		   .style("text-anchor", "middle")
 		   .style("fill", "white")
-		   .style("font-size", axisFontSize)
+		   .style("font-size", axisLabelFontSize)
 		   .text("Census Year");
 
     }

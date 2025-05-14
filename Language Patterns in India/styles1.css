@@ -3,8 +3,8 @@ body {
     text-align: center;
     background-color: #222;
     color: white;
-    margin: 20px;
-    padding-top: 100px; /* Space for header */
+    margin: 10px;
+    padding-top: 40px; /* Space for header */
 	font-color:White;
 }
 
@@ -14,80 +14,37 @@ body {
     left: 0;
     right: 0;
     background: #1a1a1a;
-    padding: 20px;
-    border-bottom: 2px solid #444;
+    padding: 15px;
+    border-bottom: 1px solid #444;
     z-index: 1000;
 }
 
 .app-header h1 {
     margin: 0;
-    font-size: 28px;
+    font-size: 24px;
     color: white;
 }
 
 .control-label {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: bold;
-    margin: 20px 0 10px;
+    margin: 10px 0 10px;
     width: 600px;
-    text-align: left;
-    padding-left: 5%;
-}
-
-.button-group {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
-    justify-content: center;
-    width: 100%;
-}
-
-.button-group button {
-    padding: 20px 30px;
-    font-size: 14px;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    min-width: 150px;
-    background-color: #444;
-	color: white;          /* Text color white */
-}
-
-.button-group button.active {
-    transform: scale(1.05);
-    box-shadow: 0 0 0 3px #fff, 0 0 0 6px #007bff;
-}
-
-#region-buttons button {
-    background-color: #555;
-	color: white;          /* Force white text */
-}
-
-#reset-button {
-    background-color: #ff9f1c;
-    width: 100%;
-    min-width: 150px;
-    padding: 15px;
-    font-size: 14px;
-    border-radius: 10px;
-    margin-top: 20px;
-	color: white;
 }
 
 #main-container {
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
-  gap: 20px;
-  padding: 20px;
+  gap: 10px;
+  padding: 10px;
 }
 
 #left-container {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	gap: 20px;
+	gap: 10px;
 	width: 100%;
 }
 	
@@ -95,8 +52,57 @@ body {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	gap: 20px;
+	gap: 10px;
 	width: 100%;
+}
+
+.button-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    justify-content: center;
+    width: 100%;
+}
+
+.button-group button {
+    padding: 10px 15px;
+    font-size: 8px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 50px;
+    background-color: #444;
+	color: white;          /* Text color white */
+}
+
+.button-group button.active {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 1px #fff;
+}
+
+#reset-button {
+    background-color: #ff9f1c;
+    max-width: 100px;
+    padding: 10px 10px;
+    font-size: 9px;
+    border-radius: 10px;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	color: white;
+}
+
+#reset-button button.active {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 1px #fff;
+}
+
+.chart-note {
+    font-size: 10px;
+    font-weight: bold;
+    margin: 10px 0 10px;
+    width: 500px;
+    text-align: left;
 }
 
 #map-container {
@@ -111,14 +117,17 @@ body {
 }
 
 #chart-container {
-  width: 700px;
-  height: 900px; /* Adjust height as per header + padding */
+  width: 600px;
+  height: 600px; /* Adjust height as per header + padding */
   background: #333;
   border-radius: 15px;
   padding: 15px;
-  box-sizing: border-box;  
-  margin: 0 auto;
+  box-sizing: border-box; 
   justify-content: flex-start;
+  margin-left:30px;
+  margin-right:50px;
+  margin-top:30px;
+  margin-bottom:50px;
 }
 
 path { background: #333; stroke: white ; stroke-width: 0.5px;   }
@@ -144,7 +153,7 @@ text {
 }
 
 .state.selected {
-  stroke-width: 3;
+  stroke-width: 2.5;
 }
 
 .state-label {
@@ -191,24 +200,105 @@ text {
 }
 
 #chart circle:hover {
-    stroke-width: 4px;
+    stroke-width: 3px;
 }
 
 @media (max-width: 375px) {
     body {
 	margin: 0 auto;
+	}  
+	.app-header {
+		padding:10px;
 	}
-	.app-header h1 {
-        font-size: 18px;
+    .app-header h1 {
+        font-size: 12px;
     }
+	
+	.button-group button {
+        padding: 6px 8px;
+        font-size: 6px;
+        border-radius: 4px;
+        min-width: 50px;
+    }
+	
+	#reset-button {
+		padding: 7px;
+		font-size: 6px;
+		border-radius: 4px;
+		max-width: 50px;
+	}
 	
 	.control-label {
 		font-size: 10px;
-		margin: 10px 0 5px;
-		width: 200px;
+		margin: 5px 0 5px;
+		width: 300px;
+	}
+	
+	.state-label {
+	  font-size: 4px;
+	}
+	
+	.state-label.selected {
+	  font-size: 5px;
+	}
+	
+	.tooltip {
+		font-size: 8px;
+		padding: 8px;
+		border-radius: 4px;
+	}
+	
+	.footer {
+	  font-size: 8px;
 	}
 
-    .button-group button {
+    #main-container {
+        flex-direction: column;
+        align-items: center;
+		gap: 5px;
+    }
+	
+	#left-container {
+		gap: 5px;
+    }
+	
+	#right-container {
+		gap: 5px;
+    }
+
+    #map-container {
+        flex-shrink: 0;
+        width: 350px;
+		height:350px;
+    }
+
+    #chart-container {
+        width: 300px;
+        height: 350px;
+		margin-left:35px;
+	    margin-right:50px;
+	    margin-top:0px;
+	    margin-bottom:50px;
+    }
+	.chart-note {
+		font-size: 8px;
+		margin: 5px 0 5px;
+		width: 300px;
+	}
+}
+
+@media (min-width: 375px) and (max-width: 768px) {
+    body {
+	margin: 0 auto;
+	}  
+	.app-header {
+		padding:10px;
+	}
+    .app-header h1 {
+        font-size: 14px;
+    }
+	
+	.button-group button {
         padding: 8px 10px;
         font-size: 6px;
         border-radius: 4px;
@@ -219,84 +309,12 @@ text {
 		padding: 8px;
 		font-size: 6px;
 		border-radius: 4px;
-		margin-top: 10px;
 		max-width: 60px;
-	}
-	
-	.state-label {
-	  font-size: 3px;
-	}
-	
-	.state-label.selected {
-	  font-size: 4px;
-	}
-	
-	.tooltip {
-		font-size: 7px;
-		padding: 8px;
-		border-radius: 3px;
-	}
-	.footer {
-	  font-size: 7px;
-	}
-
-    #main-container {
-        flex-direction: column;
-        align-items: center;
-		gap: 3px;
-    }
-	
-	#left-container {
-        flex-direction: column;
-        align-items: center;
-		gap: 3px;
-    }
-	
-	#right-container {
-        flex-direction: column;
-        align-items: center;
-		gap: 3px;
-    }
-
-    #map-container {
-        flex-shrink: 0;
-        width: 300px;
-		height: 250px;
-    }
-
-    #chart-container {
-        width: 300px;
-        height: 500px;
-    }
-}
-
-
-@media (max-width: 768px) {
-    body {
-	margin: 0 auto;
-	}   
-    .app-header h1 {
-        font-size: 20px;
-    }
-	
-	.button-group button {
-        padding: 10px 12px;
-        font-size: 8px;
-        border-radius: 6px;
-        min-width: 100px;
-    }
-	
-	#reset-button {
-		padding: 10px;
-		font-size: 8px;
-		border-radius: 6px;
-		margin-top: 10px;
-		max-width: 100px;
 	}
 	
 	.control-label {
 		font-size: 12px;
-		margin: 10px 0 5px;
+		margin: 5px 0 5px;
 		width: 350px;
 	}
 	
@@ -317,70 +335,78 @@ text {
 	.footer {
 	  font-size: 8px;
 	}
-	
-	.button-group {
-        justify-content: center; 
-    }
 
     #main-container {
         flex-direction: column;
         align-items: center;
-		gap: 5px;
+		gap: 10px;
     }
 	
 	#left-container {
-        flex-direction: column;
-        align-items: center;
-		gap: 5px;
+		gap: 10px;
     }
 	
 	#right-container {
-        flex-direction: column;
-        align-items: center;
-		gap: 5px;
+		gap: 10px;
     }
 
     #map-container {
         flex-shrink: 0;
         width: 350px;
-		height:300px;
+		height:350px;
     }
 
     #chart-container {
         width: 350px;
-        height: 600px;
+        height: 400px;
+		margin-left:35px;
+	    margin-right:50px;
+	    margin-top:0px;
+	    margin-bottom:50px;
     }
+	
+	.chart-note {
+		font-size: 8px;
+		margin: 5px 0 5px;
+		width: 350px;
+	}
 }
 
 @media (min-width: 769px) and (max-width: 1024px) {
-    #main-container {
+    body {
+	margin: 0 auto;
+	}  
+	.app-header {
+		padding:10px;
+	}
+	 .app-header h1 {
+        font-size: 16px;
+    }
+	
+	#main-container {
         flex-direction: column;
         align-items: center;
 		gap: 5px;
     }
 	
 	#left-container {
-        flex-direction: column;
-        align-items: center;
 		gap: 5px;
     }
 	
 	#right-container {
-        flex-direction: column;
-        align-items: center;
 		gap: 5px;
     }
 	
 	.control-label {
-		font-size: 15px;
-		margin: 10px 0 5px;
-		width: 400px;
+		font-size: 14px;
+		margin: 5px 0 5px;
+		width: 600px;
 	}
 
     #map-container {
         flex-shrink: 0;
-        width: 400px;
-		height:350px;
+        width: 650px;
+		height:650px;
     }
 	
 	.state-label {
@@ -402,51 +428,72 @@ text {
 	}
 
     #chart-container {
-        flex-shrink: 0;
-        width: 400px;
-		height:700px;
+        width: 500px;
+		height:500px;
+		margin-left:35px;
+	    margin-right:50px;
+	    margin-top:0px;
+	    margin-bottom:50px;
     }
+	
+	.chart-note {
+		font-size: 9px;
+		margin: 8px 0 8px;
+		width: 500px;
+	}
 
     .button-group button {
-        padding: 12px 18px;
-        font-size: 10px;
-        min-width: 120px;
+        padding: 9px 11px;
+        font-size: 8px;
+        border-radius: 6px;
+        min-width: 60px;
     }
 	
 	#reset-button {
-		padding: 12px;
-		font-size: 10px;
-		max-width: 120px;
+		padding: 9px;
+		font-size: 8px;
+		max-width: 60px;
 	}
 }
 
 @media (min-width: 1025px) {
-    #map-container {
-        
+    #map-container {        
 		width: 700px;
         height: 700px;
     }
 
     #chart-container {
-        width: 700px;
-        height: 900px;
+        width: 500px;
+        height: 500px;		
+		margin-left:35px;
+	    margin-right:50px;
+	    margin-top:20px;
+	    margin-bottom:50px;
     }
+	
+	.chart-note {
+		font-size: 10px;
+		margin: 8px 0 8px;
+		width: 500px;
+	}
 
     .button-group button {
-        padding: 20px 30px;
-        font-size: 14px;
-        min-width: 150px;
+        padding: 10px 10px;
+        font-size: 9px;
+        min-width: 60px;
+		border-radius: 6px;
     }
 	
 	#reset-button {
-		padding: 20px;
-		font-size: 14px;
-		 max-width: 150px;
+		padding: 10px 10px;
+		font-size: 9px;
+		border-radius: 6px;
+		max-width: 60px;
 	}
 	
 	.control-label {
 		width: 600px;
-		font-size: 18px;
+		font-size: 16px;
 	}
 }
 

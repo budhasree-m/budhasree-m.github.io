@@ -34,9 +34,6 @@ Bengali,West Bengal,"Non-Hindi, East",Monolinguals,52912952,57394468,70403464,90
 Bengali,West Bengal,"Non-Hindi, East",Atleast Bilinguals,5628567,10974787,8295388,9.6,16.1,10.5
 Bengali,West Bengal,"Non-Hindi, East",English,5023974,9030392,4925660,8.6,13.2,6.3
 Bengali,West Bengal,"Non-Hindi, East",Hindi,2380016,4674622,4782240,4.1,6.8,6.1
-Hindi,Madhya Pradesh,"Hindi, Central & East",Monolinguals,52861145,48283596,59807653,93.4,91.7,93
-Hindi,Madhya Pradesh,"Hindi, Central & East",Atleast Bilinguals,3757945,4375091,4517310,6.6,8.3,7
-Hindi,Madhya Pradesh,"Hindi, Central & East",English,3757945,3723078,3488231,6.6,7.1,5.4
 Hindi,Uttar Pradesh,"Hindi, Central & East",Monolinguals,115579492,135734624,171969085,92.2,89.4,91.5
 Hindi,Uttar Pradesh,"Hindi, Central & East",Atleast Bilinguals,9769000,16035507,16009970,7.8,10.6,8.5
 Hindi,Uttar Pradesh,"Hindi, Central & East",English,9101384,13715482,11841998,7.3,9,6.3
@@ -75,6 +72,9 @@ Hindi,Chandigarh,"Hindi, North & West",English,149029,244160,280858,38,40.1,36.2
 Hindi,Jharkhand,"Hindi, Central & East",Monolinguals,,14169697,18680411,90.3,91.4,91.4
 Hindi,Jharkhand,"Hindi, Central & East",Atleast Bilinguals,,1340890,1755615,9.7,8.6,8.6
 Hindi,Jharkhand,"Hindi, Central & East",English,,927187,919688,8.7,6,4.5
+Hindi,Madhya Pradesh,"Hindi, Central & East",Monolinguals,52861145,48283596,59807653,93.4,91.7,93
+Hindi,Madhya Pradesh,"Hindi, Central & East",Atleast Bilinguals,3757945,4375091,4517310,6.6,8.3,7
+Hindi,Madhya Pradesh,"Hindi, Central & East",English,3757945,3723078,3488231,6.6,7.1,5.4
 Hindi,Chhattisgarh,"Hindi, Central & East",Monolinguals,,16584387,20708030,93.4,96.4,96.9
 Hindi,Chhattisgarh,"Hindi, Central & East",Atleast Bilinguals,,626094,653897,6.6,3.6,3.1
 Hindi,Chhattisgarh,"Hindi, Central & East",English,,429942,357741,6.6,2.5,1.7

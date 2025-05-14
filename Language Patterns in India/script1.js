@@ -133,23 +133,44 @@ d3.csv("data.csv").then(function(data) {
 			    updateChart(getRegion(StateBeforeReorg(currentState)), StateBeforeReorg(currentState));	
 				console.log("Selected state:", currentState);				
             });
+			
 		const zoom = d3.zoom()
-					.filter(function(event) {
-					// Allow zoom only for mousewheel or two-finger gestures
-					return (!event.sourceEvent || 
-						   event.sourceEvent.ctrlKey ||      // For trackpad zoom on desktop
-						   event.sourceEvent.type === 'wheel' || 
-						   event.sourceEvent.touches?.length > 1);  // Pinch zoom only
-					})
-					.scaleExtent([1, 5])
-					.on("zoom", (event) => {
-						mapGroup.attr("transform", event.transform);
-					});
+						.scaleExtent([1, 8])
+						.translateExtent([[0, 0], [width, height]])
+						.on("zoom", zoomed);
 
-		svg.call(zoom);
+		function zoomed(event) {
+			mapGroup.attr("transform", event.transform);
+		}
+		
+		let zoomActive = false;
+
+		svg.on("pointerdown", function(event) {
+			zoomActive = true;
+		})
+		.on("pointerup pointerleave", function(event) {
+			zoomActive = false;
+		})
+		.on("wheel touchmove", function(event) {
+			if (!zoomActive) return;  // Ignore scroll if not zoom-active
+		})
+		.call(d3.zoom()
+			.filter(function(event) {
+				// Allow zoom only if activated
+				return zoomActive && (event.type === "wheel" || 
+				                      event.type === "touchmove" || 
+									  event.type === "touchstart");
+			})
+			.scaleExtent([1, 8])
+			.translateExtent([[0, 0], [width, height]])
+			.on("zoom", zoomed)
+		);
 			
 		  const seen = new Set();
-		  const labelOffsets = {
+		  let labelOffsets = {"All":[0,0]};
+		  
+		  if (window.innerWidth >=1025) {
+		  labelOffsets = {
 			"Delhi": [10, -10],
 			"Goa": [-15, 10],
 			"Tripura": [-10, -10],
@@ -179,6 +200,7 @@ d3.csv("data.csv").then(function(data) {
 			"Andhra Pradesh":[-80,80],
 			"Himachal Pradesh":[50,10],
 			"Puducherry":[30,0]
+		  }
 		  };
 
         mapGroup.selectAll("text")
@@ -433,7 +455,7 @@ d3.csv("data.csv").then(function(data) {
 					d3.selectAll(`.state-line-label[data-state='${stateName}']`).select("text")
 							.style("font-weight", "normal")
 							.style("opacity", 0.9)
-							.style("font-size",labelFontSize);
+							.style("font-size",labelsFontSize);
                 });
 
             // Add dots
@@ -481,7 +503,7 @@ d3.csv("data.csv").then(function(data) {
 					d3.selectAll(`.state-line-label[data-state='${stateName}']`).select("text")
 							.style("font-weight", "normal")
 							.style("opacity", 0.9)
-							.style("font-size",labelFontSize);
+							.style("font-size",labelsFontSize);
                 }); 
 			
 			svg.selectAll(".state-line-label").remove();
@@ -551,7 +573,7 @@ d3.csv("data.csv").then(function(data) {
 						.style("opacity", 0)  // Initially invisible
 						.text(`${stateName}`)
 						.transition()        // Transition for smooth fade-in
-						.duration(800)
+						.duration(400)
 						.delay(100)          // Small delay for nicer effect
 						.style("opacity", 1);
 

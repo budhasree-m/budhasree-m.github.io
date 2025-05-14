@@ -67,7 +67,7 @@ body {
 #reset-button {
     background-color: #ff9f1c;
     width: 100%;
-    max-width: 200px;
+    min-width: 150px;
     padding: 15px;
     font-size: 14px;
     border-radius: 10px;
@@ -201,6 +201,12 @@ text {
 	.app-header h1 {
         font-size: 18px;
     }
+	
+	.control-label {
+		font-size: 10px;
+		margin: 10px 0 5px;
+		width: 200px;
+	}
 
     .button-group button {
         padding: 8px 10px;
@@ -208,6 +214,14 @@ text {
         border-radius: 4px;
         min-width: 60px;
     }
+	
+	#reset-button {
+		padding: 8px;
+		font-size: 6px;
+		border-radius: 4px;
+		margin-top: 10px;
+		max-width: 60px;
+	}
 	
 	.state-label {
 	  font-size: 3px;
@@ -271,6 +285,20 @@ text {
         border-radius: 6px;
         min-width: 100px;
     }
+	
+	#reset-button {
+		padding: 10px;
+		font-size: 8px;
+		border-radius: 6px;
+		margin-top: 10px;
+		max-width: 100px;
+	}
+	
+	.control-label {
+		font-size: 12px;
+		margin: 10px 0 5px;
+		width: 350px;
+	}
 	
 	.state-label {
 	  font-size: 4px;
@@ -342,6 +370,12 @@ text {
         align-items: center;
 		gap: 5px;
     }
+	
+	.control-label {
+		font-size: 15px;
+		margin: 10px 0 5px;
+		width: 400px;
+	}
 
     #map-container {
         flex-shrink: 0;
@@ -378,6 +412,12 @@ text {
         font-size: 10px;
         min-width: 120px;
     }
+	
+	#reset-button {
+		padding: 12px;
+		font-size: 10px;
+		max-width: 120px;
+	}
 }
 
 @media (min-width: 1025px) {
@@ -397,5 +437,16 @@ text {
         font-size: 14px;
         min-width: 150px;
     }
+	
+	#reset-button {
+		padding: 20px;
+		font-size: 14px;
+		 max-width: 150px;
+	}
+	
+	.control-label {
+		width: 600px;
+		font-size: 18px;
+	}
 }
 

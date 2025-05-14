@@ -24,9 +24,9 @@ d3.csv("data.csv").then(function(data) {
 		"Non-Hindi, South East": "#2C6E72",
 		"Non-Hindi, West": "#A0522D",
         "Non-Hindi, North": "#354F52",
-        "Hindi, North & West": "#6B3E3E",
+        "Hindi, North & West": "#5A5A3A" ,
 		"Hindi, Central & East": "#5D3A58",			
-		"Non-Hindi, East": "#5A5A3A",
+		"Non-Hindi, East": "#6B3E3E",
 		"Non-Hindi, North East": "#8A5E3B"
     };
 	
@@ -35,9 +35,9 @@ d3.csv("data.csv").then(function(data) {
 		"Non-Hindi, South East": "#5FA8AD",
 		"Non-Hindi, West": "#C4744D",
         "Non-Hindi, North": "#5B7A7D",
-        "Hindi, North & West": "#A67171",		
+        "Hindi, North & West": "#84845C",		
 		"Hindi, Central & East": "#865C81",	
-		"Non-Hindi, East": "#84845C",
+		"Non-Hindi, East":  "#A67171",
 		"Non-Hindi, North East": "#B27F5E"
     };
 	

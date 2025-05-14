@@ -146,15 +146,15 @@ text {
 
 .state.hovered {
   fill: #FFAB91;
-  stroke-width: 2.3;
+  stroke-width: 2.05;
 }
 
 .state.selectedRegion {
-  stroke-width: 2.5;
+  stroke-width: 2.1;
 }
 
 .state.selected {
-  stroke-width: 2.3;
+  stroke-width: 2.05;
 }
 
 .state-label {

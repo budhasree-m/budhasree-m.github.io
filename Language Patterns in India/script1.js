@@ -307,7 +307,7 @@ d3.csv("data.csv").then(function(data) {
             .classed("selected", true);
 		mapGroup.selectAll("path").filter(s => getRegion(s.properties.st_nm) === region)
             .attr("fill", d => highlightRegionColors[region])
-			.attr("stroke-width", 2.3 );
+			.attr("stroke-width", 2.1 );
     }
 	
 	function highlightSelectedStates(stateList) {
@@ -339,7 +339,7 @@ d3.csv("data.csv").then(function(data) {
             .classed("selected", true);
 			mapGroup.selectAll("path").filter(s => s.properties.st_nm === state)
             .attr("fill", d => highlightRegionColors[getRegion(d.properties.st_nm)])
-			.attr("stroke-width", 2.3);
+			.attr("stroke-width", 2.05);
 		});
 	}
 

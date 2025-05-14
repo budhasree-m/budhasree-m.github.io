@@ -250,6 +250,7 @@ text {
 	
 	.footer {
 	  font-size: 8px;
+	  width:350px;
 	}
 
     #main-container {
@@ -334,6 +335,7 @@ text {
 	
 	.footer {
 	  font-size: 8px;
+	  footer:350px;
 	}
 
     #main-container {
@@ -425,6 +427,7 @@ text {
 	
 	.footer {
 	  font-size: 8px;
+	  width: 500px;	  
 	}
 
     #chart-container {

@@ -114,6 +114,7 @@ body {
   position: sticky;
   box-sizing: border-box;
   touch-action: pan-y; /* Allow vertical scroll */
+  overflow: visible;   /* ensure no clipping */
 }
 
 #chart-container {
@@ -213,6 +214,10 @@ text {
     .app-header h1 {
         font-size: 12px;
     }
+	
+	svg {
+		touch-action: manipulation; /* disables pinch-zoom but allows scroll */
+	}
 	
 	.button-group button {
         padding: 6px 8px;

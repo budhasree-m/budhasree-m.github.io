@@ -151,8 +151,10 @@ d3.csv("data.csv").then(function(data) {
 			mapGroup.attr("transform", event.transform);
 		}
 		
-		let zoomActive = false;
-
+		let zoomActive = false;		
+		
+		d3.select("#map-container").on("wheel.zoom", null);
+		
 		svg.on("pointerdown", function(event) {
 			zoomActive = true;
 		})

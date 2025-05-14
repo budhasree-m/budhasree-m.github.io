@@ -481,12 +481,10 @@ d3.csv("data.csv").then(function(data) {
                 .attr("stroke", "white")
                 .attr("stroke-width", 1.2)
                 .on("mouseover", function(event, d) {
-                    if (currentState === "All") {
-                        tooltip.style("display", "block")
-                            .html(`${stateName}<br>${d.year}: ${d.percentage.toFixed(1)}%`)
-                            .style("left", (event.pageX + 15) + "px")
-                            .style("top", (event.pageY - 30) + "px");
-                    }
+                    tooltip.style("display", "block")
+						.html(`${stateName}<br>${d.year}: ${d.percentage.toFixed(1)}%`)
+						.style("left", (event.pageX + 15) + "px")
+						.style("top", (event.pageY - 30) + "px");
 					d3.selectAll(`.state-line[data-state='${stateName}']`)
 					  .style("stroke-width", 2)
 					  .style("opacity", 1);

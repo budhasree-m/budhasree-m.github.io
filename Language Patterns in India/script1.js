@@ -43,6 +43,7 @@ d3.csv("data.csv").then(function(data) {
 	
 	let currentRegion = "Non-Hindi, South West";
     let currentState = "All";
+	let currentStateBeforeReorg = "All";
 	let statesToHighlight = "All";
     const tooltip = d3.select("#tooltip");
 
@@ -59,10 +60,16 @@ d3.csv("data.csv").then(function(data) {
 									return d3.select(this).attr("data-category") === category;
 								})
 								.classed("active", true);				
-                updateChart(currentRegion, currentState);
-				highlightStates(currentRegion);	
-				if(currentState != "All") {
+                if(currentStateBeforeReorg != "All") {						
+					statesToHighlight = normalizeStateClick(currentStateBeforeReorg);
+					updateChart(currentRegion, currentStateBeforeReorg);
+				} else 
+				{ 
 					statesToHighlight = normalizeStateClick(currentState);
+					updateChart(currentRegion, currentState);
+				};				
+				highlightStates(currentRegion);	
+				if(currentState != "All") {					
 					highlightSelectedStates(statesToHighlight);
 				}
             });
@@ -130,6 +137,7 @@ d3.csv("data.csv").then(function(data) {
 				 // Pass multiple states into highlight function				  
 				highlightSelectedStates(statesToHighlight);
 				// Chart
+				currentStateBeforeReorg= StateBeforeReorg(currentState);
 			    updateChart(getRegion(StateBeforeReorg(currentState)), StateBeforeReorg(currentState));	
 				console.log("Selected state:", currentState);				
             });
@@ -243,6 +251,7 @@ d3.csv("data.csv").then(function(data) {
 			   // Pass multiple states into highlight function 
 			  highlightSelectedStates(statesToHighlight);
 			  // Chart
+			  currentStateBeforeReorg= StateBeforeReorg(currentState);
 			  updateChart(getRegion(StateBeforeReorg(currentState)), StateBeforeReorg(currentState));
 			  console.log("Selected state:", currentState);			
 		   });

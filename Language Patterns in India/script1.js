@@ -21,7 +21,7 @@ d3.csv("data.csv").then(function(data) {
     ];
     const regionColors = {
         "Non-Hindi, South West": "#3A6351",
-		"Non-Hindi, South East": "#3A6351",
+		"Non-Hindi, South East": "#2C6E72",
 		"Non-Hindi, West": "#A0522D",
         "Non-Hindi, North": "#354F52",
         "Hindi, North & West": "#6B3E3E",
@@ -32,7 +32,7 @@ d3.csv("data.csv").then(function(data) {
 	
 	const highlightRegionColors = {
         "Non-Hindi, South West": "#5D8B75",
-		"Non-Hindi, South East": "#5D8B75",
+		"Non-Hindi, South East": "#5FA8AD",
 		"Non-Hindi, West": "#C4744D",
         "Non-Hindi, North": "#5B7A7D",
         "Hindi, North & West": "#A67171",		

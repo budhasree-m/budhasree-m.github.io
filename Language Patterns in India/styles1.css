@@ -159,12 +159,12 @@ text {
 }
 
 .state-label.hovered {
-  fill: #7FB3D5;
+  fill: #FFD700;
   font-size: 12px;
 }
 
 .state-label.selected {
-  fill: #7FB3D5;
+  fill: #FFD700;
   font-size: 12px;
 }
 

@@ -169,13 +169,14 @@ text {
 }
 
 .state-label.hovered {
-  fill: #FFD700;
-  font-size: 12px;
+  fill: #A3D2CA ;
+  font-size: 11px;
 }
 
 .state-label.selected {
-  fill: #FFD700;
-  font-size: 12px;
+  fill: #A3D2CA  ;
+  font-size: 11px;
+  text-shadow: 0 0 1px #A3D2CA;
 }
 
 .axis text {

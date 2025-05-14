@@ -29,17 +29,9 @@ body {
     font-size: 18px;
     font-weight: bold;
     margin: 20px 0 10px;
-    width: 100%;
+    width: 600px;
     text-align: left;
     padding-left: 5%;
-}
-
-#controls {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-    width: 100%;
 }
 
 .button-group {
@@ -75,7 +67,7 @@ body {
 #reset-button {
     background-color: #ff9f1c;
     width: 100%;
-    max-width: 300px;
+    max-width: 200px;
     padding: 15px;
     font-size: 14px;
     border-radius: 10px;
@@ -91,10 +83,26 @@ body {
   padding: 20px;
 }
 
+#left-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 20px;
+	width: 100%;
+}
+	
+#right-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 20px;
+	width: 100%;
+}
+
 #map-container {
   flex: 0 0 auto;
-  width: 900px;  /* reduce width to fit beside right containers */
-  height: 900px; /* full viewport height minus header */
+  width: 700px;  /* reduce width to fit beside right containers */
+  height: 700px; /* full viewport height minus header */
   background: #333;
   border-radius: 15px; /* Rounded corners like chart-container */
   position: sticky;
@@ -103,20 +111,17 @@ body {
 }
 
 #chart-container {
-  width: 900px;
-  height: 400px; /* Adjust height as per header + padding */
+  width: 700px;
+  height: 900px; /* Adjust height as per header + padding */
   background: #333;
   border-radius: 15px;
   padding: 15px;
   box-sizing: border-box;  
   margin: 0 auto;
-  display: block;
+  justify-content: flex-start;
 }
 
-
-
 path { background: #333; stroke: white ; stroke-width: 0.5px;   }
-
 
 text {
       font-size: 10px;
@@ -135,7 +140,7 @@ text {
 }
 
 .state.selectedRegion {
-  stroke-width: 2.2;
+  stroke-width: 3;
 }
 
 .state.selected {
@@ -159,7 +164,8 @@ text {
 }
 
 .state-label.selected {
-  fill: #87CEFA;
+  fill: #7FB3D5;
+  font-size: 12px;
 }
 
 .axis text {
@@ -225,16 +231,28 @@ text {
         align-items: center;
 		gap: 3px;
     }
+	
+	#left-container {
+        flex-direction: column;
+        align-items: center;
+		gap: 3px;
+    }
+	
+	#right-container {
+        flex-direction: column;
+        align-items: center;
+		gap: 3px;
+    }
 
     #map-container {
         flex-shrink: 0;
         width: 300px;
-		height: 300px;
+		height: 250px;
     }
 
     #chart-container {
         width: 300px;
-        height: 250px;
+        height: 500px;
     }
 }
 
@@ -281,16 +299,28 @@ text {
         align-items: center;
 		gap: 5px;
     }
+	
+	#left-container {
+        flex-direction: column;
+        align-items: center;
+		gap: 5px;
+    }
+	
+	#right-container {
+        flex-direction: column;
+        align-items: center;
+		gap: 5px;
+    }
 
     #map-container {
         flex-shrink: 0;
         width: 350px;
-		height:400px;
+		height:300px;
     }
 
     #chart-container {
         width: 350px;
-        height: 300px;
+        height: 600px;
     }
 }
 
@@ -300,11 +330,23 @@ text {
         align-items: center;
 		gap: 5px;
     }
+	
+	#left-container {
+        flex-direction: column;
+        align-items: center;
+		gap: 5px;
+    }
+	
+	#right-container {
+        flex-direction: column;
+        align-items: center;
+		gap: 5px;
+    }
 
     #map-container {
         flex-shrink: 0;
         width: 400px;
-		height:400px;
+		height:350px;
     }
 	
 	.state-label {
@@ -328,6 +370,7 @@ text {
     #chart-container {
         flex-shrink: 0;
         width: 400px;
+		height:700px;
     }
 
     .button-group button {
@@ -339,14 +382,14 @@ text {
 
 @media (min-width: 1025px) {
     #map-container {
-        flex: 0 0 auto;
-		width: 900px;
-        height: 900px;
+        
+		width: 700px;
+        height: 700px;
     }
 
     #chart-container {
-        width: 600px;
-        height: 400px;
+        width: 700px;
+        height: 900px;
     }
 
     .button-group button {

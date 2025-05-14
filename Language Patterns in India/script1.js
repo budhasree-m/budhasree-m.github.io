@@ -10,16 +10,18 @@ d3.csv("data.csv").then(function(data) {
     let categories = [...new Set(data.map(d => d.Category))];
     let regions = [...new Set(data.map(d => d.Region))];
     let regionsOrder = [
-        "Non-Hindi, South",
-		"Non-Hindi, West",
-        "Non-Hindi, North",
+        "Non-Hindi, South West",		
+		"Non-Hindi, West",       
         "Hindi, North & West",
-		"Hindi, Central & East",			
+		"Hindi, Central & East",	
+		"Non-Hindi, North",		
 		"Non-Hindi, East",
-		"Non-Hindi, North East"
+		"Non-Hindi, North East",
+		"Non-Hindi, South East"
     ];
     const regionColors = {
-        "Non-Hindi, South": "#3A6351",
+        "Non-Hindi, South West": "#3A6351",
+		"Non-Hindi, South East": "#3A6351",
 		"Non-Hindi, West": "#A0522D",
         "Non-Hindi, North": "#354F52",
         "Hindi, North & West": "#6B3E3E",
@@ -29,7 +31,8 @@ d3.csv("data.csv").then(function(data) {
     };
 	
 	const highlightRegionColors = {
-        "Non-Hindi, South": "#5D8B75",
+        "Non-Hindi, South West": "#5D8B75",
+		"Non-Hindi, South East": "#5D8B75",
 		"Non-Hindi, West": "#C4744D",
         "Non-Hindi, North": "#5B7A7D",
         "Hindi, North & West": "#A67171",		
@@ -38,7 +41,7 @@ d3.csv("data.csv").then(function(data) {
 		"Non-Hindi, North East": "#B27F5E"
     };
 	
-	let currentRegion = "Non-Hindi, South";
+	let currentRegion = "Non-Hindi, South West";
     let currentState = "All";
 	let statesToHighlight = "All";
     const tooltip = d3.select("#tooltip");
@@ -58,8 +61,10 @@ d3.csv("data.csv").then(function(data) {
 								.classed("active", true);				
                 updateChart(currentRegion, currentState);
 				highlightStates(currentRegion);	
-				statesToHighlight = normalizeStateClick(currentState);
-				highlightSelectedStates(statesToHighlight);
+				if(currentState != "All") {
+					statesToHighlight = normalizeStateClick(currentState);
+					highlightSelectedStates(statesToHighlight);
+				}
             });
     });
 
@@ -146,32 +151,34 @@ d3.csv("data.csv").then(function(data) {
 		  const seen = new Set();
 		  const labelOffsets = {
 			"Delhi": [10, -10],
-			"Goa": [10, 10],
+			"Goa": [-15, 10],
 			"Tripura": [-10, -10],
 			"Nagaland": [0, 12],
 			"Mizoram": [10, 10],
 			"Manipur": [10, 10],
 			"Assam":[-50,20],
-			"Dadra and Nagar Haveli and Daman and Diu": [-50, 10],
+			"Dadra and Nagar Haveli and Daman and Diu": [-50, 20],
 			"Gujarat": [-40,-30],
-			"Uttarakhand": [20,10],
+			"Uttarakhand": [50,10],
 			"Uttar Pradesh":[40,30],
 			"Bihar":[20,20],
 			"Jharkhand":[-40,30],
 			"West Bengal":[0,-20],
 			"Odisha":[-20,0],
 			"Tamil Nadu":[-10,50],
-			"Kerala":[30,50],
+			"Kerala":[20,50],
 			"Karnataka":[-20,40],
 			"Jammu and Kashmir":[-20,30],
-			"Punjab":[0,15],
+			"Punjab":[-20,15],
 			"Haryana":[-5,-15],
 			"Delhi":[5,10],
 			"Rajasthan":[0,40],
 			"Madhya Pradesh":[20,-30],
 			"Maharashtra":[-80,30],
 			"Telangana":[5,40],
-			"Andhra Pradesh":[-80,80]
+			"Andhra Pradesh":[-80,80],
+			"Himachal Pradesh":[50,10],
+			"Puducherry":[30,0]
 		  };
 
         mapGroup.selectAll("text")
@@ -185,7 +192,13 @@ d3.csv("data.csv").then(function(data) {
             .attr("x", d => path.centroid(d)[0] + (labelOffsets[d.properties.st_nm]?.[0] || 0))
 			.attr("y", d => path.centroid(d)[1] + (labelOffsets[d.properties.st_nm]?.[1] || 0))
 			.attr("dy", "0.35em")
-            .text(d => d.properties.st_nm)
+            .text(d => {
+						let name = d.properties.st_nm;
+						if (name === "Dadra and Nagar Haveli and Daman and Diu") {
+							return "Dadra & Nagar Haveli and Daman & Diu";
+						}
+						return name;
+					})
 			.attr("class", "state-label")
 			.style("cursor", "pointer")
 			.on("mouseover", function() {
@@ -214,7 +227,8 @@ d3.csv("data.csv").then(function(data) {
     });
 
     function getRegion(state) {
-        if (["Kerala", "Tamil Nadu", "Karnataka", "Andhra Pradesh", "Telangana", "Goa", "Lakshadweep", "Puducherry", "Andaman and Nicobar Islands"].includes(state)) return "Non-Hindi, South";
+        if (["Kerala", "Karnataka", "Goa", "Lakshadweep"].includes(state)) return "Non-Hindi, South West";
+		if (["Tamil Nadu", "Andhra Pradesh", "Telangana", "Puducherry", "Andaman and Nicobar Islands"].includes(state)) return "Non-Hindi, South East";
         if (["Jammu and Kashmir", "Ladakh", "Punjab"].includes(state)) return "Non-Hindi, North";
         if (["Chandigarh", "Rajasthan", "Haryana", "Himachal Pradesh", "Uttarakhand", "Delhi"].includes(state)) return "Hindi, North & West";
 		if (["Uttar Pradesh", "Madhya Pradesh", "Bihar", "Chhattisgarh", "Jharkhand"].includes(state)) return "Hindi, Central & East";
@@ -249,6 +263,9 @@ d3.csv("data.csv").then(function(data) {
 		d3.selectAll(".state").classed("selected", false);
 	    d3.selectAll(".state").classed("selectedRegion", false);
 	    d3.selectAll(".state-label").classed("selected", false);
+		mapGroup.selectAll("path")
+            .attr("fill", d => regionColors[getRegion(d.properties.st_nm)])
+			.attr("stroke-width", 2);
 		d3.selectAll(".state").filter(s => getRegion(s.properties.st_nm) === region)
             .classed("selectedRegion", true);
 		d3.selectAll(".state").filter(s => getRegion(s.properties.st_nm) === region)
@@ -256,8 +273,8 @@ d3.csv("data.csv").then(function(data) {
 		d3.selectAll(".state-label").filter(s => getRegion(s.properties.st_nm) === region)
             .classed("selected", true);
 		mapGroup.selectAll("path").filter(s => getRegion(s.properties.st_nm) === region)
-            .attr("fill", d => highlightRegionColors[getRegion(d.properties.st_nm)])
-			.attr("stroke-width", 3 );
+            .attr("fill", d => highlightRegionColors[region])
+			.attr("stroke-width", 3.5 );
     }
 	
 	function highlightSelectedStates(stateList) {
@@ -289,12 +306,12 @@ d3.csv("data.csv").then(function(data) {
             .classed("selected", true);
 			mapGroup.selectAll("path").filter(s => s.properties.st_nm === state)
             .attr("fill", d => highlightRegionColors[getRegion(d.properties.st_nm)])
-			.attr("stroke-width", 3);
+			.attr("stroke-width", 3.5);
 		});
 	}
 
     d3.select("#reset-button").on("click", () => {
-        currentRegion = "Non-Hindi, South";
+        currentRegion = "Non-Hindi, South West";
         currentState = "All";
 		categoryContainer.selectAll("button").classed("active", d => d === "Monolinguals");
         regionContainer.selectAll("button").classed("active", false)
@@ -339,11 +356,11 @@ d3.csv("data.csv").then(function(data) {
         let margin;
 
 		if (window.innerWidth <= 375) {
-			margin = { top: 5, right: 100, bottom: 20, left: 20 };
+			margin = { top: 10, right: 100, bottom: 20, left: 20 };
 		} else if (window.innerWidth <= 768) {
-			margin = { top: 7, right: 100, bottom: 30, left: 30 };
+			margin = { top: 15, right: 100, bottom: 30, left: 30 };
 		} else {
-			margin = {top: 10, right: 100, bottom: 50, left: 50};
+			margin = {top: 15, right: 100, bottom: 50, left: 50};
 		}
 
         let svg = d3.select("#chart").html("")
@@ -377,8 +394,9 @@ d3.csv("data.csv").then(function(data) {
 			labelsFontSize = "10px";
 		} else {
 			axisFontSize = "14px";
-			labelsFontSize = "10px";
+			labelsFontSize = "12px";
 		}
+				
 
         statesList.forEach((stateName, index) => {
             let stateData = [
@@ -392,23 +410,43 @@ d3.csv("data.csv").then(function(data) {
             // Create line
             let path = svg.append("path")
                 .datum(stateData)
+				.attr("class", "state-line")
+				.attr("data-state", stateName)
                 .attr("fill", "none")
                 .attr("stroke", lineColor)
                 .attr("stroke-width", 1.2)
                 .attr("d", lineGenerator)
-                .style("cursor", currentState === "All" ? "pointer" : "default");
+                .style("cursor", currentState === "All" ? "pointer" : "default")
+				.on("mouseover", function(event, d) {
+                    d3.select(this)
+					  .style("stroke-width", 2)
+					  .style("opacity", 1);
+					d3.selectAll(`.state-line-label[data-state='${stateName}']`).select("text")
+							.style("font-weight", "bold")
+							.style("opacity", 1)
+							.style("font-size",axisFontSize);
+                })
+                .on("mouseout", function(event, d) {
+                    d3.select(this)
+					  .style("stroke-width", 1.2)
+					  .style("opacity", 0.6);
+					d3.selectAll(`.state-line-label[data-state='${stateName}']`).select("text")
+							.style("font-weight", "normal")
+							.style("opacity", 0.9)
+							.style("font-size",labelFontSize);
+                });
 
             // Add dots
 			let circleRadius;
 
 			if (window.innerWidth <= 375) {
-				circleRadius = 3;
+				circleRadius = 4;
 			} else if (window.innerWidth <= 768) {
 				circleRadius = 5;
 			} else if (window.innerWidth <= 1024) {
 				circleRadius = 7;
 			} else {
-				circleRadius = 10;
+				circleRadius = 9;
 			}
             svg.selectAll(`.dot-${index}`)
                 .data(stateData.filter(d => d.percentage != null && !isNaN(d.percentage)))
@@ -427,10 +465,26 @@ d3.csv("data.csv").then(function(data) {
                             .style("left", (event.pageX + 15) + "px")
                             .style("top", (event.pageY - 30) + "px");
                     }
+					d3.selectAll(`.state-line[data-state='${stateName}']`)
+					  .style("stroke-width", 2)
+					  .style("opacity", 1);
+					d3.selectAll(`.state-line-label[data-state='${stateName}']`).select("text")
+							.style("font-weight", "bold")
+							.style("opacity", 1)
+							.style("font-size",axisFontSize);
                 })
                 .on("mouseout", function() {
                     tooltip.style("display", "none");
-                });            
+					d3.selectAll(`.state-line[data-state='${stateName}']`)
+					  .style("stroke-width", 1.2)
+					  .style("opacity", 0.6);
+					d3.selectAll(`.state-line-label[data-state='${stateName}']`).select("text")
+							.style("font-weight", "normal")
+							.style("opacity", 0.9)
+							.style("font-size",labelFontSize);
+                }); 
+			
+			svg.selectAll(".state-line-label").remove();
 			
 			// Add labels to data points when state is selected
             if (currentState !== "All") {
@@ -455,9 +509,9 @@ d3.csv("data.csv").then(function(data) {
                 .attr("stroke-dashoffset", 0)
 				.on("end", function() {
 					addStateLabels();  // Call label rendering after animation
-				});
+				});				
 			
-			function addStateLabels() {
+			function addStateLabels() {				
 				// Add labels to the line graph
 				stateData = filteredData.find(d => d.State === stateName);
 				if (stateData && stateData["2011_Per"] != null && stateData["2011_Per"] !== "") {
@@ -466,18 +520,32 @@ d3.csv("data.csv").then(function(data) {
 					let x2001 = xScale("2001");
 					let y2001 = yScale(stateData["2001_Per"]);
 					let x2011 = xScale("2011");
-					let y2011 = yScale(stateData["2011_Per"]);
+					let y2011 = yScale(stateData["2011_Per"]);	
 
-					// Calculate angle in degrees
-					let angleRad = Math.atan2(y2011 - y2001, x2011 - x2001);
-					let angleDeg = angleRad * (180 / Math.PI);
+					// Alternate placement
+					const use2011 = index % 2 === 0;
 					
-					svg.append("text")
+					const xPos = use2011 ? x2011 - 20 : x2001 - 20;
+					const yPos = use2011 ? y2011 + 20 : y2001 + 20;
+					
+					const labelGroup = svg.append("g")
 						.attr("class", "state-line-label")
-						.attr("x", x2011 -140)  // slight offset to the right
-						.attr("y", y2011)  // position above the line
-						.attr("transform", `rotate(${angleDeg}, ${x2011 + 8}, ${y2011})`) // rotate around label position
-						.style("text-anchor", "start")
+						.attr("data-state", stateName);
+
+					// Invisible rect to increase hit area
+					labelGroup.append("rect")
+						.attr("x", xPos)
+						.attr("y", yPos)
+						.attr("width", 50)
+						.attr("height", 15)
+						.style("fill", "transparent");
+
+					// Actual visible text
+					labelGroup.append("text")
+						.attr("x", xPos)
+						.attr("y", yPos)
+						.text(`${stateName}`)
+						.style("text-anchor", "middle")
 						.style("fill", "white")
 						.style("font-size", labelsFontSize)
 						.style("opacity", 0)  // Initially invisible
@@ -486,12 +554,38 @@ d3.csv("data.csv").then(function(data) {
 						.duration(800)
 						.delay(100)          // Small delay for nicer effect
 						.style("opacity", 1);
+
+					// Mouseover on group
+					labelGroup
+						.on("mouseover", function() {
+							const state = d3.select(this).attr("data-state");
+
+							d3.selectAll(`.state-line[data-state='${state}']`)
+								.style("stroke-width", 2)
+								.style("opacity", 1);
+
+							d3.select(this).select("text")
+								.style("font-weight", "bold")
+								.style("opacity", 1)
+								.style("font-size",axisFontSize);
+						})
+						.on("mouseout", function() {
+							const state = d3.select(this).attr("data-state");
+
+							d3.selectAll(`.state-line[data-state='${state}']`)
+								.style("stroke-width", 1.2)
+								.style("opacity", 0.6);
+
+							d3.select(this).select("text")
+								.style("font-weight", "normal")
+								.style("opacity", 0.9)
+								.style("font-size",labelsFontSize);
+						});
 				}
 			};
             
         });
-
-        
+		
         svg.append("g")
             .attr("transform", `translate(0,${height - margin.bottom})`)
             .call(d3.axisBottom(xScale).tickSize(8))
@@ -500,7 +594,7 @@ d3.csv("data.csv").then(function(data) {
 
         svg.append("g")
             .attr("transform", `translate(${margin.left},0)`)
-            .call(d3.axisLeft(yScale).tickValues(d3.range(yMin, yMax + 5, 5)))
+            .call(d3.axisLeft(yScale).tickValues(d3.range(yMin, yMax + 10, 10)))
             .selectAll("text")
             .style("font-size", axisFontSize);
 			

@@ -12,24 +12,25 @@
         <h1>Language Patterns in India Over Time</h1>       
     </header>
 	    <div id="main-container">
-			<div id="controls">
+			<div id="left-container">
 				<div class="control-label" style="text-align: center;">Regions</div>
 				<div id="region-buttons" class="button-group"></div>
 				
-				<div class="control-label" style="text-align: center;">Category</div>
-				<div id="category-buttons" class="button-group"></div>
-				
 				<button id="reset-button" class="button-group">Reset</button> 
 
-				<div id="map-note" style="color: #FFC107 ; font-size: 14px; text-align: center; margin-top: 10px;"></div>
-				
-				<div id="chart-container">
-				<svg id="chart"></svg>
-				</div>			
+				<div id="map-container" class="map-container"></div>							
 			</div>	
-			<div id="map-container" class="map-container"></div> 
+			
+			<div id="right-container">
+				<div class="control-label" style="text-align: center;">Category</div>
+				<div id="category-buttons" class="button-group"></div>
+				<div class="control-label" id="map-note" style="color: #FFC107 ; font-size: 14px; text-align: center; margin-top: 10px; "></div>
+				
+				<div id="chart-container">			
+					<svg id="chart"></svg>
+				</div>							
+			</div>			 
 		</div>
-	
 	
     <div id="tooltip" class="tooltip"></div>
 	<footer style="background: #222; color: #ccc;  text-align: center; font-size: 14px;">

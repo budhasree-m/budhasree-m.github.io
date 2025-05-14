@@ -60,7 +60,7 @@ d3.csv("data.csv").then(function(data) {
 									return d3.select(this).attr("data-category") === category;
 								})
 								.classed("active", true);				
-                if(currentStateBeforeReorg != "All") {						
+                if(currentStateBeforeReorg != "All" && getRegion(currentStateBeforeReorg) === currentRegion) {						
 					statesToHighlight = normalizeStateClick(currentStateBeforeReorg);
 					updateChart(currentRegion, currentStateBeforeReorg);
 				} else 
@@ -244,13 +244,8 @@ d3.csv("data.csv").then(function(data) {
 			  currentState = d.properties.st_nm;
 			  currentRegion = getRegion(currentState);
 			  statesToHighlight = normalizeStateClick(currentState);
-			  regionContainer.selectAll("button").classed("active", false)
-				               .filter(function() {
-									return d3.select(this).attr("data-region") === getRegion(d.properties.st_nm);
-								})
-								.classed("active", true);
-			  highlightStates(currentRegion);
-			   // Pass multiple states into highlight function 
+			  regionContainer.selectAll("button").classed("active", false);
+			  // Pass multiple states into highlight function 
 			  highlightSelectedStates(statesToHighlight);
 			  // Chart
 			  currentStateBeforeReorg= StateBeforeReorg(currentState);

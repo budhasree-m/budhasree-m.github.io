@@ -6,7 +6,8 @@ d3.csv("data.csv").then(function(data) {
         d["2001_Per"] = +d["2001_Per"];
         d["2011_Per"] = +d["2011_Per"];
     });
-
+    
+	let isFirstLoad = true;
     let categories = [...new Set(data.map(d => d.Category))];
     let regions = [...new Set(data.map(d => d.Region))];
     let regionsOrder = [
@@ -45,7 +46,8 @@ d3.csv("data.csv").then(function(data) {
     let currentState = "All";
 	let currentStateBeforeReorg = "All";
 	let statesToHighlight = "All";
-    const tooltip = d3.select("#tooltip");
+    const tooltip = d3.select("#tooltip");	
+	
 
     let categoryContainer = d3.select("#category-buttons");
     categories.forEach(category => {
@@ -55,6 +57,7 @@ d3.csv("data.csv").then(function(data) {
             .classed("active", category === "Monolinguals")
             .on("click", function() {
                 note = "";
+				isFirstLoad = false;
 				categoryContainer.selectAll("button").classed("active", false)
 						.filter(function() {
 									return d3.select(this).attr("data-category") === category;
@@ -85,6 +88,7 @@ d3.csv("data.csv").then(function(data) {
             .text(region)
             .on("click", () => {
                 note = "";
+				isFirstLoad = false;
 				regionContainer.selectAll("button").classed("active", false)
 				               .filter(function() {
 									return d3.select(this).attr("data-region") === region;
@@ -117,23 +121,27 @@ d3.csv("data.csv").then(function(data) {
             .enter()
             .append("path")
             .attr("d", path)
-            .attr("fill", d => regionColors[getRegion(d.properties.st_nm)] || highlightRegionColors[getRegion(d.properties.st_nm)])
+            .attr("fill", d => regionColors[getRegion(d.properties.st_nm)] || "#777")
             .attr("stroke", "white")
 			.attr("stroke-width", 2)
             .attr("class", "state")
-            .on("mouseover", function() { d3.select(this).classed("hovered", true); })
-            .on("mouseout", function() { d3.select(this).classed("hovered", false); })
+			.on("mouseover", function(event, d) {
+				d3.select(this)
+				  .attr("fill", highlightRegionColors[getRegion(d.properties.st_nm)] || "#AAA")
+				  .attr("stroke-width", 2.1);
+			})
+			.on("mouseout", function(event, d) {
+				d3.select(this)
+				  .attr("fill", regionColors[getRegion(d.properties.st_nm)] || "#777")
+				  .attr("stroke-width", 2);
+			})
             .on("click", function(event, d) {
                 note = "";
+				isFirstLoad = false;
 				currentState = d.properties.st_nm;
 				currentRegion = getRegion(currentState);
 				statesToHighlight = normalizeStateClick(currentState);
-				regionContainer.selectAll("button").classed("active", false)
-				               .filter(function() {
-									return d3.select(this).attr("data-region") === getRegion(d.properties.st_nm);
-								})
-								.classed("active", true);
-                highlightStates(currentRegion);
+				regionContainer.selectAll("button").classed("active", false);
 				 // Pass multiple states into highlight function				  
 				highlightSelectedStates(statesToHighlight);
 				// Chart
@@ -142,39 +150,23 @@ d3.csv("data.csv").then(function(data) {
 				console.log("Selected state:", currentState);				
             });
 			
-		const zoom = d3.zoom()
-						.scaleExtent([1, 8])
-						.translateExtent([[0, 0], [width, height]])
-						.on("zoom", zoomed);
-
 		function zoomed(event) {
 			mapGroup.attr("transform", event.transform);
 		}
 		
-		let zoomActive = false;		
+		const zoom = d3.zoom()
+					.filter(function(event) {
+						// Disable zoom on wheel and touch events, allow only pointer (drag zoom)
+						return event.type === "mousedown" || event.type === "mousemove";
+					})
+					.scaleExtent([1, 8])
+					.translateExtent([[0, 0], [width, height]])
+					.on("zoom", zoomed);
+
+		svg.call(zoom);
 		
-		d3.select("#map-container").on("wheel.zoom", null);
-		
-		svg.on("pointerdown", function(event) {
-			zoomActive = true;
-		})
-		.on("pointerup pointerleave", function(event) {
-			zoomActive = false;
-		})
-		.on("wheel touchmove", function(event) {
-			if (!zoomActive) return;  // Ignore scroll if not zoom-active
-		})
-		.call(d3.zoom()
-			.filter(function(event) {
-				// Allow zoom only if activated
-				return zoomActive && (event.type === "wheel" || 
-				                      event.type === "touchmove" || 
-									  event.type === "touchstart");
-			})
-			.scaleExtent([1, 8])
-			.translateExtent([[0, 0], [width, height]])
-			.on("zoom", zoomed)
-		);
+		// Optional: Prevent double click zoom
+		svg.on("dblclick.zoom", null);
 			
 		  const seen = new Set();
 		  let labelOffsets = {"All":[0,0]};
@@ -241,6 +233,7 @@ d3.csv("data.csv").then(function(data) {
 			})
 			.on("click", function(event, d) {
 			  note = "";
+			  isFirstLoad = false;
 			  currentState = d.properties.st_nm;
 			  currentRegion = getRegion(currentState);
 			  statesToHighlight = normalizeStateClick(currentState);
@@ -251,9 +244,16 @@ d3.csv("data.csv").then(function(data) {
 			  currentStateBeforeReorg= StateBeforeReorg(currentState);
 			  updateChart(getRegion(StateBeforeReorg(currentState)), StateBeforeReorg(currentState));
 			  console.log("Selected state:", currentState);			
-		   });
-    });
+		   });	   
+	
+	if (isFirstLoad) {
+			highlightStates(currentRegion);
+			updateChart(currentRegion, currentState);
+		}	
+	});
 
+   
+		
     function getRegion(state) {
         if (["Kerala", "Karnataka", "Goa", "Lakshadweep"].includes(state)) return "Non-Hindi, South West";
 		if (["Tamil Nadu", "Andhra Pradesh", "Telangana", "Puducherry", "Andaman and Nicobar Islands"].includes(state)) return "Non-Hindi, South East";
@@ -303,10 +303,12 @@ d3.csv("data.csv").then(function(data) {
 		mapGroup.selectAll("path").filter(s => getRegion(s.properties.st_nm) === region)
             .attr("fill", d => highlightRegionColors[region])
 			.attr("stroke-width", 2.1 );
+		console.log("Selected highlight region colour:", highlightRegionColors[region]);
     }
 	
 	function highlightSelectedStates(stateList) {
 		    d3.selectAll(".state").classed("selected", false);
+			d3.selectAll(".state").classed("selectedRegion", false);
 			d3.selectAll(".state-label").classed("selected", false);
 			mapGroup.selectAll("path")
             .attr("fill", d => regionColors[getRegion(d.properties.st_nm)])
@@ -334,7 +336,7 @@ d3.csv("data.csv").then(function(data) {
             .classed("selected", true);
 			mapGroup.selectAll("path").filter(s => s.properties.st_nm === state)
             .attr("fill", d => highlightRegionColors[getRegion(d.properties.st_nm)])
-			.attr("stroke-width", 2.05);
+			.attr("stroke-width", 2.1);
 		});
 	}
 
@@ -353,7 +355,7 @@ d3.csv("data.csv").then(function(data) {
 			.attr("stroke-width", 2);
         d3.select("#chart").html("");
 		note = "";
-    });
+    });	
 
     function updateChart(region, state) {
         let selectedCategory = d3.select("#category-buttons button.active").attr("data-category");

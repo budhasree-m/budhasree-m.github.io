@@ -144,11 +144,6 @@ text {
 	  cursor: pointer;
     }
 
-.state.hovered {
-  fill: #FFAB91;
-  stroke-width: 2.05;
-}
-
 .state.selectedRegion {
   stroke-width: 2.1;
 }

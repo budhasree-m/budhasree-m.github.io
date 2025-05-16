@@ -156,8 +156,11 @@ d3.csv("data.csv").then(function(data) {
 		
 		const zoom = d3.zoom()
 					.filter(function(event) {
-						// Disable zoom on wheel and touch events, allow only pointer (drag zoom)
-						return event.type === "mousedown" || event.type === "mousemove";
+						// Allow zoom only on:
+						// - mouse drag (mousedown)
+						// - touch events (which includes pinch)
+						// - but block 'wheel' (to avoid blocking page scroll)
+						return event.type === "mousedown" || event.type.startsWith("touch");
 					})
 					.scaleExtent([1, 8])
 					.translateExtent([[0, 0], [width, height]])

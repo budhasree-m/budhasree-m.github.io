@@ -128,7 +128,7 @@ d3.csv("data.csv").then(function(data) {
 			.on("mouseover", function(event, d) {
 				d3.select(this)
 				  .attr("fill", highlightRegionColors[getRegion(d.properties.st_nm)] || "#AAA")
-				  .attr("stroke-width", 2.1);
+				  .attr("stroke-width", 2.05);
 			})
 			.on("mouseout", function(event, d) {
 				d3.select(this)
@@ -304,7 +304,7 @@ d3.csv("data.csv").then(function(data) {
             .classed("selected", true);
 		mapGroup.selectAll("path").filter(s => getRegion(s.properties.st_nm) === region)
             .attr("fill", d => highlightRegionColors[region])
-			.attr("stroke-width", 2.1 );
+			.attr("stroke-width", 2.05 );
 		console.log("Selected highlight region colour:", highlightRegionColors[region]);
     }
 	
@@ -338,7 +338,7 @@ d3.csv("data.csv").then(function(data) {
             .classed("selected", true);
 			mapGroup.selectAll("path").filter(s => s.properties.st_nm === state)
             .attr("fill", d => highlightRegionColors[getRegion(d.properties.st_nm)])
-			.attr("stroke-width", 2.1);
+			.attr("stroke-width", 2.05);
 		});
 	}
 

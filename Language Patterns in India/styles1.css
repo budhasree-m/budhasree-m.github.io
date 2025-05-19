@@ -145,7 +145,7 @@ text {
     }
 
 .state.selectedRegion {
-  stroke-width: 2.1;
+  stroke-width: 2.05;
 }
 
 .state.selected {

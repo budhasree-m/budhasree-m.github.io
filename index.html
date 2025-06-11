@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>My GitHub Pages Projects</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 2rem; }
+    h1 { font-size: 1.8rem; }
+    .project { margin-bottom: 1.5rem; }
+    .project-title { font-size: 1.2rem; margin: 0; }
+    .project-desc { margin: 0.2rem 0 0.5rem 0; color: #555; }
+    a { text-decoration: none; color: #0366d6; }
+    a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <h1>🔗 My GitHub Pages Projects</h1>
+  <div id="project-list"></div>
+
+  <script>
+    const username = 'budhasree-m';
+
+    const projects = [
+      {
+        name: 'Self-Directed-Learning',
+        description: 'A reflection tool to assess your own learning journey using a simplified one-question-at-a-time interface.'
+      },
+      {
+        name: 'Language-Patterns-India',
+        description: 'An interactive map and chart dashboard analyzing language usage across Indian states using Census data.'
+      }
+    ];
+
+    const container = document.getElementById('project-list');
+    projects.forEach(project => {
+      const div = document.createElement('div');
+      div.className = 'project';
+
+      const title = document.createElement('h2');
+      title.className = 'project-title';
+
+      const link = document.createElement('a');
+      link.href = `https://${username}.github.io/${project.name}/`;
+      link.textContent = project.name;
+      link.target = '_blank';
+      title.appendChild(link);
+
+      const desc = document.createElement('p');
+      desc.className = 'project-desc';
+      desc.textContent = project.description;
+
+      div.appendChild(title);
+      div.appendChild(desc);
+      container.appendChild(div);
+    });
+  </script>
+</body>
+</html>

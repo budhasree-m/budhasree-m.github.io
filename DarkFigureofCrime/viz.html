@@ -805,7 +805,6 @@ function matchState(geoName){
 d3.json('https://raw.githubusercontent.com/geohacker/india/master/state/india_state.geojson')
   .then(india=>{
     const w=mc.offsetWidth, h=mc.offsetHeight;
-    const objKey=Object.keys(india.objects)[0];
     const features = india.features;
     const projection=d3.geoMercator().center([82,22]).scale(Math.min(w,h)*1.12).translate([w/2,h/2]);
     const path=d3.geoPath().projection(projection);

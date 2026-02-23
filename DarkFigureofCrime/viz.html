@@ -802,7 +802,7 @@ function matchState(geoName){
   return null;
 }
 
-d3.json('https://cdn.jsdelivr.net/npm/india-states-topojson@1.0.3/india_states.json')
+d3.json('https://raw.githubusercontent.com/geohacker/india/master/state/india_state.geojson')
   .then(india=>{
     const w=mc.offsetWidth, h=mc.offsetHeight;
     const objKey=Object.keys(india.objects)[0];

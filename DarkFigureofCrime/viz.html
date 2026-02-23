@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Visualizations — NCRB Dark Figure</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=IBM+Plex+Mono:wght@400;500&family=Manrope:wght@300;400;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
+
+<style>
+/* ── DESIGN TOKENS — identical to index.html ── */
+:root {
+  --bg: #0a0a0a;
+  --surface: #111111;
+  --surface2: #181818;
+  --border: #242424;
+  --text: #e8e2d8;
+  --muted: #666;
+  --accent: #e05c3a;
+  --accent2: #f0a952;
+  --grid: rgba(255,255,255,0.03);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Manrope', sans-serif;
+  font-weight: 300;
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+/* ── GRID BACKGROUND — same as index.html ── */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none; z-index: 0;
+}
+
+/* ── NAV — identical to index.html ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.2rem 2.5rem;
+  background: rgba(10,10,10,0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.75rem; color: var(--accent);
+  letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none;
+}
+.nav-links { display: flex; gap: 2rem; list-style: none; }
+.nav-links a {
+  font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--muted); text-decoration: none; transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--text); }
+.nav-back {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.7rem; padding: 0.5rem 1.2rem;
+  border: 1px solid var(--border); color: var(--muted);
+  text-decoration: none; letter-spacing: 0.1em; text-transform: uppercase;
+  transition: border-color 0.2s, color 0.2s;
+}
+.nav-back:hover { border-color: var(--text); color: var(--text); }
+
+/* ── PAGE HEADER ── */
+.page-header {
+  position: relative; z-index: 1;
+  padding: 8rem 2.5rem 4rem;
+  border-bottom: 1px solid var(--border);
+}
+.page-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 1.2rem;
+  display: flex; align-items: center; gap: 0.8rem;
+}
+.page-eyebrow::before {
+  content: ''; display: inline-block;
+  width: 2rem; height: 1px; background: var(--accent);
+}
+.page-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(2.2rem, 5vw, 4rem);
+  line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 1rem;
+}
+.page-title em { font-style: italic; color: var(--accent); }
+.page-desc {
+  font-size: 0.9rem; color: var(--muted);
+  max-width: 600px; line-height: 1.8;
+}
+
+/* ── PANEL TABS ── */
+.panel-tabs {
+  position: relative; z-index: 1;
+  display: flex; border-bottom: 1px solid var(--border);
+  background: var(--bg);
+}
+.tab-btn {
+  padding: 1rem 2.5rem;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase;
+  border: none; cursor: pointer;
+  background: transparent; color: var(--muted);
+  border-right: 1px solid var(--border);
+  transition: all 0.2s; position: relative;
+}
+.tab-btn::after {
+  content: ''; position: absolute;
+  bottom: -1px; left: 0; right: 0; height: 2px;
+  background: transparent; transition: background 0.2s;
+}
+.tab-btn.active-a { color: var(--text); }
+.tab-btn.active-a::after { background: var(--accent2); }
+.tab-btn.active-b { color: var(--text); }
+.tab-btn.active-b::after { background: var(--accent); }
+.tab-btn:hover:not(.active-a):not(.active-b) { color: var(--text); background: var(--surface); }
+
+/* ── SECTION WRAPPER ── */
+.section-wrap {
+  position: relative; z-index: 1;
+  max-width: 1280px; margin: 0 auto;
+  padding: 4rem 2.5rem;
+}
+.section-tag {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 0.8rem; display: block;
+}
+h2 {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  line-height: 1.2; margin-bottom: 0.8rem;
+}
+h2 em { font-style: italic; }
+
+/* ── CHART CARDS ── */
+.chart-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 2rem; margin-bottom: 1.5rem;
+  transition: border-color 0.2s;
+}
+.chart-card:hover { border-color: #333; }
+.chart-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.2rem; margin-bottom: 0.3rem; color: var(--text);
+}
+.chart-subtitle {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.6rem; color: var(--muted);
+  letter-spacing: 0.08em; margin-bottom: 1.5rem;
+}
+.chart-note {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.58rem; color: var(--muted);
+  letter-spacing: 0.05em; margin-top: 1rem;
+  padding-top: 0.8rem; border-top: 1px solid var(--border);
+  line-height: 1.7;
+}
+
+/* ── ASSUMPTION BOX ── */
+.assumption-box {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-left: 2px solid var(--accent);
+  padding: 1.2rem 1.5rem; margin-bottom: 1.5rem;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.65rem; line-height: 1.9; color: var(--muted);
+}
+.assumption-box strong { color: var(--text); font-weight: 500; }
+
+/* ── PANEL BADGE ── */
+.panel-badge {
+  display: inline-block;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase;
+  padding: 0.3rem 0.8rem; margin-bottom: 1.5rem; border: 1px solid;
+}
+.panel-badge.a { color: var(--accent2); border-color: var(--accent2); }
+.panel-badge.b { color: var(--accent); border-color: var(--accent); }
+
+/* ── SCENARIO LEGEND ── */
+.scenario-legend {
+  display: flex; gap: 1.5rem; flex-wrap: wrap;
+  padding: 0.8rem 1.2rem;
+  background: var(--surface2); border: 1px solid var(--border);
+  margin-bottom: 1rem;
+}
+.s-item { display: flex; align-items: center; gap: 0.5rem; }
+.s-line { width: 24px; height: 2px; }
+.s-text {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.6rem; color: var(--muted);
+}
+
+/* ── FILTER BAR ── */
+.filter-bar {
+  display: flex; gap: 0.8rem; flex-wrap: wrap;
+  align-items: center; margin-bottom: 1.2rem;
+}
+.filter-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.6rem; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--muted);
+}
+.filter-select {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.65rem; padding: 0.4rem 0.8rem;
+  border: 1px solid var(--border);
+  background: var(--surface2); color: var(--text);
+  cursor: pointer; outline: none; transition: border-color 0.2s;
+}
+.filter-select:focus { border-color: var(--accent); }
+
+/* ── LAYOUTS ── */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+.three-col {
+  display: grid; grid-template-columns: repeat(3,1fr);
+  gap: 1px; background: var(--border); border: 1px solid var(--border);
+}
+.three-col-card { background: var(--surface); padding: 1.8rem; }
+
+/* ── MAP ── */
+#map-container {
+  width: 100%; height: 460px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  position: relative; overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+}
+#india-map { width: 100%; height: 100%; }
+.map-tooltip {
+  position: absolute; pointer-events: none;
+  background: var(--surface); color: var(--text);
+  padding: 0.7rem 1rem;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.62rem; line-height: 1.8;
+  border: 1px solid var(--border);
+  border-left: 2px solid var(--accent);
+  opacity: 0; transition: opacity 0.12s;
+  max-width: 220px; z-index: 10;
+}
+.map-tooltip strong { color: var(--accent2); display: block; margin-bottom: 0.2rem; }
+
+/* ── DIVIDER ── */
+.full-divider {
+  position: relative; z-index: 1;
+  border: none; border-top: 1px solid var(--border);
+}
+
+/* ── METHOD CARDS ── */
+.method-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.6rem; color: var(--accent);
+  letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 0.8rem;
+}
+.method-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.1rem; margin-bottom: 0.6rem; color: var(--text);
+}
+.method-body { font-size: 0.8rem; color: var(--muted); line-height: 1.8; }
+
+/* ── FOOTER ── */
+footer {
+  position: relative; z-index: 1;
+  border-top: 1px solid var(--border);
+  padding: 2rem 2.5rem;
+  display: flex; justify-content: space-between;
+  align-items: center; flex-wrap: wrap; gap: 1rem;
+}
+footer p {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.62rem; color: var(--muted); letter-spacing: 0.06em;
+}
+footer a { color: var(--accent); text-decoration: none; }
+footer a:hover { color: var(--accent2); }
+
+/* ── REVEAL ── */
+.reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.6s, transform 0.6s; }
+.reveal.visible { opacity: 1; transform: none; }
+
+@media(max-width:900px) {
+  .two-col { grid-template-columns: 1fr; }
+  .three-col { grid-template-columns: 1fr; }
+  nav .nav-links { display: none; }
+}
+@media(max-width:600px) {
+  .section-wrap { padding: 3rem 1.2rem; }
+  .page-header  { padding: 7rem 1.2rem 3rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+  <a href="index.html" class="nav-logo">NCRB · Dark Figure</a>
+  <ul class="nav-links">
+    <li><a href="#national">National</a></li>
+    <li><a href="#dark-figure">Dark Figure</a></li>
+    <li><a href="#states">States</a></li>
+    <li><a href="#methodology">Method</a></li>
+  </ul>
+  <a href="index.html" class="nav-back">← Back to Project</a>
+</nav>
+
+<!-- ── PAGE HEADER ── -->
+<div class="page-header">
+  <p class="page-eyebrow">NCRB Crime in India · IPC Data · 1981–2023</p>
+  <h1 class="page-title">Crime <em>Recorded</em> &amp;<br>Crime <em>Estimated</em></h1>
+  <p class="page-desc">
+    Two panels. The same dataset. Panel A shows what NCRB officially recorded.
+    Panel B applies dark figure modelling — making uncertainty visible, not hiding it.
+  </p>
+</div>
+
+<!-- ── PANEL TABS ── -->
+<div class="panel-tabs" id="national">
+  <button class="tab-btn active-a" onclick="switchPanel('a')">▪ Panel A — Official NCRB Record</button>
+  <button class="tab-btn" id="tab-b" onclick="switchPanel('b')">▪ Panel B — Dark Figure Lens</button>
+</div>
+
+<!-- ══ PANEL A ══════════════════════════════════════════════════════════ -->
+<div id="content-a">
+<div class="section-wrap">
+  <div class="reveal" style="margin-bottom:2rem">
+    <span class="section-tag">// 01 · National Trends · Official Data</span>
+    <span class="panel-badge a">Panel A · What NCRB Recorded</span>
+  </div>
+
+  <div class="chart-card reveal">
+    <div class="chart-title">Total IPC Crime Incidence, 1981–2023</div>
+    <div class="chart-subtitle">Absolute number of cases registered nationally per year · Source: NCRB "At a Glance" table</div>
+    <canvas id="chart-incidence" height="85"></canvas>
+    <div class="chart-note">2020 spike (4.25M) reflects expanded IPC categorisation including pandemic-related offences. Underlying trend: ~1.4M (1981) → ~3.8M (2023).</div>
+  </div>
+
+  <div class="two-col reveal">
+    <div class="chart-card">
+      <div class="chart-title">Crime Rate per Lakh Population</div>
+      <div class="chart-subtitle">Normalised for demographic growth</div>
+      <canvas id="chart-rate" height="160"></canvas>
+      <div class="chart-note">Rate fell 1981→2003 despite rising incidence — population growth outpaced recorded crime in that period.</div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Charge-Sheeting Rate</div>
+      <div class="chart-subtitle">% of cases reaching charge-sheet stage · proxy for institutional follow-through</div>
+      <canvas id="chart-cs" height="160"></canvas>
+      <div class="chart-note">Declining trend post-2016 (80.6% → 72.7%) raises questions about case disposal quality and institutional capacity.</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ══ PANEL B ══════════════════════════════════════════════════════════ -->
+<div id="content-b" style="display:none">
+<div class="section-wrap" id="dark-figure">
+  <div class="reveal" style="margin-bottom:2rem">
+    <span class="section-tag">// 01 · National Trends · Dark Figure Lens</span>
+    <span class="panel-badge b">Panel B · Estimated True Crime</span>
+  </div>
+
+  <div class="assumption-box reveal">
+    <strong>Methodology — Scenario-Based Estimation:</strong> Using T = R / p, three scenarios are projected simultaneously.
+    <strong>p = 0.3</strong> (conservative) — only 30% of crimes are reported, consistent with high-stigma crime research.
+    <strong>p = 0.5</strong> (moderate) — 50% reporting.
+    <strong>p = 0.7</strong> (optimistic) — 70% reporting.
+    The shaded band is the <strong>plausible range of true crime</strong>. These are not confirmed totals — they make structural uncertainty visible.
+  </div>
+
+  <div class="chart-card reveal">
+    <div class="chart-title">Estimated True IPC Crime — Three Scenarios, 1981–2023</div>
+    <div class="chart-subtitle">Recorded (bright) vs plausible true crime under three reporting probabilities · shaded band = uncertainty range</div>
+    <div class="scenario-legend">
+      <div class="s-item"><div class="s-line" style="background:#e8e2d8;height:2.5px"></div><span class="s-text">Recorded (official)</span></div>
+      <div class="s-item"><div class="s-line" style="background:#f0a952;border-top:2px dashed #f0a952;height:0"></div><span class="s-text">p=0.7 optimistic</span></div>
+      <div class="s-item"><div class="s-line" style="background:#e05c3a"></div><span class="s-text">p=0.5 moderate</span></div>
+      <div class="s-item"><div class="s-line" style="background:#a83220;height:3px"></div><span class="s-text">p=0.3 conservative</span></div>
+      <div class="s-item"><div class="s-line" style="background:rgba(224,92,58,0.2);height:10px;border-radius:2px"></div><span class="s-text">uncertainty band</span></div>
+    </div>
+    <canvas id="chart-darkfigure" height="100"></canvas>
+    <div class="chart-note">At p=0.3 in 2023: estimated true crimes ≈ 12.5M vs 3.76M recorded — a dark figure of ~8.8M. Even at optimistic p=0.7, ~1.6M crimes go unrecorded annually. Assumptions are explicit; do not read as confirmed totals.</div>
+  </div>
+
+  <div class="chart-card reveal">
+    <div class="chart-title">The Dark Figure Gap — Estimated Unrecorded Crimes, 1981–2023</div>
+    <div class="chart-subtitle">D = T − R · the volume of crime estimated to go unrecorded each year under each scenario</div>
+    <canvas id="chart-gap" height="90"></canvas>
+    <div class="chart-note">Gap grows proportionally with recorded crime. At p=0.3, the dark figure exceeds 8M in 2020. Even at p=0.7, over 1M crimes go unrecorded every year since ~2000.</div>
+  </div>
+</div>
+</div>
+
+<!-- ══ STATES ════════════════════════════════════════════════════════════ -->
+<hr class="full-divider">
+<div class="section-wrap" id="states">
+  <div class="section-header reveal" style="margin-bottom:2rem">
+    <span class="section-tag">// 02 · State-Level Analysis · 2023</span>
+    <h2>How Crime Differs<br><em>Across</em> India</h2>
+  </div>
+
+  <div class="two-col reveal">
+    <div class="chart-card" style="padding:1.5rem">
+      <div class="chart-title">Crime Rate by State / UT</div>
+      <div class="chart-subtitle">Recorded IPC crimes per lakh population · 2023 · hover for details</div>
+      <div id="map-container">
+        <svg id="india-map"></svg>
+        <div class="map-tooltip" id="map-tooltip"></div>
+      </div>
+      <div style="display:flex;gap:0.5rem;align-items:center;margin-top:0.8rem">
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:0.58rem;color:var(--muted)">Low</span>
+        <div style="height:8px;flex:1;border-radius:1px;background:linear-gradient(to right,#1e1e1e,#e05c3a)"></div>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:0.58rem;color:var(--muted)">High (per lakh)</span>
+      </div>
+      <div class="chart-note">Requires internet to load India TopoJSON. Hover a state for crime data and dark figure estimate.</div>
+    </div>
+
+    <div class="chart-card" style="padding:1.5rem">
+      <div class="chart-title">State Rankings</div>
+      <div class="chart-subtitle">Sortable — compare official data vs dark figure estimates</div>
+      <div class="filter-bar">
+        <span class="filter-label">Metric:</span>
+        <select class="filter-select" id="bar-metric" onchange="renderStateBar()">
+          <option value="rate">Crime Rate (per lakh)</option>
+          <option value="inc2023">Incidence 2023</option>
+          <option value="cs">Charge-Sheet Rate</option>
+          <option value="dark03">Est. True Crime (p=0.3)</option>
+          <option value="dark05">Est. True Crime (p=0.5)</option>
+        </select>
+        <span class="filter-label">Show:</span>
+        <select class="filter-select" id="bar-top" onchange="renderStateBar()">
+          <option value="15">Top 15</option>
+          <option value="20">Top 20</option>
+          <option value="36">All 36</option>
+        </select>
+      </div>
+      <canvas id="chart-statebar" height="230"></canvas>
+      <div class="chart-note">Dark figure estimates: T = R/p applied to 2023 state incidence. p held constant per scenario.</div>
+    </div>
+  </div>
+
+  <div class="chart-card reveal" style="margin-top:1.5rem">
+    <div class="chart-title">Regression Residuals — Where Data Defies Expectation</div>
+    <div class="chart-subtitle">OLS: crime rate ~ log(population) · residual = actual − predicted · negative may signal underreporting</div>
+    <div class="assumption-box" style="margin-bottom:1rem;margin-top:0.5rem">
+      <strong>Method:</strong> OLS regression predicts each state's crime rate from log-transformed population.
+      <strong style="color:var(--accent)">Negative residual</strong> = records less than population predicts — possible underreporting or social barriers to filing FIRs.
+      <strong style="color:#5ab490">Positive residual</strong> = records more than predicted — better reporting infrastructure, genuine hotspots, or higher institutional capacity.
+    </div>
+    <canvas id="chart-residuals" height="85"></canvas>
+    <div class="chart-note">OLS uses population as sole predictor — simplified proxy. Future versions will add literacy, female LFPR, and police strength per lakh to build a proper Visibility Index.</div>
+  </div>
+</div>
+
+<!-- ══ METHODOLOGY ═══════════════════════════════════════════════════════ -->
+<hr class="full-divider">
+<div class="section-wrap" id="methodology" style="padding-bottom:5rem">
+  <div class="section-header reveal" style="margin-bottom:2rem">
+    <span class="section-tag">// 03 · Methodology &amp; Transparency</span>
+    <h2>Every Assumption<br><em>Made Explicit</em></h2>
+  </div>
+
+  <div class="three-col reveal">
+    <div class="three-col-card">
+      <div class="method-num">Model 01 · Scenario Estimation</div>
+      <div class="method-title">T = R / p</div>
+      <p class="method-body">Applied at p = 0.3, 0.5, 0.7. Produces a plausible range, not a single true number. p is held constant within each scenario and does not vary by state or crime type. Best used for visualising the potential scale of underreporting.</p>
+    </div>
+    <div class="three-col-card">
+      <div class="method-num">Model 02 · Regression Residuals</div>
+      <div class="method-title">Actual − Predicted</div>
+      <p class="method-body">OLS regression: crime rate ~ log(population). Residuals flag states deviating from population-predicted levels. Current predictor is population only. Future iterations add literacy, police strength, female LFPR, and GDP per capita.</p>
+    </div>
+    <div class="three-col-card">
+      <div class="method-num">Data Sources</div>
+      <div class="method-title">What Feeds These Charts</div>
+      <p class="method-body">NCRB Crime in India 2023 — national time series 1981–2023 and Table 1A (state-wise IPC crimes 2021–2023). Population: NCRB mid-year projected 2023 figures. No NFHS-5 or auxiliary socio-demographic data in this version.</p>
+    </div>
+  </div>
+
+  <div class="assumption-box reveal" style="margin-top:1.5rem">
+    <strong>What this project does not claim:</strong>
+    These visualizations do not assert a definitive dark figure. They demonstrate that silence in official data does not mean absence of crime.
+    All models are transparent, assumptions are stated, and uncertainty is shown — not hidden.
+    Next phase: NFHS-5 domestic violence prevalence, state literacy rates, police strength per lakh,
+    and female LFPR to build a proper Visibility Index quadrant scatterplot.
+  </div>
+</div>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <p>Data: <a href="https://ncrb.gov.in" target="_blank">NCRB Crime in India 2023</a> · Concept: <a href="https://medium.com/@budhasree-m/the-crime-you-cant-chart-why-india-s-crime-data-needs-a-dark-figure-lens-052cf4fcd6e7" target="_blank">The Invisible Crime ↗</a></p>
+  <p>Chart.js · D3.js · All assumptions explicit · No false precision.</p>
+</footer>
+
+<!-- ══ SCRIPTS ══════════════════════════════════════════════════════════ -->
+<script>
+const nationalData = [
+  {year:1981,inc:1385757,rate:200.8,cs:61.3},{year:1982,inc:1353904,rate:192.0,cs:65.3},
+  {year:1983,inc:1349866,rate:187.4,cs:67.3},{year:1984,inc:1358660,rate:184.7,cs:67.9},
+  {year:1985,inc:1384731,rate:184.4,cs:70.2},{year:1986,inc:1405835,rate:183.5,cs:71.1},
+  {year:1987,inc:1406992,rate:180.1,cs:72.4},{year:1988,inc:1440356,rate:180.8,cs:70.7},
+  {year:1989,inc:1529844,rate:188.5,cs:72.3},{year:1990,inc:1604449,rate:194.0,cs:70.2},
+  {year:1991,inc:1678375,rate:197.5,cs:71.3},{year:1992,inc:1689341,rate:194.7,cs:72.2},
+  {year:1993,inc:1629936,rate:184.4,cs:72.5},{year:1994,inc:1635251,rate:181.7,cs:74.1},
+  {year:1995,inc:1695696,rate:185.1,cs:74.3},{year:1996,inc:1709576,rate:183.4,cs:76.9},
+  {year:1997,inc:1719820,rate:180.0,cs:77.5},{year:1998,inc:1778815,rate:183.2,cs:77.8},
+  {year:1999,inc:1764629,rate:178.9,cs:78.0},{year:2000,inc:1771084,rate:176.7,cs:78.4},
+  {year:2001,inc:1769308,rate:172.3,cs:78.6},{year:2002,inc:1780330,rate:169.5,cs:80.0},
+  {year:2003,inc:1716120,rate:160.7,cs:80.1},{year:2004,inc:1832015,rate:168.8,cs:79.8},
+  {year:2005,inc:1822602,rate:165.3,cs:80.7},{year:2006,inc:1878293,rate:167.7,cs:80.6},
+  {year:2007,inc:1989673,rate:175.1,cs:80.1},{year:2008,inc:2093379,rate:181.5,cs:79.8},
+  {year:2009,inc:2121345,rate:181.4,cs:78.4},{year:2010,inc:2224831,rate:187.6,cs:79.1},
+  {year:2011,inc:2325575,rate:192.2,cs:78.8},{year:2012,inc:2387188,rate:196.7,cs:78.8},
+  {year:2013,inc:2647722,rate:215.5,cs:79.5},{year:2014,inc:2851563,rate:229.2,cs:79.6},
+  {year:2015,inc:2949400,rate:234.2,cs:77.7},{year:2016,inc:2975711,rate:233.6,cs:72.9},
+  {year:2017,inc:3062579,rate:237.7,cs:70.7},{year:2018,inc:3132955,rate:236.7,cs:68.1},
+  {year:2019,inc:3225597,rate:241.2,cs:67.2},{year:2020,inc:4254356,rate:314.3,cs:75.8},
+  {year:2021,inc:3663360,rate:268.0,cs:72.3},{year:2022,inc:3561379,rate:258.1,cs:71.3},
+  {year:2023,inc:3763102,rate:270.3,cs:72.7}
+];
+
+const stateData = [
+  {state:"Andhra Pradesh",    inc2023:153867, pop:532.2,  rate:289.1, cs:91.6},
+  {state:"Arunachal Pradesh", inc2023:2505,   pop:15.7,   rate:160.1, cs:52.1},
+  {state:"Assam",             inc2023:49884,  pop:358.2,  rate:139.2, cs:48.0},
+  {state:"Bihar",             inc2023:231627, pop:1273.7, rate:181.9, cs:77.5},
+  {state:"Chhattisgarh",      inc2023:67961,  pop:302.9,  rate:224.3, cs:80.8},
+  {state:"Goa",               inc2023:2094,   pop:15.8,   rate:132.8, cs:72.8},
+  {state:"Gujarat",           inc2023:170657, pop:717.9,  rate:237.7, cs:88.6},
+  {state:"Haryana",           inc2023:129294, pop:303.3,  rate:426.3, cs:44.2},
+  {state:"Himachal Pradesh",  inc2023:13505,  pop:74.8,   rate:180.5, cs:82.3},
+  {state:"Jharkhand",         inc2023:50187,  pop:396.3,  rate:126.6, cs:64.6},
+  {state:"Karnataka",         inc2023:148648, pop:678.3,  rate:219.1, cs:76.7},
+  {state:"Kerala",            inc2023:258538, pop:358.2,  rate:721.7, cs:95.6},
+  {state:"Madhya Pradesh",    inc2023:297689, pop:869.2,  rate:342.5, cs:85.4},
+  {state:"Maharashtra",       inc2023:385623, pop:1267.1, rate:304.3, cs:73.9},
+  {state:"Manipur",           inc2023:19192,  pop:32.3,   rate:594.0, cs:23.2},
+  {state:"Meghalaya",         inc2023:2730,   pop:33.6,   rate:81.3,  cs:26.9},
+  {state:"Mizoram",           inc2023:3281,   pop:12.4,   rate:264.4, cs:53.9},
+  {state:"Nagaland",          inc2023:1050,   pop:22.4,   rate:46.9,  cs:50.8},
+  {state:"Odisha",            inc2023:170022, pop:463.7,  rate:366.6, cs:78.0},
+  {state:"Punjab",            inc2023:44872,  pop:308.0,  rate:145.7, cs:63.2},
+  {state:"Rajasthan",         inc2023:234985, pop:813.2,  rate:289.0, cs:49.9},
+  {state:"Sikkim",            inc2023:511,    pop:6.9,    rate:74.0,  cs:46.0},
+  {state:"Tamil Nadu",        inc2023:203804, pop:769.4,  rate:264.9, cs:80.8},
+  {state:"Telangana",         inc2023:156737, pop:381.4,  rate:411.0, cs:78.5},
+  {state:"Tripura",           inc2023:3814,   pop:41.6,   rate:91.8,  cs:76.5},
+  {state:"Uttar Pradesh",     inc2023:428794, pop:2364.8, rate:181.3, cs:78.0},
+  {state:"Uttarakhand",       inc2023:17094,  pop:116.8,  rate:146.4, cs:68.5},
+  {state:"West Bengal",       inc2023:156237, pop:992.4,  rate:157.4, cs:90.6},
+  {state:"A&N Islands",       inc2023:587,    pop:4.0,    rate:145.7, cs:85.4},
+  {state:"Chandigarh",        inc2023:3285,   pop:12.4,   rate:266.0, cs:54.0},
+  {state:"D&N Haveli & D&D",  inc2023:761,    pop:12.9,   rate:58.9,  cs:57.3},
+  {state:"Delhi",             inc2023:324257, pop:214.9,  rate:1508.9,cs:28.7},
+  {state:"Jammu & Kashmir",   inc2023:25127,  pop:136.4,  rate:184.3, cs:79.1},
+  {state:"Ladakh",            inc2023:459,    pop:3.0,    rate:152.5, cs:85.6},
+  {state:"Lakshadweep",       inc2023:76,     pop:0.7,    rate:110.1, cs:63.1},
+  {state:"Puducherry",        inc2023:3348,   pop:16.6,   rate:201.9, cs:92.5}
+];
+
+stateData.forEach(d => {
+  d.dark03 = Math.round(d.inc2023 / 0.3);
+  d.dark05 = Math.round(d.inc2023 / 0.5);
+});
+
+// ── Chart defaults ────────────────────────────────────────────────────────
+Chart.defaults.font.family = "'Manrope', sans-serif";
+Chart.defaults.font.size = 11;
+Chart.defaults.color = '#666';
+Chart.defaults.plugins.legend.display = false;
+
+const GRID_C = 'rgba(255,255,255,0.05)';
+const TEXT_C = '#e8e2d8';
+const ACCENT  = '#e05c3a';
+const ACCENT2 = '#f0a952';
+const DARK_R  = '#a83220';
+const years   = nationalData.map(d => d.year);
+
+const scaleBase = {
+  x: { grid:{ display:false }, ticks:{ maxTicksLimit:11, color:'#555' } },
+  y: { grid:{ color: GRID_C }, ticks:{ color:'#555' } }
+};
+
+// ── Panel A: Incidence ────────────────────────────────────────────────────
+new Chart(document.getElementById('chart-incidence'), {
+  type:'line',
+  data:{ labels:years, datasets:[{
+    data: nationalData.map(d=>d.inc),
+    borderColor: TEXT_C, borderWidth:1.8,
+    fill:true, backgroundColor:'rgba(232,226,216,0.05)',
+    pointRadius:0, tension:0.35
+  }]},
+  options:{
+    responsive:true,
+    interaction:{mode:'index',intersect:false},
+    plugins:{ tooltip:{ callbacks:{ label: c=>`  Cases: ${c.parsed.y.toLocaleString('en-IN')}` }}},
+    scales:{
+      x: scaleBase.x,
+      y:{ ...scaleBase.y, ticks:{ color:'#555', callback: v=>(v/1e6).toFixed(1)+'M' }}
+    }
+  }
+});
+
+// ── Panel A: Rate ─────────────────────────────────────────────────────────
+new Chart(document.getElementById('chart-rate'), {
+  type:'line',
+  data:{ labels:years, datasets:[{
+    data: nationalData.map(d=>d.rate),
+    borderColor:ACCENT2, borderWidth:1.8,
+    fill:true, backgroundColor:'rgba(240,169,82,0.07)',
+    pointRadius:0, tension:0.35
+  }]},
+  options:{
+    responsive:true,
+    interaction:{mode:'index',intersect:false},
+    plugins:{ tooltip:{ callbacks:{ label: c=>`  Rate: ${c.parsed.y} per lakh` }}},
+    scales: scaleBase
+  }
+});
+
+// ── Panel A: CS ───────────────────────────────────────────────────────────
+new Chart(document.getElementById('chart-cs'), {
+  type:'line',
+  data:{ labels:years, datasets:[{
+    data: nationalData.map(d=>d.cs),
+    borderColor:ACCENT, borderWidth:1.8,
+    fill:true, backgroundColor:'rgba(224,92,58,0.07)',
+    pointRadius:0, tension:0.35
+  }]},
+  options:{
+    responsive:true,
+    interaction:{mode:'index',intersect:false},
+    plugins:{ tooltip:{ callbacks:{ label: c=>`  CS Rate: ${c.parsed.y}%` }}},
+    scales:{
+      x: scaleBase.x,
+      y:{ ...scaleBase.y, min:55, max:85, ticks:{ color:'#555', callback:v=>v+'%' }}
+    }
+  }
+});
+
+// ── Panel B: Uncertainty bands ────────────────────────────────────────────
+const t03 = nationalData.map(d=>Math.round(d.inc/0.3));
+const t05 = nationalData.map(d=>Math.round(d.inc/0.5));
+const t07 = nationalData.map(d=>Math.round(d.inc/0.7));
+
+new Chart(document.getElementById('chart-darkfigure'), {
+  type:'line',
+  data:{ labels:years, datasets:[
+    { data:t03, borderColor:DARK_R, borderWidth:2, fill:false, pointRadius:0, tension:0.35 },
+    { data:t07, borderColor:'transparent', borderWidth:0, fill:'-1', backgroundColor:'rgba(224,92,58,0.12)', pointRadius:0, tension:0.35 },
+    { data:t07, borderColor:ACCENT2, borderWidth:1.5, borderDash:[5,4], fill:false, pointRadius:0, tension:0.35 },
+    { data:t05, borderColor:ACCENT, borderWidth:2, fill:false, pointRadius:0, tension:0.35 },
+    { data:nationalData.map(d=>d.inc), borderColor:TEXT_C, borderWidth:2.5, fill:false, pointRadius:0, tension:0.35 }
+  ]},
+  options:{
+    responsive:true,
+    interaction:{mode:'index',intersect:false},
+    plugins:{
+      legend:{display:false},
+      tooltip:{ callbacks:{ label: c=>{
+        if(c.datasetIndex===1) return null;
+        const lbl=['Est.(p=0.3)',null,'Est.(p=0.7)','Est.(p=0.5)','Recorded'];
+        return `  ${lbl[c.datasetIndex]}: ${c.parsed.y.toLocaleString('en-IN')}`;
+      }}}
+    },
+    scales:{
+      x: scaleBase.x,
+      y:{ ...scaleBase.y, ticks:{ color:'#555', callback:v=>(v/1e6).toFixed(0)+'M' }}
+    }
+  }
+});
+
+// ── Panel B: Gap bars ─────────────────────────────────────────────────────
+new Chart(document.getElementById('chart-gap'), {
+  type:'bar',
+  data:{ labels:years, datasets:[
+    { label:'p=0.3 gap', data:nationalData.map((d,i)=>t03[i]-d.inc), backgroundColor:'rgba(168,50,32,0.75)', borderWidth:0 },
+    { label:'p=0.5 gap', data:nationalData.map((d,i)=>t05[i]-d.inc), backgroundColor:'rgba(224,92,58,0.55)', borderWidth:0 },
+    { label:'p=0.7 gap', data:nationalData.map((d,i)=>t07[i]-d.inc), backgroundColor:'rgba(240,169,82,0.4)', borderWidth:0 }
+  ]},
+  options:{
+    responsive:true,
+    interaction:{mode:'index',intersect:false},
+    plugins:{
+      legend:{ display:true, position:'top', labels:{ font:{family:"'IBM Plex Mono',monospace",size:10}, color:'#666', boxWidth:12, padding:14 }},
+      tooltip:{ callbacks:{ label: c=>`  ${c.dataset.label}: ${c.parsed.y.toLocaleString('en-IN')}` }}
+    },
+    scales:{
+      x:{ grid:{display:false}, ticks:{maxTicksLimit:11,color:'#555'} },
+      y:{ grid:{color:GRID_C}, ticks:{color:'#555', callback:v=>(v/1e6).toFixed(0)+'M'} }
+    }
+  }
+});
+
+// ── State bar ─────────────────────────────────────────────────────────────
+let stateBarChart = null;
+function renderStateBar(){
+  const metric = document.getElementById('bar-metric').value;
+  const top    = parseInt(document.getElementById('bar-top').value);
+  const isDark = metric.startsWith('dark');
+  const sorted = [...stateData].sort((a,b)=>b[metric]-a[metric]).slice(0,top);
+  if(stateBarChart) stateBarChart.destroy();
+  stateBarChart = new Chart(document.getElementById('chart-statebar'),{
+    type:'bar',
+    data:{ labels: sorted.map(d=>d.state.length>15?d.state.substring(0,14)+'…':d.state),
+      datasets:[{ data: sorted.map(d=>d[metric]),
+        backgroundColor: sorted.map((d,i)=>{
+          const a = 0.4+0.55*(1-i/top);
+          return isDark ? `rgba(224,92,58,${a})` : `rgba(240,169,82,${a})`;
+        }), borderWidth:0, borderRadius:2
+      }]
+    },
+    options:{
+      indexAxis:'y', responsive:true,
+      plugins:{ tooltip:{ callbacks:{ label: c=>{
+        const v=c.parsed.x;
+        if(metric==='cs') return `  ${v.toFixed(1)}%`;
+        if(metric==='rate') return `  ${v.toFixed(1)} per lakh`;
+        return `  ${v.toLocaleString('en-IN')}`;
+      }}}},
+      scales:{
+        x:{ grid:{color:GRID_C}, ticks:{color:'#555', callback:v=>{
+          if(metric==='cs') return v+'%';
+          if(metric==='rate') return v;
+          return (v/1000).toFixed(0)+'K';
+        }}},
+        y:{ grid:{display:false}, ticks:{color:'#888',font:{size:9.5}} }
+      }
+    }
+  });
+}
+renderStateBar();
+
+// ── Regression residuals ──────────────────────────────────────────────────
+function computeResiduals(){
+  const x = stateData.map(d=>Math.log(d.pop));
+  const y = stateData.map(d=>d.rate);
+  const n=x.length, mx=x.reduce((a,b)=>a+b,0)/n, my=y.reduce((a,b)=>a+b,0)/n;
+  const slope = x.reduce((s,xi,i)=>s+(xi-mx)*(y[i]-my),0)/x.reduce((s,xi)=>s+(xi-mx)**2,0);
+  const intercept = my-slope*mx;
+  return stateData.map((d,i)=>({
+    state:d.state,
+    residual:parseFloat((d.rate-(intercept+slope*x[i])).toFixed(1)),
+    rate:d.rate
+  })).sort((a,b)=>a.residual-b.residual);
+}
+const residuals = computeResiduals();
+new Chart(document.getElementById('chart-residuals'),{
+  type:'bar',
+  data:{ labels: residuals.map(d=>d.state.length>12?d.state.substring(0,12)+'…':d.state),
+    datasets:[{ data: residuals.map(d=>d.residual),
+      backgroundColor: residuals.map(d=>d.residual<0?'rgba(224,92,58,0.7)':'rgba(90,180,144,0.65)'),
+      borderWidth:0, borderRadius:2
+    }]
+  },
+  options:{
+    responsive:true,
+    plugins:{ tooltip:{ callbacks:{
+      title: c=>residuals[c[0].dataIndex].state,
+      label: c=>[
+        `  Residual: ${c.parsed.y>0?'+':''}${c.parsed.y}`,
+        `  Actual rate: ${residuals[c[0].dataIndex].rate} per lakh`
+      ]
+    }}},
+    scales:{
+      x:{grid:{display:false},ticks:{color:'#555',font:{size:9}}},
+      y:{grid:{color:GRID_C},ticks:{color:'#555',callback:v=>(v>0?'+':'')+v}}
+    }
+  }
+});
+
+// ── India Map ─────────────────────────────────────────────────────────────
+const mapSvg  = d3.select('#india-map');
+const tooltip = document.getElementById('map-tooltip');
+const mc      = document.getElementById('map-container');
+const colorScale = d3.scaleSequential().domain([0,1600]).interpolator(t=>d3.interpolate('#1a1a1a','#e05c3a')(t));
+
+function matchState(geoName){
+  if(!geoName) return null;
+  const n = geoName.toLowerCase().replace(/[^a-z]/g,'');
+  for(const s of stateData){
+    const sn = s.state.toLowerCase().replace(/[^a-z]/g,'');
+    if(n===sn) return s;
+    if(n.length>4 && sn.startsWith(n.substring(0,5))) return s;
+    if(sn.length>4 && n.startsWith(sn.substring(0,5))) return s;
+  }
+  return null;
+}
+
+d3.json('https://cdn.jsdelivr.net/npm/india-states-topojson@1.0.3/india_states.json')
+  .then(india=>{
+    const w=mc.offsetWidth, h=mc.offsetHeight;
+    const objKey=Object.keys(india.objects)[0];
+    const features=topojson.feature(india,india.objects[objKey]).features;
+    const projection=d3.geoMercator().center([82,22]).scale(Math.min(w,h)*1.12).translate([w/2,h/2]);
+    const path=d3.geoPath().projection(projection);
+
+    mapSvg.attr('viewBox',`0 0 ${w} ${h}`)
+      .selectAll('path').data(features).enter().append('path')
+        .attr('d',path)
+        .attr('fill',d=>{
+          const name=d.properties.ST_NM||d.properties.NAME_1||d.properties.name||'';
+          const m=matchState(name);
+          return m?colorScale(m.rate):'#1e1e1e';
+        })
+        .attr('stroke','#0a0a0a').attr('stroke-width',0.7)
+        .style('cursor','pointer')
+        .on('mousemove',function(event,d){
+          const name=d.properties.ST_NM||d.properties.NAME_1||d.properties.name||'Unknown';
+          const m=matchState(name);
+          const rect=mc.getBoundingClientRect();
+          let tx=event.clientX-rect.left+14, ty=event.clientY-rect.top-10;
+          if(tx+220>w) tx=event.clientX-rect.left-230;
+          tooltip.style.left=tx+'px'; tooltip.style.top=ty+'px'; tooltip.style.opacity='1';
+          tooltip.innerHTML = m
+            ? `<strong>${m.state}</strong>Rate: ${m.rate} per lakh<br>Incidence 2023: ${m.inc2023.toLocaleString('en-IN')}<br>CS Rate: ${m.cs}%<br><span style="color:var(--accent)">Est. true (p=0.5): ${Math.round(m.inc2023/0.5).toLocaleString('en-IN')}</span>`
+            : `<strong>${name}</strong><span style="color:var(--muted)">No data matched</span>`;
+          d3.select(this).attr('stroke','#e05c3a').attr('stroke-width',1.5);
+        })
+        .on('mouseleave',function(){
+          tooltip.style.opacity='0';
+          d3.select(this).attr('stroke','#0a0a0a').attr('stroke-width',0.7);
+        });
+  })
+  .catch(()=>{
+    mc.innerHTML=`<div style="text-align:center;padding:3rem 2rem;color:var(--muted);font-family:'IBM Plex Mono',monospace;font-size:0.68rem;line-height:2.2">
+      India map requires internet to load TopoJSON.<br>See bar chart for all state data →<br><br>
+      <span style="color:var(--accent)">Highest rates 2023:</span><br>
+      Delhi 1508.9 · Kerala 721.7 · Manipur 594.0 · Telangana 411.0
+    </div>`;
+  });
+
+// ── Panel toggle ──────────────────────────────────────────────────────────
+function switchPanel(p){
+  const ca=document.getElementById('content-a'), cb=document.getElementById('content-b');
+  const ta=document.querySelector('.tab-btn:first-child'), tb=document.getElementById('tab-b');
+  if(p==='a'){ ca.style.display='block'; cb.style.display='none'; ta.className='tab-btn active-a'; tb.className='tab-btn'; }
+  else        { ca.style.display='none'; cb.style.display='block'; ta.className='tab-btn'; tb.className='tab-btn active-b'; }
+}
+
+// ── Scroll reveal ─────────────────────────────────────────────────────────
+const ro=new IntersectionObserver(entries=>{
+  entries.forEach((e,i)=>{ if(e.isIntersecting){ setTimeout(()=>e.target.classList.add('visible'),i*60); ro.unobserve(e.target); }});
+},{threshold:0.07});
+document.querySelectorAll('.reveal').forEach(el=>ro.observe(el));
+</script>
+</body>
+</html>

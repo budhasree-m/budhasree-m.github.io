@@ -1,1001 +1,477 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>The Invisible Crime — NCRB Dark Figure Visualization</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=IBM+Plex+Mono:wght@400;500&family=Manrope:wght@300;400;600&display=swap" rel="stylesheet">
-
-  <style>
-    :root {
-      --bg: #0a0a0a;
-      --surface: #111111;
-      --surface2: #181818;
-      --border: #242424;
-      --text: #e8e2d8;
-      --muted: #666;
-      --accent: #e05c3a;
-      --accent2: #f0a952;
-      --band: rgba(224, 92, 58, 0.12);
-      --grid: rgba(255,255,255,0.03);
-    }
-
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Manrope', sans-serif;
-      font-weight: 300;
-      line-height: 1.7;
-      overflow-x: hidden;
-    }
-
-    /* ── GRID BACKGROUND ── */
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image:
-        linear-gradient(var(--grid) 1px, transparent 1px),
-        linear-gradient(90deg, var(--grid) 1px, transparent 1px);
-      background-size: 60px 60px;
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    /* ── NAV ── */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 1.2rem 2.5rem;
-      background: rgba(10,10,10,0.85);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .nav-logo {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.75rem;
-      color: var(--accent);
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 2rem;
-      list-style: none;
-    }
-
-    .nav-links a {
-      font-size: 0.75rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--muted);
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-    .nav-links a:hover { color: var(--text); }
-
-    .nav-cta {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.7rem;
-      padding: 0.5rem 1.2rem;
-      border: 1px solid var(--accent);
-      color: var(--accent);
-      text-decoration: none;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      transition: background 0.2s, color 0.2s;
-    }
-    .nav-cta:hover { background: var(--accent); color: #fff; }
-
-    /* ── HERO ── */
-    .hero {
-      position: relative;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      padding: 7rem 2.5rem 4rem;
-      z-index: 1;
-      overflow: hidden;
-    }
-
-    .hero-bg-number {
-      position: absolute;
-      right: -2rem;
-      top: 50%;
-      transform: translateY(-50%);
-      font-family: 'DM Serif Display', serif;
-      font-size: clamp(16rem, 28vw, 32rem);
-      color: rgba(255,255,255,0.02);
-      line-height: 1;
-      user-select: none;
-      pointer-events: none;
-    }
-
-    .hero-inner {
-      max-width: 900px;
-    }
-
-    .hero-eyebrow {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.7rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 1.5rem;
-      display: flex;
-      align-items: center;
-      gap: 0.8rem;
-      opacity: 0;
-      animation: fadeUp 0.8s 0.2s forwards;
-    }
-
-    .hero-eyebrow::before {
-      content: '';
-      display: inline-block;
-      width: 2rem;
-      height: 1px;
-      background: var(--accent);
-    }
-
-    h1 {
-      font-family: 'DM Serif Display', serif;
-      font-size: clamp(3rem, 7vw, 6.5rem);
-      line-height: 1.05;
-      letter-spacing: -0.02em;
-      margin-bottom: 1rem;
-      opacity: 0;
-      animation: fadeUp 0.8s 0.4s forwards;
-    }
-
-    h1 em {
-      font-style: italic;
-      color: var(--accent);
-    }
-
-    .hero-subtitle {
-      font-size: 1.05rem;
-      color: var(--muted);
-      max-width: 560px;
-      margin-bottom: 3rem;
-      opacity: 0;
-      animation: fadeUp 0.8s 0.6s forwards;
-    }
-
-    .hero-actions {
-      display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
-      opacity: 0;
-      animation: fadeUp 0.8s 0.8s forwards;
-    }
-
-    .btn-primary {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.6rem;
-      padding: 0.9rem 2rem;
-      background: var(--accent);
-      color: #fff;
-      text-decoration: none;
-      font-size: 0.82rem;
-      font-weight: 600;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-    .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(224,92,58,0.35);
-    }
-
-    .btn-secondary {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.6rem;
-      padding: 0.9rem 2rem;
-      border: 1px solid var(--border);
-      color: var(--text);
-      text-decoration: none;
-      font-size: 0.82rem;
-      font-weight: 600;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      transition: border-color 0.2s, background 0.2s;
-    }
-    .btn-secondary:hover { border-color: var(--text); background: var(--surface2); }
-
-    /* ── STAT STRIP ── */
-    .stat-strip {
-      position: relative;
-      z-index: 1;
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-      background: var(--surface);
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      padding: 0 2.5rem;
-      opacity: 0;
-      animation: fadeUp 0.8s 1s forwards;
-    }
-
-    .stat-item {
-      padding: 2rem 2rem;
-      border-right: 1px solid var(--border);
-    }
-    .stat-item:last-child { border-right: none; }
-
-    .stat-value {
-      font-family: 'DM Serif Display', serif;
-      font-size: 2.6rem;
-      color: var(--accent2);
-      line-height: 1;
-      margin-bottom: 0.4rem;
-    }
-
-    .stat-label {
-      font-size: 0.72rem;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: var(--muted);
-    }
-
-    /* ── SECTIONS ── */
-    section {
-      position: relative;
-      z-index: 1;
-      padding: 6rem 2.5rem;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .section-tag {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.65rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 1rem;
-    }
-
-    h2 {
-      font-family: 'DM Serif Display', serif;
-      font-size: clamp(2rem, 4vw, 3.2rem);
-      line-height: 1.15;
-      margin-bottom: 1.2rem;
-    }
-
-    /* ── TWO PANELS ── */
-    .panels {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1.5px;
-      background: var(--border);
-      border: 1px solid var(--border);
-      margin-top: 3rem;
-    }
-
-    .panel {
-      background: var(--surface);
-      padding: 2.5rem;
-      position: relative;
-      overflow: hidden;
-      transition: background 0.3s;
-    }
-    .panel:hover { background: var(--surface2); }
-
-    .panel-badge {
-      display: inline-block;
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.62rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      padding: 0.3rem 0.8rem;
-      border: 1px solid;
-      margin-bottom: 1.5rem;
-    }
-
-    .panel-a .panel-badge { color: var(--accent2); border-color: var(--accent2); }
-    .panel-b .panel-badge { color: var(--accent); border-color: var(--accent); }
-
-    .panel h3 {
-      font-family: 'DM Serif Display', serif;
-      font-size: 1.7rem;
-      margin-bottom: 0.8rem;
-    }
-
-    .panel p {
-      font-size: 0.88rem;
-      color: var(--muted);
-      line-height: 1.8;
-      margin-bottom: 1.5rem;
-    }
-
-    .viz-list {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-
-    .viz-list li {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.72rem;
-      color: var(--muted);
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-    }
-
-    .viz-list li::before {
-      content: '→';
-      color: var(--accent);
-    }
-
-    .panel-a .viz-list li::before { color: var(--accent2); }
-
-    /* ── FAKE CHART PREVIEW ── */
-    .chart-preview {
-      margin-top: 2rem;
-      height: 100px;
-      border: 1px solid var(--border);
-      position: relative;
-      overflow: hidden;
-      background: var(--bg);
-    }
-
-    .chart-preview svg { width: 100%; height: 100%; }
-
-    /* ── EQUATION BLOCK ── */
-    .equation-block {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-left: 3px solid var(--accent);
-      padding: 2rem 2.5rem;
-      margin: 3rem 0;
-      display: flex;
-      align-items: center;
-      gap: 3rem;
-      flex-wrap: wrap;
-    }
-
-    .eq-formula {
-      font-family: 'DM Serif Display', serif;
-      font-size: 2.2rem;
-      font-style: italic;
-      color: var(--accent);
-      white-space: nowrap;
-    }
-
-    .eq-explain {
-      font-size: 0.82rem;
-      color: var(--muted);
-      line-height: 1.9;
-    }
-
-    .eq-explain span {
-      font-family: 'IBM Plex Mono', monospace;
-      color: var(--text);
-    }
-
-    /* ── VIZ GRID ── */
-    .viz-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1px;
-      background: var(--border);
-      border: 1px solid var(--border);
-      margin-top: 3rem;
-    }
-
-    .viz-card {
-      background: var(--surface);
-      padding: 2rem;
-      transition: background 0.2s;
-    }
-    .viz-card:hover { background: var(--surface2); }
-
-    .viz-card-icon {
-      width: 40px;
-      height: 40px;
-      border: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 1rem;
-      font-size: 1rem;
-    }
-
-    .viz-card h4 {
-      font-family: 'DM Serif Display', serif;
-      font-size: 1.15rem;
-      margin-bottom: 0.5rem;
-    }
-
-    .viz-card p {
-      font-size: 0.78rem;
-      color: var(--muted);
-      line-height: 1.7;
-    }
-
-    /* ── METHODOLOGY TABLE ── */
-    .method-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 2rem;
-      font-size: 0.82rem;
-    }
-
-    .method-table thead tr {
-      border-bottom: 1px solid var(--accent);
-    }
-
-    .method-table th {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.65rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--accent);
-      padding: 0.8rem 1rem;
-      text-align: left;
-    }
-
-    .method-table td {
-      padding: 1rem 1rem;
-      border-bottom: 1px solid var(--border);
-      color: var(--muted);
-      vertical-align: top;
-    }
-
-    .method-table td:first-child {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.75rem;
-      color: var(--text);
-      white-space: nowrap;
-    }
-
-    .method-table tr:hover td { background: var(--surface2); }
-
-    /* ── DATA SOURCES ── */
-    .source-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 1px;
-      background: var(--border);
-      border: 1px solid var(--border);
-      margin-top: 2rem;
-    }
-
-    .source-card {
-      background: var(--surface);
-      padding: 1.5rem 2rem;
-      display: flex;
-      gap: 1rem;
-      align-items: flex-start;
-    }
-
-    .source-num {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.65rem;
-      color: var(--accent);
-      flex-shrink: 0;
-      margin-top: 0.2rem;
-    }
-
-    .source-card h5 {
-      font-size: 0.88rem;
-      font-weight: 600;
-      margin-bottom: 0.3rem;
-    }
-
-    .source-card p {
-      font-size: 0.75rem;
-      color: var(--muted);
-    }
-
-    /* ── ROADMAP ── */
-    .roadmap {
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-      margin-top: 2.5rem;
-      border: 1px solid var(--border);
-    }
-
-    .roadmap-item {
-      display: grid;
-      grid-template-columns: 80px 1fr;
-      border-bottom: 1px solid var(--border);
-    }
-    .roadmap-item:last-child { border-bottom: none; }
-
-    .roadmap-phase {
-      padding: 1.5rem;
-      border-right: 1px solid var(--border);
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.65rem;
-      color: var(--accent);
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-    }
-
-    .roadmap-content {
-      padding: 1.5rem 2rem;
-    }
-
-    .roadmap-content h5 {
-      font-size: 0.9rem;
-      font-weight: 600;
-      margin-bottom: 0.3rem;
-    }
-
-    .roadmap-content p {
-      font-size: 0.78rem;
-      color: var(--muted);
-    }
-
-    /* ── FOOTER ── */
-    footer {
-      position: relative;
-      z-index: 1;
-      border-top: 1px solid var(--border);
-      padding: 2.5rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: gap;
-      gap: 1rem;
-    }
-
-    footer p {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.65rem;
-      color: var(--muted);
-      letter-spacing: 0.08em;
-    }
-
-    footer a {
-      color: var(--accent);
-      text-decoration: none;
-    }
-
-    .footer-links {
-      display: flex;
-      gap: 1.5rem;
-    }
-
-    /* ── DIVIDER ── */
-    .full-divider {
-      position: relative;
-      z-index: 1;
-      border: none;
-      border-top: 1px solid var(--border);
-      margin: 0;
-    }
-
-    /* ── ANIMATIONS ── */
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    /* ── SCROLL REVEAL ── */
-    .reveal {
-      opacity: 0;
-      transform: translateY(24px);
-      transition: opacity 0.7s, transform 0.7s;
-    }
-    .reveal.visible {
-      opacity: 1;
-      transform: none;
-    }
-
-    /* ── RESPONSIVE ── */
-    @media (max-width: 900px) {
-      .panels, .viz-grid, .source-grid { grid-template-columns: 1fr; }
-      .stat-strip { grid-template-columns: repeat(2, 1fr); }
-      .stat-item:nth-child(2) { border-right: none; }
-      nav .nav-links { display: none; }
-    }
-
-    @media (max-width: 600px) {
-      .stat-strip { grid-template-columns: 1fr 1fr; }
-      section { padding: 4rem 1.5rem; }
-      nav { padding: 1rem 1.5rem; }
-      .equation-block { flex-direction: column; gap: 1rem; }
-    }
-  </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>The Invisible Crime — NCRB Dark Figure Visualization</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=IBM+Plex+Mono:wght@400;500&family=Manrope:wght@300;400;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root {
+  --bg: #0a0a0a;
+  --surface: #111111;
+  --surface2: #181818;
+  --border: #242424;
+  --text: #e8e2d8;
+  --muted: #666;
+  --accent: #e05c3a;
+  --accent2: #f0a952;
+  --grid: rgba(255,255,255,0.03);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Manrope',sans-serif;font-weight:300;line-height:1.7;overflow-x:hidden}
+
+body::before{
+  content:'';position:fixed;inset:0;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:60px 60px;pointer-events:none;z-index:0;
+}
+
+/* NAV */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:1.2rem 2.5rem;
+  background:rgba(10,10,10,0.88);backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--border);
+}
+.nav-logo{font-family:'IBM Plex Mono',monospace;font-size:0.75rem;color:var(--accent);letter-spacing:0.12em;text-transform:uppercase;text-decoration:none}
+.nav-links{display:flex;gap:2rem;list-style:none}
+.nav-links a{font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color 0.2s}
+.nav-links a:hover{color:var(--text)}
+.nav-cta{font-family:'IBM Plex Mono',monospace;font-size:0.7rem;padding:0.5rem 1.2rem;border:1px solid var(--accent);color:var(--accent);text-decoration:none;letter-spacing:0.1em;text-transform:uppercase;transition:background 0.2s,color 0.2s}
+.nav-cta:hover{background:var(--accent);color:#fff}
+
+/* HERO */
+.hero{
+  position:relative;min-height:100vh;
+  display:grid;grid-template-columns:1fr 1fr;
+  padding-top:60px;z-index:1;
+  border-bottom:1px solid var(--border);
+}
+.hero-left{
+  padding:5rem 3rem 4rem;
+  border-right:1px solid var(--border);
+  display:flex;flex-direction:column;justify-content:center;
+}
+.hero-right{
+  padding:3rem;display:flex;flex-direction:column;justify-content:center;gap:1.5rem;
+  background:var(--surface);
+}
+.eyebrow{
+  font-family:'IBM Plex Mono',monospace;font-size:0.68rem;letter-spacing:0.2em;
+  text-transform:uppercase;color:var(--accent);margin-bottom:1.5rem;
+  display:flex;align-items:center;gap:0.8rem;
+  opacity:0;animation:fadeUp 0.7s 0.2s forwards;
+}
+.eyebrow::before{content:'';display:inline-block;width:2rem;height:1px;background:var(--accent)}
+h1{
+  font-family:'DM Serif Display',serif;
+  font-size:clamp(2.8rem,5.5vw,5.2rem);
+  line-height:1.05;letter-spacing:-0.02em;margin-bottom:1.2rem;
+  opacity:0;animation:fadeUp 0.7s 0.35s forwards;
+}
+h1 em{font-style:italic;color:var(--accent)}
+.hero-sub{
+  font-size:0.92rem;color:var(--muted);max-width:480px;line-height:1.85;margin-bottom:2.5rem;
+  opacity:0;animation:fadeUp 0.7s 0.5s forwards;
+}
+.hero-cta{
+  display:flex;gap:1rem;flex-wrap:wrap;
+  opacity:0;animation:fadeUp 0.7s 0.65s forwards;
+}
+.btn-primary{
+  display:inline-flex;align-items:center;gap:0.5rem;
+  padding:0.85rem 2rem;background:var(--accent);color:#fff;
+  text-decoration:none;font-size:0.8rem;font-weight:600;
+  letter-spacing:0.05em;text-transform:uppercase;
+  transition:transform 0.2s,box-shadow 0.2s;
+}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(224,92,58,0.35)}
+.btn-secondary{
+  display:inline-flex;align-items:center;gap:0.5rem;
+  padding:0.85rem 2rem;border:1px solid var(--border);
+  color:var(--text);text-decoration:none;font-size:0.8rem;font-weight:600;
+  letter-spacing:0.05em;text-transform:uppercase;
+  transition:border-color 0.2s,background 0.2s;
+}
+.btn-secondary:hover{border-color:var(--text);background:var(--surface2)}
+
+/* HERO SPARKLINES */
+.sparkline-card{
+  background:var(--surface2);border:1px solid var(--border);
+  padding:1.2rem 1.5rem;
+  opacity:0;animation:fadeUp 0.7s forwards;
+}
+.sparkline-card:nth-child(1){animation-delay:0.5s}
+.sparkline-card:nth-child(2){animation-delay:0.65s}
+.sparkline-card:nth-child(3){animation-delay:0.8s}
+.spark-label{
+  font-family:'IBM Plex Mono',monospace;font-size:0.58rem;
+  letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:0.6rem;
+}
+.spark-val{
+  font-family:'DM Serif Display',serif;font-size:1.6rem;
+  color:var(--text);margin-bottom:0.8rem;line-height:1;
+}
+.spark-val span{color:var(--accent);font-style:italic}
+
+/* STAT STRIP */
+.stat-strip{
+  position:relative;z-index:1;
+  border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+  background:var(--surface);
+  display:grid;grid-template-columns:repeat(4,1fr);
+}
+.stat-item{padding:2rem;border-right:1px solid var(--border)}
+.stat-item:last-child{border-right:none}
+.stat-val{
+  font-family:'DM Serif Display',serif;font-size:2.6rem;
+  color:var(--accent2);line-height:1;margin-bottom:0.4rem;
+  font-style:italic;
+}
+.stat-lbl{font-family:'IBM Plex Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:0.12em;color:var(--muted)}
+
+/* STORY SECTION */
+.story{position:relative;z-index:1;border-bottom:1px solid var(--border)}
+.story-inner{max-width:1200px;margin:0 auto;padding:6rem 2.5rem}
+.section-tag{
+  font-family:'IBM Plex Mono',monospace;font-size:0.65rem;
+  letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);
+  margin-bottom:1rem;display:block;
+}
+h2{font-family:'DM Serif Display',serif;font-size:clamp(1.8rem,3.5vw,3rem);line-height:1.15;margin-bottom:1.2rem}
+h2 em{font-style:italic}
+
+/* EQUATION BLOCK */
+.eq-block{
+  display:flex;align-items:center;gap:3rem;flex-wrap:wrap;
+  background:var(--surface);border:1px solid var(--border);
+  border-left:3px solid var(--accent);
+  padding:2rem 2.5rem;margin:2.5rem 0;
+}
+.eq-formula{
+  font-family:'DM Serif Display',serif;font-size:3rem;
+  font-style:italic;color:var(--accent);white-space:nowrap;
+}
+.eq-vars{font-family:'IBM Plex Mono',monospace;font-size:0.68rem;color:var(--muted);line-height:2.2}
+.eq-vars strong{color:var(--text);font-weight:500}
+
+/* PANELS PREVIEW */
+.panels-preview{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border);margin-top:3rem}
+.preview-panel{background:var(--surface);padding:2.5rem;transition:background 0.25s}
+.preview-panel:hover{background:var(--surface2)}
+.preview-badge{
+  display:inline-block;font-family:'IBM Plex Mono',monospace;
+  font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;
+  padding:0.3rem 0.8rem;border:1px solid;margin-bottom:1.2rem;
+}
+.badge-a{color:var(--accent2);border-color:var(--accent2)}
+.badge-b{color:var(--accent);border-color:var(--accent)}
+.preview-title{font-family:'DM Serif Display',serif;font-size:1.5rem;margin-bottom:0.6rem}
+.preview-desc{font-size:0.82rem;color:var(--muted);line-height:1.8;margin-bottom:1.5rem}
+.preview-list{list-style:none;display:flex;flex-direction:column;gap:0.4rem}
+.preview-list li{font-family:'IBM Plex Mono',monospace;font-size:0.65rem;color:var(--muted);display:flex;align-items:center;gap:0.6rem}
+.preview-list li::before{content:'→';color:var(--accent)}
+.preview-panel:first-child .preview-list li::before{color:var(--accent2)}
+
+/* METHOD STRIP */
+.method-strip{position:relative;z-index:1;border-bottom:1px solid var(--border)}
+.method-inner{max-width:1200px;margin:0 auto;padding:5rem 2.5rem}
+.method-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);margin-top:2.5rem}
+.method-card{background:var(--surface);padding:2rem;transition:background 0.25s}
+.method-card:hover{background:var(--surface2)}
+.method-num{font-family:'IBM Plex Mono',monospace;font-size:0.6rem;color:var(--accent);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:0.8rem}
+.method-title{font-family:'DM Serif Display',serif;font-size:1.15rem;margin-bottom:0.6rem;color:var(--text)}
+.method-body{font-size:0.78rem;color:var(--muted);line-height:1.85}
+
+/* FOOTER */
+footer{
+  position:relative;z-index:1;
+  border-top:1px solid var(--border);padding:2rem 2.5rem;
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;
+}
+footer p{font-family:'IBM Plex Mono',monospace;font-size:0.62rem;color:var(--muted);letter-spacing:0.06em}
+footer a{color:var(--accent);text-decoration:none}
+footer a:hover{color:var(--accent2)}
+
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(22px);transition:opacity 0.65s,transform 0.65s}
+.reveal.visible{opacity:1;transform:none}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+
+@media(max-width:900px){
+  .hero{grid-template-columns:1fr}
+  .hero-right{display:none}
+  .stat-strip{grid-template-columns:repeat(2,1fr)}
+  .stat-item:nth-child(2){border-right:none}
+  .panels-preview,.method-grid{grid-template-columns:1fr}
+  nav .nav-links{display:none}
+}
+</style>
 </head>
 <body>
 
-  <!-- ── NAV ── -->
-  <nav>
-    <div class="nav-logo">NCRB · Dark Figure</div>
-    <ul class="nav-links">
-      <li><a href="#about">About</a></li>
-      <li><a href="#visualizations">Visuals</a></li>
-      <li><a href="#methodology">Methodology</a></li>
-      <li><a href="#data">Data</a></li>
-      <li><a href="#roadmap">Roadmap</a></li>
-    </ul>
-    <a href="https://www.ncrb.gov.in" target="_blank" class="nav-cta">NCRB Source ↗</a>
-  </nav>
+<nav>
+  <a href="index.html" class="nav-logo">NCRB · Dark Figure</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#method">Method</a></li>
+    <li><a href="viz.html">Visualizations</a></li>
+  </ul>
+  <a href="viz.html" class="nav-cta">Explore Data →</a>
+</nav>
 
-  <!-- ── HERO ── -->
-  <div class="hero">
-    <div class="hero-bg-number">?</div>
-    <div class="hero-inner">
-      <p class="hero-eyebrow">India Crime Data · NCRB · 2015–2023</p>
-      <h1>The Crime<br>You <em>Can't</em> Chart</h1>
-      <p class="hero-subtitle">
-        Official NCRB data captures what was <em>recorded</em> — not what <em>happened</em>.
-        This project visualizes both: the numbers we have, and the vast shadow they cast.
-      </p>
-      <div class="hero-actions">
-        <a href="viz.html" class="btn-primary">Explore Visualizations →</a>
-        <a href="#methodology" class="btn-secondary">Read Methodology</a>
-      </div>
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-left">
+    <p class="eyebrow">NCRB India · IPC Crimes · 1981–2023</p>
+    <h1>The Crime<br>You <em>Can't</em><br>Chart</h1>
+    <p class="hero-sub">
+      Official NCRB statistics capture only what was <em>recorded</em> — not what happened.
+      This project visualizes both: the numbers we have, and the vast shadow they cast across four decades of Indian crime data.
+    </p>
+    <div class="hero-cta">
+      <a href="viz.html" class="btn-primary">Explore Visualizations →</a>
+      <a href="#about" class="btn-secondary">Read the Argument</a>
     </div>
   </div>
 
-  <!-- ── STAT STRIP ── -->
-  <div class="stat-strip">
-    <div class="stat-item">
-      <div class="stat-value">36</div>
-      <div class="stat-label">States &amp; UTs tracked</div>
+  <div class="hero-right">
+    <!-- Live sparkline cards from real data -->
+    <div class="sparkline-card">
+      <div class="spark-label">IPC Crime Incidence · 1981–2023</div>
+      <div class="spark-val"><span id="inc-counter">3.76</span>M recorded in 2023</div>
+      <canvas id="spark-inc" height="55"></canvas>
     </div>
-    <div class="stat-item">
-      <div class="stat-value">9</div>
-      <div class="stat-label">Years of NCRB data</div>
+    <div class="sparkline-card">
+      <div class="spark-label">Crime Rate per Lakh Population</div>
+      <div class="spark-val"><span id="rate-counter">270</span> per lakh · 2023</div>
+      <canvas id="spark-rate" height="55"></canvas>
     </div>
-    <div class="stat-item">
-      <div class="stat-value">~60%</div>
-      <div class="stat-label">Est. underreporting (domestic violence)</div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-value">3</div>
-      <div class="stat-label">Dark figure models applied</div>
+    <div class="sparkline-card">
+      <div class="spark-label">Charge-Sheeting Rate · Declining since 2016</div>
+      <div class="spark-val"><span id="cs-counter">72.7</span>% in 2023</div>
+      <canvas id="spark-cs" height="55"></canvas>
     </div>
   </div>
+</div>
 
-  <hr class="full-divider">
+<!-- STAT STRIP -->
+<div class="stat-strip">
+  <div class="stat-item reveal">
+    <div class="stat-val" data-target="43">0</div>
+    <div class="stat-lbl">Years of NCRB data<br>1981–2023</div>
+  </div>
+  <div class="stat-item reveal">
+    <div class="stat-val" data-target="36">0</div>
+    <div class="stat-lbl">States &amp; UTs<br>tracked</div>
+  </div>
+  <div class="stat-item reveal">
+    <div class="stat-val" style="font-size:2rem">~3×</div>
+    <div class="stat-lbl">Estimated true crime<br>at p=0.3</div>
+  </div>
+  <div class="stat-item reveal">
+    <div class="stat-val" data-target="3">0</div>
+    <div class="stat-lbl">Dark figure<br>models applied</div>
+  </div>
+</div>
 
-  <!-- ── ABOUT ── -->
-  <section id="about">
-    <p class="section-tag reveal">// 01 · About</p>
-    <h2 class="reveal">What is the<br><em>dark figure</em> of crime?</h2>
-    <p class="reveal" style="max-width:620px; color:var(--muted); font-size:0.95rem;">
-      In criminology, the dark figure refers to all crime that <em>occurs</em> but is never reported
-      to police or recorded in official statistics. In India, this gap is not random — it is
-      structural, shaped by stigma, institutional distrust, caste &amp; gender imbalances, and
-      bureaucratic friction.
+<!-- ABOUT / STORY -->
+<div class="story" id="about">
+  <div class="story-inner">
+    <span class="section-tag reveal">// 01 · The Problem</span>
+    <h2 class="reveal">Recorded ≠ Real.<br><em>The dark figure</em> is the gap.</h2>
+    <p class="reveal" style="max-width:640px;color:var(--muted);font-size:0.92rem;margin-bottom:1.5rem">
+      In criminology, the <strong style="color:var(--text)">dark figure of crime</strong> refers to all crime that occurs but is never reported to police or recorded in official statistics. In India, this gap is not random — it is structural, shaped by stigma, institutional distrust, caste and gender power imbalances, and bureaucratic friction.
+    </p>
+    <p class="reveal" style="max-width:640px;color:var(--muted);font-size:0.92rem">
+      For a crime to appear in NCRB data it must pass two filters: someone must report it, and police must register it. If either fails, it never becomes a number. What we visualize here is both the number — and the filter.
     </p>
 
-    <div class="equation-block reveal">
-      <div class="eq-formula">T = R / p</div>
-      <div class="eq-explain">
-        <span>T</span> = estimated true incidents &nbsp;·&nbsp;
-        <span>R</span> = NCRB recorded crimes &nbsp;·&nbsp;
-        <span>p</span> = reporting probability<br>
-        When <span>p &lt; 1</span>, the dark figure <span>D = T − R</span> is non-zero.<br>
-        In India, <span>p</span> varies widely across crime type, state, and social context.
+    <div class="eq-block reveal">
+      <div class="eq-formula">T = R ÷ p</div>
+      <div class="eq-vars">
+        <strong>T</strong> = estimated true crime incidents<br>
+        <strong>R</strong> = NCRB recorded (official) crimes<br>
+        <strong>p</strong> = reporting probability (0 → 1)<br>
+        <strong>D = T − R</strong> = the dark figure<br><br>
+        At p=0.3 in 2023: T ≈ 12.5M · R = 3.76M · D ≈ 8.8M
       </div>
     </div>
 
-    <p class="reveal" style="color:var(--muted); font-size:0.88rem; max-width:700px;">
-      This project does not claim to know the "true" number — instead, it makes uncertainty
-      visible through uncertainty bands, residual maps, and a composite Visibility Index.
-      Every chart shows assumptions explicitly. No false precision.
-    </p>
-  </section>
-
-  <hr class="full-divider">
-
-  <!-- ── VISUALIZATIONS ── -->
-  <section id="visualizations">
-    <p class="section-tag reveal">// 02 · Visualizations</p>
-    <h2 class="reveal">Two lenses.<br>One dataset.</h2>
-    <p class="reveal" style="color:var(--muted); font-size:0.9rem; max-width:580px;">
-      The project is structured around two parallel visualization panels — you can view them
-      independently or in direct comparison.
-    </p>
-
-    <div class="panels reveal">
-
-      <!-- Panel A -->
-      <div class="panel panel-a">
-        <span class="panel-badge">Panel A — Official Record</span>
-        <h3>What NCRB<br>Tells Us</h3>
-        <p>
-          Recorded crime data as published. State-wise breakdowns, year-over-year trends,
-          IPC category distributions, and charge-sheet rates.
-        </p>
-        <ul class="viz-list">
-          <li>Choropleth: crime rate per 1L population</li>
-          <li>Multi-line: IPC category trends 2015–2023</li>
-          <li>Bar chart: state rankings by crime type</li>
-          <li>Stacked bar: charge-sheet &amp; disposal rates</li>
-          <li>Filter: crime type · year · state</li>
+    <div class="panels-preview reveal">
+      <div class="preview-panel">
+        <span class="preview-badge badge-a">Panel A · Official Record</span>
+        <div class="preview-title">What NCRB Tells Us</div>
+        <p class="preview-desc">Recorded crime as published. 43 years of national trends, state-wise breakdowns, charge-sheeting rates — with key historical moments annotated directly on the charts.</p>
+        <ul class="preview-list">
+          <li>Annotated incidence trend 1981–2023</li>
+          <li>Crime rate normalised for population</li>
+          <li>State rankings — sortable by metric</li>
+          <li>Choropleth map of India 2023</li>
         </ul>
-        <div class="chart-preview">
-          <svg viewBox="0 0 300 100" preserveAspectRatio="none">
-            <polyline points="0,80 40,65 80,70 120,45 160,50 200,35 240,40 300,20"
-              fill="none" stroke="#f0a952" stroke-width="2" opacity="0.8"/>
-            <polygon points="0,80 40,65 80,70 120,45 160,50 200,35 240,40 300,20 300,100 0,100"
-              fill="#f0a95218"/>
-          </svg>
-        </div>
       </div>
-
-      <!-- Panel B -->
-      <div class="panel panel-b">
-        <span class="panel-badge">Panel B — Dark Figure Lens</span>
-        <h3>What We Might<br>Be Missing</h3>
-        <p>
-          Statistical models applied to the same data: scenario-based uncertainty bands,
-          regression residuals, and a Visibility Index quadrant.
-        </p>
-        <ul class="viz-list">
-          <li>Uncertainty band: recorded vs estimated range</li>
-          <li>Interactive p-slider: adjust reporting probability</li>
-          <li>Residual map: where data defies expectation</li>
-          <li>4-quadrant scatter: Visibility Index vs recorded crime</li>
-          <li>Annotation layer: auxiliary signals (NFHS-5)</li>
+      <div class="preview-panel">
+        <span class="preview-badge badge-b">Panel B · Dark Figure Lens</span>
+        <div class="preview-title">What We Might Be Missing</div>
+        <p class="preview-desc">Statistical models applied to the same data. Drag the reporting probability slider to see the estimated band morph in real time. Every assumption is stated explicitly.</p>
+        <ul class="preview-list">
+          <li>Live p-slider — drag to adjust estimate</li>
+          <li>Uncertainty band chart with annotations</li>
+          <li>Regression residual map by state</li>
+          <li>Dark figure gap over 43 years</li>
         </ul>
-        <div class="chart-preview">
-          <svg viewBox="0 0 300 100" preserveAspectRatio="none">
-            <polygon points="0,90 40,75 80,78 120,52 160,55 200,40 240,45 300,25 300,100 0,100"
-              fill="#e05c3a14"/>
-            <polygon points="0,65 40,52 80,56 120,32 160,35 200,22 240,27 300,10 300,35 240,27 200,32 160,45 120,48 80,64 40,60 0,72"
-              fill="#e05c3a22"/>
-            <polyline points="0,80 40,65 80,70 120,45 160,50 200,35 240,40 300,20"
-              fill="none" stroke="#e05c3a" stroke-width="2" opacity="0.9" stroke-dasharray="5,3"/>
-          </svg>
-        </div>
       </div>
-
     </div>
-  </section>
+  </div>
+</div>
 
-  <hr class="full-divider">
-
-  <!-- ── VISUALIZATION DETAIL ── -->
-  <section>
-    <p class="section-tag reveal">// 02b · Visual Inventory</p>
-    <h2 class="reveal">Six core charts</h2>
-
-    <div class="viz-grid reveal">
-
-      <div class="viz-card">
-        <div class="viz-card-icon">🗺</div>
-        <h4>State Choropleth</h4>
-        <p>India map shaded by crime rate per 1 lakh population. Toggle between recorded count and dark-figure-adjusted estimate.</p>
-      </div>
-
-      <div class="viz-card">
-        <div class="viz-card-icon">📈</div>
-        <h4>Uncertainty Band Chart</h4>
-        <p>Line chart with shaded band. Recorded crime is the solid line; p-slider adjusts the upper/lower estimate band in real time.</p>
-      </div>
-
-      <div class="viz-card">
-        <div class="viz-card-icon">🔴</div>
-        <h4>Residual Deviation Map</h4>
-        <p>Diverging choropleth showing where recorded crime deviates from OLS/Ridge regression predictions. Red = likely underreporting.</p>
-      </div>
-
-      <div class="viz-card">
-        <div class="viz-card-icon">⊹</div>
-        <h4>Visibility Index Quadrant</h4>
-        <p>Scatterplot with four interpretive quadrants. X-axis = composite Visibility Index; Y-axis = recorded crime rate.</p>
-      </div>
-
-      <div class="viz-card">
-        <div class="viz-card-icon">▦</div>
-        <h4>IPC Category Trends</h4>
-        <p>Multi-line time series for major crime categories — rape, murder, theft, cybercrime, domestic violence — 2015 to 2023.</p>
-      </div>
-
-      <div class="viz-card">
-        <div class="viz-card-icon">≡</div>
-        <h4>State Ranking Bar Chart</h4>
-        <p>Horizontal bars sortable by crime type and year. Side-by-side columns for recorded vs. dark-figure-adjusted estimates.</p>
-      </div>
-
-    </div>
-  </section>
-
-  <hr class="full-divider">
-
-  <!-- ── METHODOLOGY ── -->
-  <section id="methodology">
-    <p class="section-tag reveal">// 03 · Methodology</p>
-    <h2 class="reveal">Three models.<br>All assumptions explicit.</h2>
-
-    <table class="method-table reveal">
-      <thead>
-        <tr>
-          <th>Model</th>
-          <th>Approach</th>
-          <th>Output</th>
-          <th>Assumption</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Scenario Estimation</td>
-          <td>T = R / p, applied at p = 0.3, 0.5, 0.7</td>
-          <td>Low / mid / high estimate band per state × crime type × year</td>
-          <td>Reporting probability p is uniform within a scenario; does not vary by state</td>
-        </tr>
-        <tr>
-          <td>Regression Residuals</td>
-          <td>OLS / Ridge regression: recorded crime ~ literacy + police strength + urbanization + female LFPR + GDP per capita</td>
-          <td>Residual map — states recording far less than predicted flag potential underreporting</td>
-          <td>Socio-demographic predictors are good proxies for expected crime; omitted variables may affect residuals</td>
-        </tr>
-        <tr>
-          <td>Visibility Index</td>
-          <td>Normalized composite of literacy, female LFPR, police per lakh, helpline usage</td>
-          <td>0–1 score per state, used as X-axis in quadrant scatterplot</td>
-          <td>Chosen indicators are reliable proxies for reporting likelihood; equal weighting applied unless otherwise noted</td>
-        </tr>
-      </tbody>
-    </table>
-  </section>
-
-  <hr class="full-divider">
-
-  <!-- ── DATA SOURCES ── -->
-  <section id="data">
-    <p class="section-tag reveal">// 04 · Data Sources</p>
-    <h2 class="reveal">Where the numbers<br>come from</h2>
-
-    <div class="source-grid reveal">
-
-      <div class="source-card">
-        <span class="source-num">01</span>
-        <div>
-          <h5>NCRB — Crime in India Reports</h5>
-          <p>Primary dataset. Annual reports 2015–2023. State &amp; UT level IPC crime counts, charge-sheet rates, police strength. ncrb.gov.in</p>
-        </div>
-      </div>
-
-      <div class="source-card">
-        <span class="source-num">02</span>
-        <div>
-          <h5>NFHS-5 (2019–21)</h5>
-          <p>National Family Health Survey. Domestic violence prevalence module used as an empirical anchor for reporting probability estimates in that category.</p>
-        </div>
-      </div>
-
-      <div class="source-card">
-        <span class="source-num">03</span>
-        <div>
-          <h5>Census 2011 / 2021 Projections</h5>
-          <p>Population denominators for crime rate normalization. Literacy rates, urbanization shares, female labor force participation.</p>
-        </div>
-      </div>
-
-      <div class="source-card">
-        <span class="source-num">04</span>
-        <div>
-          <h5>MHA Annual Reports &amp; MOSPI</h5>
-          <p>Police strength per lakh population, state-wise economic indicators used as regression predictors.</p>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-  <hr class="full-divider">
-
-  <!-- ── ROADMAP ── -->
-  <section id="roadmap">
-    <p class="section-tag reveal">// 05 · Roadmap</p>
-    <h2 class="reveal">Build phases</h2>
-
-    <div class="roadmap reveal">
-
-      <div class="roadmap-item">
-        <div class="roadmap-phase">Phase<br>1</div>
-        <div class="roadmap-content">
-          <h5>Data Pipeline</h5>
-          <p>Clean and normalize NCRB CSVs across 2015–2023. Standardize state names (pre/post J&amp;K bifurcation 2019). Merge with Census and NFHS-5 datasets. Output: structured SQLite / PostgreSQL.</p>
-        </div>
-      </div>
-
-      <div class="roadmap-item">
-        <div class="roadmap-phase">Phase<br>2</div>
-        <div class="roadmap-content">
-          <h5>Modelling Layer</h5>
-          <p>Python scripts for scenario estimation, OLS regression residuals, and Visibility Index computation. Export pre-computed results as JSON for frontend consumption.</p>
-        </div>
-      </div>
-
-      <div class="roadmap-item">
-        <div class="roadmap-phase">Phase<br>3</div>
-        <div class="roadmap-content">
-          <h5>Panel A — Official NCRB Visuals</h5>
-          <p>Choropleth, trend lines, bar charts. Interactive filters for crime type, year, and state. D3.js + TopoJSON India map.</p>
-        </div>
-      </div>
-
-      <div class="roadmap-item">
-        <div class="roadmap-phase">Phase<br>4</div>
-        <div class="roadmap-content">
-          <h5>Panel B — Dark Figure Visuals</h5>
-          <p>Uncertainty band chart with p-slider, residual deviation map, Visibility Index quadrant scatter. All annotations showing assumptions explicitly.</p>
-        </div>
-      </div>
-
-      <div class="roadmap-item">
-        <div class="roadmap-phase">Phase<br>5</div>
-        <div class="roadmap-content">
-          <h5>Scrollytelling &amp; Polish</h5>
-          <p>Narrative scroll structure tying Panels A &amp; B together. Methodology transparency panel. Mobile responsiveness. Deploy to GitHub Pages.</p>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- ── FOOTER ── -->
-  <footer>
-    <p>
-      Built on NCRB data · Dark figure methodology from
-      <a href="https://medium.com/@budhasree-m/the-crime-you-cant-chart-why-india-s-crime-data-needs-a-dark-figure-lens-052cf4fcd6e7" target="_blank">this article</a> ·
-      Data: ncrb.gov.in
+<!-- METHOD -->
+<div class="method-strip" id="method">
+  <div class="method-inner">
+    <span class="section-tag reveal">// 02 · Methodology</span>
+    <h2 class="reveal">Three models.<br><em>All assumptions explicit.</em></h2>
+    <p class="reveal" style="max-width:580px;color:var(--muted);font-size:0.88rem;margin-top:0.5rem">
+      This project does not claim to know the true number. It makes uncertainty visible through three complementary statistical lenses — each with stated assumptions, no false precision.
     </p>
-    <div class="footer-links">
-      <p><a href="https://github.com" target="_blank">GitHub ↗</a></p>
-      <p><a href="#methodology">Methodology</a></p>
-      <p><a href="#data">Data Sources</a></p>
+    <div class="method-grid reveal">
+      <div class="method-card">
+        <div class="method-num">Model 01 · Scenario Estimation</div>
+        <div class="method-title">T = R / p</div>
+        <p class="method-body">Applied at p = 0.3, 0.5, 0.7 simultaneously. An interactive slider lets you explore the full continuum. Produces a plausible range, not a single claimed truth.</p>
+      </div>
+      <div class="method-card">
+        <div class="method-num">Model 02 · Regression Residuals</div>
+        <div class="method-title">Actual − Predicted</div>
+        <p class="method-body">OLS regression predicts crime rate from log population. States with large negative residuals — recording far less than expected — flag potential underreporting patterns.</p>
+      </div>
+      <div class="method-card">
+        <div class="method-num">Data Sources</div>
+        <div class="method-title">NCRB 2023 + Census</div>
+        <p class="method-body">NCRB national time series 1981–2023 and Table 1A state-wise IPC crimes. Population: NCRB mid-year projected 2023. Future: NFHS-5, police strength, literacy rates.</p>
+      </div>
     </div>
-  </footer>
+  </div>
+</div>
 
-  <script>
-    // Scroll reveal
-    const reveals = document.querySelectorAll('.reveal');
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((e, i) => {
-        if (e.isIntersecting) {
-          setTimeout(() => e.target.classList.add('visible'), i * 80);
-          observer.unobserve(e.target);
-        }
-      });
-    }, { threshold: 0.1 });
-    reveals.forEach(el => observer.observe(el));
+<!-- FOOTER -->
+<footer>
+  <p>Data: <a href="https://ncrb.gov.in" target="_blank">NCRB Crime in India 2023</a> · Concept: <a href="https://medium.com/@budhasree-m/the-crime-you-cant-chart-why-india-s-crime-data-needs-a-dark-figure-lens-052cf4fcd6e7" target="_blank">The Invisible Crime (Medium) ↗</a></p>
+  <p>Chart.js · D3.js · All assumptions explicit · No false precision.</p>
+</footer>
 
-    // Smooth active nav highlight
-    const sections = document.querySelectorAll('section[id], div[id]');
-    const navLinks = document.querySelectorAll('.nav-links a');
-    const navObs = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const id = entry.target.id;
-          navLinks.forEach(a => {
-            a.style.color = a.getAttribute('href') === `#${id}` ? 'var(--text)' : '';
-          });
-        }
-      });
-    }, { threshold: 0.4 });
-    sections.forEach(s => navObs.observe(s));
-  </script>
+<script>
+// ── REAL DATA ─────────────────────────────────────────────────────────────
+const national = [
+  {y:1981,inc:1385757,rate:200.8,cs:61.3},{y:1982,inc:1353904,rate:192.0,cs:65.3},
+  {y:1983,inc:1349866,rate:187.4,cs:67.3},{y:1984,inc:1358660,rate:184.7,cs:67.9},
+  {y:1985,inc:1384731,rate:184.4,cs:70.2},{y:1986,inc:1405835,rate:183.5,cs:71.1},
+  {y:1987,inc:1406992,rate:180.1,cs:72.4},{y:1988,inc:1440356,rate:180.8,cs:70.7},
+  {y:1989,inc:1529844,rate:188.5,cs:72.3},{y:1990,inc:1604449,rate:194.0,cs:70.2},
+  {y:1991,inc:1678375,rate:197.5,cs:71.3},{y:1992,inc:1689341,rate:194.7,cs:72.2},
+  {y:1993,inc:1629936,rate:184.4,cs:72.5},{y:1994,inc:1635251,rate:181.7,cs:74.1},
+  {y:1995,inc:1695696,rate:185.1,cs:74.3},{y:1996,inc:1709576,rate:183.4,cs:76.9},
+  {y:1997,inc:1719820,rate:180.0,cs:77.5},{y:1998,inc:1778815,rate:183.2,cs:77.8},
+  {y:1999,inc:1764629,rate:178.9,cs:78.0},{y:2000,inc:1771084,rate:176.7,cs:78.4},
+  {y:2001,inc:1769308,rate:172.3,cs:78.6},{y:2002,inc:1780330,rate:169.5,cs:80.0},
+  {y:2003,inc:1716120,rate:160.7,cs:80.1},{y:2004,inc:1832015,rate:168.8,cs:79.8},
+  {y:2005,inc:1822602,rate:165.3,cs:80.7},{y:2006,inc:1878293,rate:167.7,cs:80.6},
+  {y:2007,inc:1989673,rate:175.1,cs:80.1},{y:2008,inc:2093379,rate:181.5,cs:79.8},
+  {y:2009,inc:2121345,rate:181.4,cs:78.4},{y:2010,inc:2224831,rate:187.6,cs:79.1},
+  {y:2011,inc:2325575,rate:192.2,cs:78.8},{y:2012,inc:2387188,rate:196.7,cs:78.8},
+  {y:2013,inc:2647722,rate:215.5,cs:79.5},{y:2014,inc:2851563,rate:229.2,cs:79.6},
+  {y:2015,inc:2949400,rate:234.2,cs:77.7},{y:2016,inc:2975711,rate:233.6,cs:72.9},
+  {y:2017,inc:3062579,rate:237.7,cs:70.7},{y:2018,inc:3132955,rate:236.7,cs:68.1},
+  {y:2019,inc:3225597,rate:241.2,cs:67.2},{y:2020,inc:4254356,rate:314.3,cs:75.8},
+  {y:2021,inc:3663360,rate:268.0,cs:72.3},{y:2022,inc:3561379,rate:258.1,cs:71.3},
+  {y:2023,inc:3763102,rate:270.3,cs:72.7}
+];
 
+const years = national.map(d=>d.y);
+
+// ── SPARKLINE DEFAULTS ────────────────────────────────────────────────────
+const sparkOpts = (color) => ({
+  responsive:true,
+  plugins:{legend:{display:false},tooltip:{enabled:false}},
+  scales:{x:{display:false},y:{display:false}},
+  elements:{point:{radius:0},line:{tension:0.4,borderWidth:1.5,fill:true}}
+});
+
+// Incidence sparkline
+new Chart(document.getElementById('spark-inc'),{
+  type:'line',
+  data:{
+    labels:years,
+    datasets:[{
+      data:national.map(d=>d.inc),
+      borderColor:'#e05c3a',
+      backgroundColor:'rgba(224,92,58,0.08)',
+      pointRadius:0,tension:0.4,fill:true,borderWidth:2
+    }]
+  },
+  options:sparkOpts('#e05c3a')
+});
+
+// Rate sparkline
+new Chart(document.getElementById('spark-rate'),{
+  type:'line',
+  data:{
+    labels:years,
+    datasets:[{
+      data:national.map(d=>d.rate),
+      borderColor:'#f0a952',
+      backgroundColor:'rgba(240,169,82,0.08)',
+      pointRadius:0,tension:0.4,fill:true,borderWidth:2
+    }]
+  },
+  options:sparkOpts('#f0a952')
+});
+
+// CS Rate sparkline
+new Chart(document.getElementById('spark-cs'),{
+  type:'line',
+  data:{
+    labels:years,
+    datasets:[{
+      data:national.map(d=>d.cs),
+      borderColor:'#e8e2d8',
+      backgroundColor:'rgba(232,226,216,0.05)',
+      pointRadius:0,tension:0.4,fill:true,borderWidth:2
+    }]
+  },
+  options:sparkOpts('#e8e2d8')
+});
+
+// ── COUNTER ANIMATION ─────────────────────────────────────────────────────
+function animateCounter(el, target, duration=1200) {
+  const start = performance.now();
+  const update = (now) => {
+    const p = Math.min((now-start)/duration, 1);
+    const ease = 1-Math.pow(1-p,3);
+    el.textContent = Math.round(ease*target);
+    if(p<1) requestAnimationFrame(update);
+  };
+  requestAnimationFrame(update);
+}
+
+// ── SCROLL REVEAL + COUNTER TRIGGER ──────────────────────────────────────
+const ro = new IntersectionObserver(entries=>{
+  entries.forEach((e,i)=>{
+    if(e.isIntersecting){
+      setTimeout(()=>{
+        e.target.classList.add('visible');
+        const val = e.target.querySelector('[data-target]');
+        if(val) animateCounter(val, parseInt(val.dataset.target));
+      }, i*80);
+      ro.unobserve(e.target);
+    }
+  });
+},{threshold:0.1});
+document.querySelectorAll('.reveal').forEach(el=>ro.observe(el));
+</script>
 </body>
 </html>

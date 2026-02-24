@@ -147,6 +147,74 @@ footer a:hover{color:var(--accent2)}
   .section-wrap{padding:3rem 1.2rem}
   .page-header{padding:7rem 1.2rem 3rem}
 }
+
+/* ── PANEL C STYLES ───────────────────────────────────────────────────── */
+.tab-btn.active-c{color:var(--text)}.tab-btn.active-c::after{background:var(--green)}
+
+/* p-estimator result bar */
+.p-result-bar{background:var(--surface2);border:1px solid var(--border);border-left:3px solid var(--green);padding:1.5rem 2rem;margin-bottom:1.5rem;display:flex;align-items:center;gap:2rem;flex-wrap:wrap}
+.p-result-num{font-family:'DM Serif Display',serif;font-size:3rem;font-style:italic;color:var(--green);line-height:1;min-width:6rem}
+.p-result-label{font-family:'IBM Plex Mono',monospace;font-size:0.62rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.3rem}
+.p-result-desc{font-size:0.82rem;color:var(--text);line-height:1.6;max-width:520px}
+.p-result-range{font-family:'IBM Plex Mono',monospace;font-size:0.6rem;color:var(--muted);margin-top:0.4rem}
+
+/* variable cards */
+.var-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem;margin-bottom:1.5rem}
+.var-card{background:var(--surface);border:1px solid var(--border);padding:1.2rem 1.4rem;transition:border-color 0.2s;position:relative}
+.var-card:hover{border-color:#333}
+.var-card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:0.5rem;margin-bottom:0.8rem}
+.var-card-name{font-family:'DM Serif Display',serif;font-size:1rem;color:var(--text);line-height:1.3}
+.var-card-tag{font-family:'IBM Plex Mono',monospace;font-size:0.55rem;letter-spacing:0.1em;text-transform:uppercase;padding:0.2rem 0.5rem;border:1px solid;flex-shrink:0}
+.tag-structural{color:#8fbcdb;border-color:#8fbcdb}
+.tag-institutional{color:var(--accent2);border-color:var(--accent2)}
+.tag-social{color:var(--green);border-color:var(--green)}
+.tag-custom{color:#b48ead;border-color:#b48ead}
+.var-card-desc{font-size:0.75rem;color:var(--muted);line-height:1.7;margin-bottom:0.8rem}
+.var-slider-row{display:flex;align-items:center;gap:0.8rem}
+.var-slider-label{font-family:'IBM Plex Mono',monospace;font-size:0.58rem;color:var(--muted);white-space:nowrap}
+.var-slider-val{font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:var(--text);min-width:2.2rem;text-align:right}
+.var-card input[type=range]{margin-bottom:0;height:2px}
+.var-remove{position:absolute;top:0.7rem;right:0.7rem;background:none;border:none;color:var(--muted);cursor:pointer;font-size:0.9rem;line-height:1;padding:0.15rem 0.3rem;transition:color 0.15s}
+.var-remove:hover{color:var(--accent)}
+
+/* contributor inputs */
+.contrib-form{background:var(--surface2);border:1px solid var(--border);border-left:2px solid #b48ead;padding:1.5rem 2rem;margin-bottom:1.5rem}
+.contrib-form-title{font-family:'IBM Plex Mono',monospace;font-size:0.65rem;letter-spacing:0.14em;text-transform:uppercase;color:#b48ead;margin-bottom:1rem}
+.contrib-row{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:0.8rem;align-items:end;margin-bottom:0.8rem}
+.contrib-field{display:flex;flex-direction:column;gap:0.3rem}
+.contrib-field label{font-family:'IBM Plex Mono',monospace;font-size:0.58rem;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase}
+.contrib-field input,.contrib-field select,.contrib-field textarea{font-family:'IBM Plex Mono',monospace;font-size:0.68rem;padding:0.5rem 0.7rem;border:1px solid var(--border);background:var(--surface);color:var(--text);outline:none;transition:border-color 0.2s;width:100%}
+.contrib-field input:focus,.contrib-field select:focus,.contrib-field textarea:focus{border-color:#b48ead}
+.contrib-field textarea{resize:vertical;min-height:60px}
+.btn-add-var{font-family:'IBM Plex Mono',monospace;font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;padding:0.55rem 1.2rem;border:1px solid var(--green);background:transparent;color:var(--green);cursor:pointer;transition:all 0.2s;white-space:nowrap;align-self:end}
+.btn-add-var:hover{background:rgba(90,180,144,0.1)}
+.btn-primary{font-family:'IBM Plex Mono',monospace;font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;padding:0.55rem 1.4rem;border:1px solid var(--accent);background:transparent;color:var(--accent);cursor:pointer;transition:all 0.2s}
+.btn-primary:hover{background:rgba(224,92,58,0.1)}
+
+/* submission log */
+.submission-log{background:var(--surface2);border:1px solid var(--border);padding:1.2rem 1.5rem;margin-bottom:1.5rem;max-height:240px;overflow-y:auto}
+.submission-log-title{font-family:'IBM Plex Mono',monospace;font-size:0.6rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-bottom:0.8rem}
+.log-entry{border-bottom:1px solid var(--border);padding:0.7rem 0;font-size:0.75rem;display:grid;grid-template-columns:auto 1fr auto;gap:0.8rem;align-items:start}
+.log-entry:last-child{border-bottom:none}
+.log-role{font-family:'IBM Plex Mono',monospace;font-size:0.58rem;padding:0.15rem 0.4rem;border:1px solid var(--border);color:var(--muted);white-space:nowrap}
+.log-text{color:var(--text);line-height:1.6}
+.log-p{font-family:'DM Serif Display',serif;font-size:1.1rem;font-style:italic;color:var(--green)}
+.log-empty{font-family:'IBM Plex Mono',monospace;font-size:0.62rem;color:var(--muted);text-align:center;padding:1.5rem 0}
+
+/* gauge strip */
+.gauge-strip{position:relative;height:48px;background:linear-gradient(to right,rgba(168,50,32,0.6) 0%,rgba(224,92,58,0.5) 25%,rgba(240,169,82,0.5) 50%,rgba(90,180,144,0.5) 75%,rgba(74,159,212,0.45) 100%);border:1px solid var(--border);border-radius:2px;margin:1rem 0 0.4rem}
+.gauge-marker{position:absolute;top:0;bottom:0;width:3px;background:#fff;transform:translateX(-50%);transition:left 0.4s cubic-bezier(0.4,0,0.2,1);border-radius:1px;box-shadow:0 0 8px rgba(255,255,255,0.4)}
+.gauge-label-row{display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:0.58rem;color:var(--muted);margin-bottom:0.5rem}
+
+@media(max-width:900px){
+  .contrib-row{grid-template-columns:1fr 1fr}
+  .btn-add-var{grid-column:span 2}
+}
+@media(max-width:600px){
+  .var-grid{grid-template-columns:1fr}
+  .contrib-row{grid-template-columns:1fr}
+  .btn-add-var{grid-column:1}
+}
 </style>
 </head>
 <body>
@@ -165,13 +233,14 @@ footer a:hover{color:var(--accent2)}
 <div class="page-header">
   <p class="page-eyebrow">NCRB Crime in India · IPC Data · 1981–2023</p>
   <h1 class="page-title">Crime <em>Recorded</em> &amp;<br>Crime <em>Estimated</em></h1>
-  <p class="page-desc">Two panels. The same dataset. Panel A shows what NCRB officially recorded — with key moments annotated. Panel B applies dark figure modelling with a live slider — drag to see the estimate change in real time.</p>
+  <p class="page-desc">Three panels. Panel A shows what NCRB officially recorded. Panel B applies dark figure modelling with a live p-slider. Panel C is a practitioner workshop — use evidence-based variables to estimate your own p, and contribute parameters for the community to consider.</p>
 </div>
 
 <!-- TABS -->
 <div class="panel-tabs" id="national">
   <button class="tab-btn active-a" onclick="switchPanel('a')">▪ Panel A — Official NCRB Record</button>
   <button class="tab-btn" id="tab-b" onclick="switchPanel('b')">▪ Panel B — Dark Figure Lens</button>
+  <button class="tab-btn" id="tab-c" onclick="switchPanel('c')">▪ Panel C — Estimate Your p</button>
 </div>
 
 <!-- ══ PANEL A ══════════════════════════════════════════════════════════ -->
@@ -206,6 +275,31 @@ footer a:hover{color:var(--accent2)}
       <div class="chart-subtitle">% of registered cases reaching charge-sheet stage</div>
       <canvas id="chart-cs" height="170"></canvas>
       <div class="chart-note">Declining 6 years straight — from 80.6% (2016) to 72.7% (2023). Proxy for institutional follow-through.</div>
+    </div>
+  </div>
+
+  <!-- NEW · State deviation lollipop + rank shift -->
+  <div class="two-col reveal" style="margin-top:1.5rem">
+    <div class="chart-card">
+      <div class="chart-title">State Rate vs National Average</div>
+      <div class="chart-subtitle">Official crime rate · deviation from 270.3/lakh · 2023</div>
+      <div class="assumption-box" style="margin:0 0 1rem">
+        <strong style="color:var(--accent)">Right of zero</strong> — above national average.
+        <strong style="color:var(--green)">Left of zero</strong> — below national average.
+        Sorted by deviation.
+      </div>
+      <svg id="pA-lollipop" style="width:100%;display:block"></svg>
+      <div class="chart-note">Hover any dot. Delhi (+1238.6) and Kerala (+451.4) are extreme positive outliers; Nagaland (−223.4) sits furthest below.</div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Official Rank vs CS-Adjusted Rank</div>
+      <div class="chart-subtitle">Top 20 states · adjusted rank penalises low chargesheeting · rate ÷ (CS%/50)</div>
+      <div class="assumption-box" style="margin:0 0 1rem">
+        A state with high crime <em>and</em> low CS% gets a higher adjusted danger rank.
+        <strong style="color:var(--accent)">Orange line rises</strong> = worsens · <strong style="color:var(--green)">Green line falls</strong> = improves.
+      </div>
+      <svg id="pA-rankshift" style="width:100%;display:block"></svg>
+      <div class="chart-note">Hover any connector for detail. Manipur moves up 8 positions; Andhra Pradesh drops 6 when prosecution efficiency is factored in.</div>
     </div>
   </div>
 </div>
@@ -270,6 +364,166 @@ footer a:hover{color:var(--accent2)}
     <canvas id="chart-gap" height="95"></canvas>
     <div class="chart-note">Even at optimistic p=0.7, over 1M crimes go unrecorded every year since 2000. The gap is structural, not marginal.</div>
   </div>
+
+  <!-- NEW · OLS residual lollipop + accountability rank shift -->
+  <div class="two-col reveal" style="margin-top:1.5rem">
+    <div class="chart-card">
+      <div class="chart-title">State Rate vs Population-Predicted Rate</div>
+      <div class="chart-subtitle">OLS residuals · actual − predicted (crime rate ~ log population) · 2023</div>
+      <div class="assumption-box" style="margin:0 0 1rem">
+        <strong style="color:var(--accent)">Positive (right)</strong> — records more than population size predicts.
+        <strong style="color:var(--green)">Negative (left)</strong> — likely underreporting relative to size. Hover for detail.
+      </div>
+      <svg id="pB-lollipop" style="width:100%;display:block"></svg>
+      <div class="chart-note">Population alone is a deliberate simplification. Negative residuals flag states where the dark figure risk is highest relative to expected recording behaviour.</div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Official Rank vs Accountability-Penalty Rank</div>
+      <div class="chart-subtitle">Top 20 states · penalty score = rate × (100 / CS%) · dark figure framing</div>
+      <div class="assumption-box" style="margin:0 0 1rem">
+        States with high crime <em>and</em> low CS% — crimes that never reach trial — climb when accountability is factored in.
+        <strong style="color:var(--accent)">Orange</strong> = worsens · <strong style="color:var(--green)">Green</strong> = improves.
+      </div>
+      <svg id="pB-rankshift" style="width:100%;display:block"></svg>
+      <div class="chart-note">Manipur (CS 23.2%) and Haryana (CS 44.2%) are the most extreme upward movers — low prosecution rates amplify the dark figure risk significantly.</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ══ PANEL C ═══════════════════════════════════════════════════════════ -->
+<div id="content-c" style="display:none">
+<div class="section-wrap">
+  <div class="reveal" style="margin-bottom:2rem">
+    <span class="section-tag">// 03 · Practitioner Workshop · Estimate Your p</span>
+    <span class="panel-badge" style="color:var(--green);border-color:var(--green)">Panel C · p-Estimator</span>
+  </div>
+
+  <div class="assumption-box reveal">
+    <strong>What this panel does:</strong> The dark figure formula T = R/p has one unknown — p, the probability that a crime gets reported.
+    This tool helps you estimate p by weighting a set of structural, institutional, and social variables drawn from criminological literature and the NCRB data.
+    <strong>Each variable pushes p up or down.</strong> The final estimate is a weighted average — a reasoned position, not a measurement.
+    Contributions from this session are stored in memory and shown in the log below. <strong>Nothing is saved across sessions.</strong>
+  </div>
+
+  <!-- Live result bar -->
+  <div class="p-result-bar reveal" id="pc-result-bar">
+    <div>
+      <div class="p-result-label">Estimated p</div>
+      <div class="p-result-num" id="pc-p-val">0.42</div>
+    </div>
+    <div style="flex:1;min-width:200px">
+      <div class="p-result-label" style="margin-bottom:0.5rem">Confidence range</div>
+      <div class="gauge-strip"><div class="gauge-marker" id="pc-gauge-marker" style="left:34%"></div></div>
+      <div class="gauge-label-row"><span>p=0.10</span><span>p=0.30</span><span>p=0.50</span><span>p=0.70</span><span>p=0.90</span></div>
+      <div class="p-result-range" id="pc-range-text">Low confidence range: 0.30 – 0.55 · Based on 4 active variables</div>
+    </div>
+    <div>
+      <div class="p-result-label">Implied dark figure (2023)</div>
+      <div style="font-family:'DM Serif Display',serif;font-size:1.6rem;font-style:italic;color:var(--accent)" id="pc-dark-val">5.58M</div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:0.58rem;color:var(--muted);margin-top:0.2rem" id="pc-mult-val">×2.4 the recorded</div>
+    </div>
+  </div>
+
+  <!-- Variable cards grid -->
+  <div class="reveal">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:1rem;flex-wrap:wrap;gap:0.8rem">
+      <div>
+        <span class="section-tag" style="margin-bottom:0.2rem">Active Variables</span>
+        <p style="font-size:0.78rem;color:var(--muted);line-height:1.6">Each slider expresses your evidence-based belief about this variable's direction and strength. Drag to adjust. The estimated p updates live.</p>
+      </div>
+      <div style="display:flex;gap:0.5rem;flex-wrap:wrap">
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:0.58rem;color:var(--muted);display:flex;align-items:center;gap:0.4rem"><span class="var-card-tag tag-structural" style="border:1px solid #8fbcdb;color:#8fbcdb">Structural</span> Population/geography</span>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:0.58rem;color:var(--muted);display:flex;align-items:center;gap:0.4rem"><span class="var-card-tag tag-institutional" style="border:1px solid var(--accent2);color:var(--accent2)">Institutional</span> Police/legal system</span>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:0.58rem;color:var(--muted);display:flex;align-items:center;gap:0.4rem"><span class="var-card-tag tag-social" style="border:1px solid var(--green);color:var(--green)">Social</span> Stigma/trust/access</span>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:0.58rem;color:var(--muted);display:flex;align-items:center;gap:0.4rem"><span class="var-card-tag tag-custom" style="border:1px solid #b48ead;color:#b48ead">Custom</span> Your additions</span>
+      </div>
+    </div>
+    <div class="var-grid" id="var-grid"></div>
+  </div>
+
+  <!-- Add variable form -->
+  <div class="contrib-form reveal">
+    <div class="contrib-form-title">+ Contribute a Variable · Session Only</div>
+    <p style="font-size:0.75rem;color:var(--muted);line-height:1.7;margin-bottom:1rem">
+      Add a parameter you believe affects how likely crimes are to be reported. You can draw from NFHS-5 data, National Crime Victimisation surveys, FIR registration studies, or your domain knowledge.
+      Your variable will appear in the grid above and be included in the p estimate.
+    </p>
+    <div class="contrib-row">
+      <div class="contrib-field">
+        <label>Variable name</label>
+        <input type="text" id="cv-name" placeholder="e.g. Female literacy rate" maxlength="60">
+      </div>
+      <div class="contrib-field">
+        <label>Category</label>
+        <select id="cv-cat">
+          <option value="structural">Structural</option>
+          <option value="institutional">Institutional</option>
+          <option value="social" selected>Social</option>
+          <option value="custom">Custom / Other</option>
+        </select>
+      </div>
+      <div class="contrib-field">
+        <label>Direction of effect on p</label>
+        <select id="cv-dir">
+          <option value="1">↑ Increases reporting (pushes p up)</option>
+          <option value="-1">↓ Decreases reporting (pushes p down)</option>
+        </select>
+      </div>
+      <button class="btn-add-var" onclick="addCustomVariable()">+ Add to grid</button>
+    </div>
+    <div class="contrib-field" style="margin-bottom:1rem">
+      <label>Rationale / source (optional)</label>
+      <textarea id="cv-rationale" placeholder="e.g. Higher female literacy correlates with greater awareness of legal rights and higher FIR registration rates (NFHS-5, 2021)." rows="2"></textarea>
+    </div>
+  </div>
+
+  <!-- Suggest p to the community -->
+  <div class="chart-card reveal">
+    <div class="chart-title">Submit Your p Estimate to the Session Log</div>
+    <div class="chart-subtitle">Practitioner submissions · visible to all users in this session · not persisted</div>
+    <p style="font-size:0.78rem;color:var(--muted);line-height:1.7;margin-bottom:1.2rem">
+      After adjusting variables, you can record your estimated p along with your role and reasoning.
+      This creates a living document of how different practitioners — designers, lawyers, journalists, data scientists — would set the dark figure assumption given the same evidence.
+    </p>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:0.8rem;align-items:end;margin-bottom:1rem;flex-wrap:wrap" class="contrib-row">
+      <div class="contrib-field">
+        <label>Your role</label>
+        <select id="sub-role">
+          <option>Data Practitioner</option>
+          <option>Journalist</option>
+          <option>Lawyer / Legal Researcher</option>
+          <option>Designer / Communicator</option>
+          <option>Policy Researcher</option>
+          <option>Academic</option>
+          <option>Civil Society</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="contrib-field">
+        <label>Your p estimate</label>
+        <input type="number" id="sub-p" min="0.05" max="0.95" step="0.01" placeholder="e.g. 0.38">
+      </div>
+      <div class="contrib-field">
+        <label>Key reasoning (brief)</label>
+        <input type="text" id="sub-reason" placeholder="e.g. Low CS + stigma suppress reporting" maxlength="120">
+      </div>
+      <button class="btn-primary" onclick="submitEstimate()">Submit →</button>
+    </div>
+  </div>
+
+  <!-- Session log -->
+  <div class="chart-card reveal">
+    <div class="chart-title">Session Estimates Log</div>
+    <div class="chart-subtitle">All p submissions this session · resets on page reload</div>
+    <div class="submission-log" id="submission-log">
+      <div class="log-empty" id="log-empty">No submissions yet. Be the first to record your p estimate above.</div>
+    </div>
+    <!-- Mini distribution of submitted p values -->
+    <svg id="pc-dist-svg" style="width:100%;display:block;overflow:visible;margin-top:0.5rem" height="60"></svg>
+    <div class="chart-note" id="pc-dist-note">Submit estimates above to see the distribution of practitioner p values.</div>
+  </div>
+
 </div>
 </div>
 
@@ -838,10 +1092,17 @@ d3.json('india_state.geojson')
 
 // ── PANEL TOGGLE ──────────────────────────────────────────────────────────
 function switchPanel(p){
-  const ca=document.getElementById('content-a'),cb=document.getElementById('content-b');
-  const ta=document.querySelector('.tab-btn:first-child'),tb=document.getElementById('tab-b');
-  if(p==='a'){ca.style.display='block';cb.style.display='none';ta.className='tab-btn active-a';tb.className='tab-btn';}
-  else{ca.style.display='none';cb.style.display='block';ta.className='tab-btn';tb.className='tab-btn active-b';}
+  const ca=document.getElementById('content-a');
+  const cb=document.getElementById('content-b');
+  const cc=document.getElementById('content-c');
+  const ta=document.querySelector('.tab-btn:first-child');
+  const tb=document.getElementById('tab-b');
+  const tc=document.getElementById('tab-c');
+  ca.style.display='none'; cb.style.display='none'; cc.style.display='none';
+  ta.className='tab-btn'; tb.className='tab-btn'; tc.className='tab-btn';
+  if(p==='a'){ca.style.display='block';ta.className='tab-btn active-a';}
+  else if(p==='b'){cb.style.display='block';tb.className='tab-btn active-b';}
+  else{cc.style.display='block';tc.className='tab-btn active-c';initPanelC();}
 }
 
 // ── SCROLL REVEAL ─────────────────────────────────────────────────────────
@@ -851,6 +1112,407 @@ const ro=new IntersectionObserver(entries=>{
   });
 },{threshold:0.07});
 document.querySelectorAll('.reveal').forEach(el=>ro.observe(el));
+
+// ── SHARED FLOAT TOOLTIP ──────────────────────────────────────────────────
+const floatTT=(()=>{
+  const el=document.createElement('div');
+  el.style.cssText='position:fixed;z-index:9999;pointer-events:none;background:var(--surface);color:var(--text);padding:0.6rem 0.9rem;font-family:"IBM Plex Mono",monospace;font-size:0.6rem;line-height:1.9;border:1px solid var(--border);border-left:2px solid var(--accent);opacity:0;transition:opacity 0.1s;max-width:240px';
+  document.body.appendChild(el);
+  function show(e,html){
+    el.innerHTML=html;
+    let x=e.clientX+14,y=e.clientY-10;
+    if(x+250>window.innerWidth) x=e.clientX-255;
+    if(y+130>window.innerHeight) y=e.clientY-130;
+    el.style.left=x+'px';el.style.top=y+'px';el.style.opacity='1';
+  }
+  function hide(){el.style.opacity='0';}
+  document.addEventListener('mousemove',e=>{
+    if(el.style.opacity==='1'){
+      let x=e.clientX+14,y=e.clientY-10;
+      if(x+250>window.innerWidth)x=e.clientX-255;
+      if(y+130>window.innerHeight)y=e.clientY-130;
+      el.style.left=x+'px';el.style.top=y+'px';
+    }
+  });
+  return {show,hide};
+})();
+
+// ── OLS RESIDUALS (shared computation) ───────────────────────────────────
+const olsResiduals=(()=>{
+  const xs=stateData.map(d=>Math.log(d.pop));
+  const ys=stateData.map(d=>d.rate);
+  const n=xs.length,mx=xs.reduce((a,b)=>a+b,0)/n,my=ys.reduce((a,b)=>a+b,0)/n;
+  const slope=xs.reduce((s,x,i)=>s+(x-mx)*(ys[i]-my),0)/xs.reduce((s,x)=>s+(x-mx)**2,0);
+  const intercept=my-slope*mx;
+  return stateData.map((d,i)=>({
+    ...d,
+    predicted:parseFloat((intercept+slope*xs[i]).toFixed(1)),
+    residual:parseFloat((d.rate-(intercept+slope*xs[i])).toFixed(1))
+  }));
+})();
+
+// ── LOLLIPOP HELPER ───────────────────────────────────────────────────────
+function drawLollipop(svgId, dataArr, getVal, getLabel, centerVal, getColor, ttFn){
+  const el=document.getElementById(svgId);
+  if(!el) return;
+  const sorted=[...dataArr].sort((a,b)=>getVal(a)-getVal(b));
+  const ROW=17, PAD={t:16,r:68,b:20,l:114};
+  const W=el.parentElement.clientWidth||600;
+  const H=sorted.length*ROW+PAD.t+PAD.b;
+  el.setAttribute('height',H);
+  const svg=d3.select('#'+svgId).attr('viewBox',`0 0 ${W} ${H}`).style('overflow','hidden');
+  const g=svg.append('g').attr('transform',`translate(${PAD.l},${PAD.t})`);
+  const iW=W-PAD.l-PAD.r, iH=H-PAD.t-PAD.b;
+
+  // clip
+  const cid=svgId+'-clip';
+  svg.append('defs').append('clipPath').attr('id',cid)
+    .append('rect').attr('width',iW).attr('height',iH+4).attr('y',-2);
+  const gc=g.append('g').attr('clip-path',`url(#${cid})`);
+
+  const maxDev=d3.max(sorted,d=>Math.abs(getVal(d)-centerVal));
+  const x=d3.scaleLinear().domain([-maxDev*1.05,maxDev*1.05]).range([0,iW]);
+
+  // zero line
+  gc.append('line').attr('x1',x(0)).attr('y1',-6).attr('x2',x(0)).attr('y2',iH+6)
+    .attr('stroke','rgba(255,255,255,0.12)').attr('stroke-width',1);
+
+  // tick grid
+  const ticks=x.ticks(5);
+  ticks.forEach(v=>{
+    if(v===0) return;
+    gc.append('line').attr('x1',x(v)).attr('y1',0).attr('x2',x(v)).attr('y2',iH)
+      .attr('stroke','rgba(255,255,255,0.04)').attr('stroke-width',1);
+    g.append('text').attr('x',x(v)).attr('y',iH+14).attr('text-anchor','middle')
+      .attr('fill','#444').style('font-size','8px').style('font-family','IBM Plex Mono,monospace')
+      .text(v>0?'+'+Math.round(v):Math.round(v));
+  });
+
+  sorted.forEach((d,i)=>{
+    const dev=getVal(d)-centerVal;
+    const y=i*ROW+ROW/2;
+    const col=getColor(d,dev);
+    const x0=x(0), x1=x(dev);
+    gc.append('line').attr('x1',x0).attr('y1',y).attr('x2',x0).attr('y2',y)
+      .attr('stroke',col).attr('stroke-width',1.5).attr('opacity',0.6)
+      .transition().delay(i*12).duration(450).ease(d3.easeQuadOut).attr('x2',x1);
+    const dot=gc.append('circle').attr('cx',x0).attr('cy',y).attr('r',3.5)
+      .attr('fill',col).attr('opacity',0).style('cursor','default');
+    dot.transition().delay(i*12+380).duration(150).attr('cx',x1).attr('opacity',0.95);
+    dot.on('mousemove',e=>floatTT.show(e,ttFn(d,dev))).on('mouseleave',()=>floatTT.hide());
+    // label
+    const short=getLabel(d).length>13?getLabel(d).slice(0,12)+'…':getLabel(d);
+    g.append('text').attr('x',-5).attr('y',y+4.5).attr('text-anchor','end')
+      .attr('fill','rgba(232,226,216,0.45)').style('font-size','8.5px').style('font-family','Manrope,sans-serif').text(short);
+    // value tag
+    if(Math.abs(dev)>maxDev*0.25){
+      gc.append('text').attr('x',x1+(dev>=0?5:-5)).attr('y',y+4)
+        .attr('text-anchor',dev>=0?'start':'end').attr('fill',col)
+        .style('font-size','7.5px').style('font-family','IBM Plex Mono,monospace').attr('opacity',0)
+        .transition().delay(i*12+500).duration(150).attr('opacity',0.7)
+        .selection().text(dev>0?'+'+Math.round(dev):Math.round(dev));
+    }
+  });
+}
+
+// ── RANK SHIFT HELPER ─────────────────────────────────────────────────────
+function drawRankShift(svgId, offRanked, adjRanked, leftLabel, rightLabel){
+  const el=document.getElementById(svgId);
+  if(!el) return;
+  const N=offRanked.length;
+  const ROW=23, PAD={t:26,r:76,b:10,l:76};
+  const W=el.parentElement.clientWidth||600;
+  const H=N*ROW+PAD.t+PAD.b;
+  el.setAttribute('height',H);
+  const iW=W-PAD.l-PAD.r;
+  const svg=d3.select('#'+svgId).attr('viewBox',`0 0 ${W} ${H}`).style('overflow','hidden');
+  const g=svg.append('g').attr('transform',`translate(${PAD.l},${PAD.t})`);
+
+  g.append('text').attr('x',0).attr('y',-12).attr('fill',ACCENT2)
+    .style('font-size','8px').style('font-family','IBM Plex Mono,monospace').style('font-weight','500').text(leftLabel);
+  g.append('text').attr('x',iW).attr('y',-12).attr('text-anchor','end').attr('fill',ACCENT)
+    .style('font-size','8px').style('font-family','IBM Plex Mono,monospace').style('font-weight','500').text(rightLabel);
+
+  const yL=d3.scalePoint().domain(offRanked.map(d=>d.state)).range([0,H-PAD.t-PAD.b]).padding(0.1);
+  const yR=d3.scalePoint().domain(adjRanked.map(d=>d.state)).range([0,H-PAD.t-PAD.b]).padding(0.1);
+
+  offRanked.forEach((d,i)=>{
+    const adjI=adjRanked.indexOf(d);
+    const rise=i-adjI; // negative = worsens (rank number goes up)
+    const col=rise<0?ACCENT:rise>0?GREEN:'rgba(255,255,255,0.18)';
+    const big=Math.abs(rise)>=3;
+    const y1=yL(d.state), y2=yR(d.state);
+
+    g.append('line').attr('x1',10).attr('y1',y1).attr('x2',iW-10).attr('y2',y2)
+      .attr('stroke',col).attr('stroke-width',big?1.8:0.9).attr('opacity',big?0.72:0.36)
+      .style('cursor','default')
+      .on('mousemove',e=>floatTT.show(e,
+        `<strong style="color:var(--text)">${d.state}</strong><br>Official: #${i+1}<br>Adjusted: #${adjI+1}<br>${rise===0?'No change':rise<0?'▲'+Math.abs(rise)+' worsens':'▼'+rise+' improves'}<br>Rate: ${d.rate} · CS: ${d.cs}%`))
+      .on('mouseleave',()=>floatTT.hide());
+
+    g.append('circle').attr('cx',10).attr('cy',y1).attr('r',3).attr('fill',ACCENT2).attr('opacity',0.75);
+    g.append('circle').attr('cx',iW-10).attr('cy',y2).attr('r',big?4.5:3).attr('fill',col).attr('opacity',0.9);
+
+    const sn=d.state.length>10?d.state.slice(0,9)+'…':d.state;
+    g.append('text').attr('x',4).attr('y',y1+4).attr('text-anchor','start')
+      .attr('fill','rgba(232,226,216,0.4)').style('font-size','8px').style('font-family','Manrope,sans-serif')
+      .text(`${i+1}. ${sn}`);
+    g.append('text').attr('x',iW-4).attr('y',y2+4).attr('text-anchor','end')
+      .attr('fill',col).style('font-size','8px').style('font-family','Manrope,sans-serif').style('opacity',big?1:0.55)
+      .text(`${adjI+1}. ${sn}`);
+
+    if(big){
+      g.append('text').attr('x',iW/2).attr('y',(y1+y2)/2+3).attr('text-anchor','middle')
+        .attr('fill',col).style('font-size','8px').style('font-family','IBM Plex Mono,monospace').attr('opacity',0.82)
+        .text(rise<0?'▲'+Math.abs(rise):'▼'+rise);
+    }
+  });
+}
+
+// ── DRAW PANEL A: LOLLIPOP ────────────────────────────────────────────────
+drawLollipop('pA-lollipop', stateData,
+  d=>d.rate,
+  d=>d.state,
+  270.3,
+  (d,dev)=>dev>0?ACCENT:GREEN,
+  (d,dev)=>`<strong style="color:var(--text)">${d.state}</strong><br>Rate: ${d.rate}/lakh<br>National avg: 270.3<br>Deviation: ${dev>0?'+':''}${dev.toFixed(1)}<br>CS Rate: ${d.cs}%`
+);
+
+// ── DRAW PANEL A: RANK SHIFT ──────────────────────────────────────────────
+(()=>{
+  const top20=[...stateData].sort((a,b)=>b.rate-a.rate).slice(0,20);
+  const adj=[...top20].sort((a,b)=>(b.rate/(b.cs/50))-(a.rate/(a.cs/50)));
+  drawRankShift('pA-rankshift', top20, adj, 'OFFICIAL', 'CS-ADJUSTED');
+})();
+
+// ── DRAW PANEL B: OLS RESIDUAL LOLLIPOP ──────────────────────────────────
+drawLollipop('pB-lollipop', olsResiduals,
+  d=>d.residual,
+  d=>d.state,
+  0,
+  (d,dev)=>dev>0?ACCENT:GREEN,
+  (d,dev)=>`<strong style="color:var(--text)">${d.state}</strong><br>Actual: ${d.rate}/lakh<br>Predicted: ${d.predicted}/lakh<br>Residual: ${dev>0?'+':''}${dev.toFixed(1)}<br>${dev<0?'⚑ Below expected — underreporting risk':'Above population expectation'}`
+);
+
+// ── DRAW PANEL B: PENALTY RANK SHIFT ─────────────────────────────────────
+(()=>{
+  const top20=[...stateData].sort((a,b)=>b.rate-a.rate).slice(0,20);
+  const pen=[...top20].sort((a,b)=>(b.rate*(100/b.cs))-(a.rate*(100/a.cs)));
+  drawRankShift('pB-rankshift', top20, pen, 'OFFICIAL', 'PENALTY RANK');
+})();
+
+// ══════════════════════════════════════════════════════════════════════════
+// ── PANEL C: p-ESTIMATOR ─────────────────────────────────────────────────
+// ══════════════════════════════════════════════════════════════════════════
+
+// Default variable definitions
+const DEFAULT_VARS=[
+  {id:'v1', name:'Chargesheeting Rate (2023)',      cat:'institutional', dir:-1, weight:3,
+   val:50, desc:'National CS rate of 72.7% — well below the 80.6% peak. Low follow-through signals institutional erosion that suppresses reporting incentive.',
+   rationale:'NCRB 2023, Table 1A.'},
+  {id:'v2', name:'Stigma & Social Sanction Risk',   cat:'social',        dir:-1, weight:2,
+   val:60, desc:'Crimes involving sexual violence, domestic abuse, and honour are systematically underreported due to victim stigma and family pressure.',
+   rationale:'NFHS-5 (2019–21): only 14% of ever-married women who experienced violence sought help.'},
+  {id:'v3', name:'Police Strength per Lakh',        cat:'institutional', dir:1,  weight:2,
+   val:35, desc:'India has ~153 police per lakh vs UN-recommended 222. Understaffed stations reduce FIR registration capacity.',
+   rationale:'Bureau of Police Research & Development 2023.'},
+  {id:'v4', name:'Female Literacy Rate',            cat:'structural',    dir:1,  weight:1,
+   val:45, desc:'Higher female literacy correlates with greater awareness of legal rights and willingness to file FIRs for gender-based crimes.',
+   rationale:'NFHS-5 correlation analysis; Census 2011 literacy data.'},
+  {id:'v5', name:'Urban vs Rural Access to Police', cat:'structural',    dir:1,  weight:2,
+   val:40, desc:'~65% of India is rural. Distance to police station and transport access are significant barriers to FIR registration.',
+   rationale:'NCRB Infrastructure Report 2022.'},
+  {id:'v6', name:'Prior FIR Dismissal Rate',        cat:'institutional', dir:-1, weight:3,
+   val:55, desc:'If victims or witnesses have experienced FIRs being refused or dismissed without action, future reporting is suppressed.',
+   rationale:'Commonwealth Human Rights Initiative — Police Accountability Reports.'},
+  {id:'v7', name:'Media / Civil Society Pressure',  cat:'social',        dir:1,  weight:1,
+   val:30, desc:'Periods of active media coverage of crime (post-Nirbhaya, post-Hathras) correlate with short-term spikes in FIR registration.',
+   rationale:'NCRB incidence data 2012–2014 spike analysis.'},
+];
+
+// Session state
+let sessionVars=[...DEFAULT_VARS.map(v=>({...v}))];
+let sessionSubmissions=[];
+let pcInitialized=false;
+
+function computeP(){
+  if(!sessionVars.length) return 0.5;
+  // Each variable contributes a shift from 0.5 baseline.
+  // direction × (slider val / 100) × weight → normalised weighted mean
+  let totalWeight=0, weightedShift=0;
+  sessionVars.forEach(v=>{
+    const strength=v.val/100; // 0–1
+    const shift=v.dir * strength * 0.15; // max ±0.15 per variable
+    weightedShift += shift * v.weight;
+    totalWeight += v.weight;
+  });
+  const rawP=0.5+(weightedShift/Math.max(totalWeight,1));
+  return Math.max(0.08, Math.min(0.92, parseFloat(rawP.toFixed(3))));
+}
+
+function confidenceRange(p){
+  const spread=0.12+0.08*(1-sessionVars.length/12);
+  return [Math.max(0.05,p-spread), Math.min(0.95,p+spread)];
+}
+
+function updatePResult(){
+  const p=computeP();
+  const R2023=3763102;
+  const T=Math.round(R2023/p);
+  const D=T-R2023;
+  const [lo,hi]=confidenceRange(p);
+  document.getElementById('pc-p-val').textContent=p.toFixed(2);
+  document.getElementById('pc-dark-val').textContent=fmt(D);
+  document.getElementById('pc-mult-val').textContent=`×${(T/R2023).toFixed(1)} the recorded`;
+  // gauge position: p=0.10 → 0%, p=0.90 → 100%
+  const pct=((p-0.10)/(0.90-0.10)*100).toFixed(1);
+  document.getElementById('pc-gauge-marker').style.left=pct+'%';
+  const conf=sessionVars.length<=2?'Low':sessionVars.length<=5?'Moderate':'Higher';
+  document.getElementById('pc-range-text').textContent=
+    `${conf} confidence range: ${lo.toFixed(2)} – ${hi.toFixed(2)} · Based on ${sessionVars.length} active variable${sessionVars.length!==1?'s':''}`;
+  // pre-fill submission p
+  const sub=document.getElementById('sub-p');
+  if(sub && !sub._userEdited) sub.value=p.toFixed(2);
+}
+
+function renderVarGrid(){
+  const grid=document.getElementById('var-grid');
+  if(!grid) return;
+  grid.innerHTML='';
+  sessionVars.forEach(v=>{
+    const card=document.createElement('div');
+    card.className='var-card';
+    const tagClass=`tag-${v.cat}`;
+    const dirLabel=v.dir>0?'↑ increases p':'↓ decreases p';
+    const dirCol=v.dir>0?'var(--green)':'var(--accent)';
+    card.innerHTML=`
+      <button class="var-remove" onclick="removeVar('${v.id}')" title="Remove variable">×</button>
+      <div class="var-card-head">
+        <div class="var-card-name">${v.name}</div>
+        <span class="var-card-tag ${tagClass}">${v.cat}</span>
+      </div>
+      <p class="var-card-desc">${v.desc}</p>
+      ${v.rationale?`<p style="font-family:'IBM Plex Mono',monospace;font-size:0.58rem;color:var(--muted);margin-bottom:0.8rem;line-height:1.6;border-left:2px solid var(--border);padding-left:0.6rem">${v.rationale}</p>`:''}
+      <div class="var-slider-row">
+        <span class="var-slider-label" style="color:${dirCol}">${dirLabel}</span>
+        <input type="range" min="0" max="100" value="${v.val}" step="5"
+          oninput="updateVar('${v.id}',this.value)"
+          style="flex:1;min-width:80px">
+        <span class="var-slider-val" id="vval-${v.id}">${v.val}%</span>
+      </div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:0.58rem;color:var(--muted);margin-top:0.5rem">
+        Weight: ${'●'.repeat(v.weight)}${'○'.repeat(3-Math.min(v.weight,3))} · strength ${v.val}%
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+  updatePResult();
+}
+
+function updateVar(id, val){
+  const v=sessionVars.find(v=>v.id===id);
+  if(v){ v.val=parseInt(val); document.getElementById('vval-'+id).textContent=val+'%'; updatePResult(); }
+}
+
+function removeVar(id){
+  sessionVars=sessionVars.filter(v=>v.id!==id);
+  renderVarGrid();
+}
+
+function addCustomVariable(){
+  const name=document.getElementById('cv-name').value.trim();
+  if(!name){alert('Please enter a variable name.');return;}
+  const cat=document.getElementById('cv-cat').value;
+  const dir=parseInt(document.getElementById('cv-dir').value);
+  const rationale=document.getElementById('cv-rationale').value.trim();
+  const newId='cv'+Date.now();
+  sessionVars.push({
+    id:newId, name, cat, dir, weight:2, val:50,
+    desc:`Custom variable contributed this session. Direction: ${dir>0?'increases':'decreases'} reporting probability.`,
+    rationale: rationale||''
+  });
+  document.getElementById('cv-name').value='';
+  document.getElementById('cv-rationale').value='';
+  renderVarGrid();
+  document.getElementById('var-grid').lastElementChild.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+function submitEstimate(){
+  const role=document.getElementById('sub-role').value;
+  const pRaw=parseFloat(document.getElementById('sub-p').value);
+  const reason=document.getElementById('sub-reason').value.trim();
+  if(isNaN(pRaw)||pRaw<0.05||pRaw>0.95){alert('Enter a p value between 0.05 and 0.95');return;}
+  const entry={role, p:pRaw, reason:reason||'No reasoning provided.', vars:sessionVars.length, ts:new Date().toLocaleTimeString()};
+  sessionSubmissions.push(entry);
+  renderLog();
+  document.getElementById('sub-p').value='';
+  document.getElementById('sub-reason').value='';
+}
+
+function renderLog(){
+  const log=document.getElementById('submission-log');
+  const empty=document.getElementById('log-empty');
+  if(!sessionSubmissions.length){if(empty)empty.style.display='block';return;}
+  if(empty) empty.style.display='none';
+  log.innerHTML='';
+  [...sessionSubmissions].reverse().forEach(e=>{
+    const row=document.createElement('div');
+    row.className='log-entry';
+    row.innerHTML=`
+      <span class="log-role">${e.role}</span>
+      <div class="log-text">${e.reason}<br><span style="font-family:'IBM Plex Mono',monospace;font-size:0.58rem;color:var(--muted)">${e.vars} variables · ${e.ts}</span></div>
+      <span class="log-p">p=${e.p.toFixed(2)}</span>
+    `;
+    log.appendChild(row);
+  });
+  renderDistribution();
+}
+
+function renderDistribution(){
+  const svgEl=document.getElementById('pc-dist-svg');
+  if(!svgEl||!sessionSubmissions.length) return;
+  const W=svgEl.parentElement.clientWidth-32;
+  const H=60, M={t:8,r:20,b:24,l:20};
+  const w=W-M.left-M.right, h=H-M.top-M.bottom;
+  const svg=d3.select('#pc-dist-svg').attr('viewBox',`0 0 ${W} ${H}`).html('');
+  const g=svg.append('g').attr('transform',`translate(${M.left},${M.top})`);
+  const x=d3.scaleLinear().domain([0.05,0.95]).range([0,w]);
+  // axis
+  g.append('line').attr('x1',0).attr('x2',w).attr('y1',h).attr('y2',h).attr('stroke','#333').attr('stroke-width',1);
+  [0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9].forEach(v=>{
+    g.append('text').attr('x',x(v)).attr('y',h+14).attr('text-anchor','middle')
+      .attr('fill','#444').style('font-size','8px').style('font-family','IBM Plex Mono,monospace').text(v.toFixed(1));
+  });
+  // dots for each submission
+  sessionSubmissions.forEach((e,i)=>{
+    const cx=x(e.p), cy=h/2;
+    g.append('circle').attr('cx',cx).attr('cy',cy).attr('r',5)
+      .attr('fill',GREEN).attr('opacity',0.75).attr('stroke','#0a0a0a').attr('stroke-width',1.5)
+      .on('mousemove',ev=>floatTT.show(ev,`<strong>${e.role}</strong><br>p=${e.p.toFixed(2)}<br>${e.reason}`))
+      .on('mouseleave',()=>floatTT.hide());
+  });
+  // mean line
+  const mean=sessionSubmissions.reduce((s,e)=>s+e.p,0)/sessionSubmissions.length;
+  g.append('line').attr('x1',x(mean)).attr('x2',x(mean)).attr('y1',0).attr('y2',h)
+    .attr('stroke',ACCENT2).attr('stroke-width',1.5).attr('stroke-dasharray','3 2');
+  g.append('text').attr('x',x(mean)).attr('y',-2).attr('text-anchor','middle')
+    .attr('fill',ACCENT2).style('font-size','8px').style('font-family','IBM Plex Mono,monospace')
+    .text('avg p='+mean.toFixed(2));
+  document.getElementById('pc-dist-note').textContent=
+    `${sessionSubmissions.length} submission${sessionSubmissions.length!==1?'s':''} · Session mean p = ${mean.toFixed(2)} · Implied dark figure = ${fmt(Math.round(3763102/mean)-3763102)}`;
+}
+
+// track if user manually changed sub-p
+document.addEventListener('DOMContentLoaded',()=>{
+  const sub=document.getElementById('sub-p');
+  if(sub) sub.addEventListener('input',()=>{sub._userEdited=true;});
+});
+
+function initPanelC(){
+  if(pcInitialized) return;
+  pcInitialized=true;
+  renderVarGrid();
+}
 </script>
 </body>
 </html>
